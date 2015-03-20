@@ -1,0 +1,11 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongodb": {
+    "database": "ebike",
+    "name": "mongodb",
+    "connector": "mongodb"
+  }
+}
