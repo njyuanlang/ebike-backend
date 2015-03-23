@@ -10,7 +10,7 @@ module.exports = function(Authmessage) {
     
     var postData = {
       mobile: authmessage.phone,
-      message: "验证码："+authmessage.code+" 在2分钟内有效【帮大师】"
+      message: "验证码："+authmessage.code+" 在1分钟内有效【帮大师】"
     }
     
     var content = querystring.stringify(postData);

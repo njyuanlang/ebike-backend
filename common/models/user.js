@@ -12,7 +12,7 @@ module.exports = function(User) {
         } else if(authmessage.code !== parseInt(ctx.req.body.authcode, 10)){
           err = new Error('invalid auth code')
           err.status = 400
-        } else if(authmessage.created+120*1000 < Date.now()) {
+        } else if(authmessage.created+60*1000 < Date.now()) {
           err = new Error('outdate auth code')
           err.status = 400
           User.app.models.Authmessage.destroyById(authmessage.id)
