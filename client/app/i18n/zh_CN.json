@@ -1,0 +1,25 @@
+{
+  "dashboard": {
+    "Dashboard": "控制面板",
+    "WELCOME": "欢迎来到 {{appName}}"
+  },
+  "topbar": {
+    "search": {
+      "PLACEHOLDER": "Type and hit enter.."
+    }
+  },
+  "sidebar": {
+    "WELCOME": "欢迎",
+    "heading": {
+      "HEADER": "主菜单"
+    },
+    "nav": {
+      "DASHBOARD": "控制面板",
+      "CLIENTS": "客户管理",
+      "menu": {
+        "MENU": "Menu",
+        "SUBMENU": "Sub Menu"
+      }
+    }
+  }
+}

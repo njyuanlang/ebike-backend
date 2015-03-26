@@ -20,6 +20,7 @@ module.exports = function(User) {
           User.app.models.Authmessage.destroyById(authmessage.id)
         }
         if(err) next(err)
+        delete ctx.req.body.authcode
         next()
       })
     } else {

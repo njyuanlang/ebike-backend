@@ -1,0 +1,33 @@
+h3
+  | 客户
+.container-fluid(ng-controller="ClientsController")
+  // START DATATABLE 1 
+  .row
+    .col-lg-12
+      .panel.panel-default
+        .panel-heading 
+          | Data Tables | 
+          small Zero Configuration
+        .panel-body
+          table#datatable1.table.table-striped.table-hover
+            thead
+              tr
+                th Rendering engine
+                th Browser
+                th Platform(s)
+                th.sort-numeric Engine version
+                th.sort-alpha CSS grade
+            tbody
+              tr.gradeX
+                td Trident
+                td Internet Explorer 4.0
+                td Win 95+
+                td 4
+                td X
+              tr.gradeC
+                td Trident
+                td Internet Explorer 5.0
+                td Win 95+
+                td 5
+                td C
+  // END DATATABLE 1 

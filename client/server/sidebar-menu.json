@@ -1,0 +1,31 @@
+[
+  {
+    "text": "Menu Heading",
+    "heading": "true",
+    "translate": "sidebar.heading.HEADER"
+  },
+  {
+    "text": "Dashboard",
+    "sref": "app.dashboard",
+    "icon": "icon-speedometer",
+    "translate": "sidebar.nav.DASHBOARD"
+  },
+  {
+    "text": "Clients",
+    "sref": "app.clients",
+    "icon": "icon-users",
+    "translate": "sidebar.nav.CLIENTS"
+  },
+  {
+    "text": "Menu",
+    "sref": "#",
+    "icon": "icon-folder",
+    "submenu": [
+      { "text": "Sub Menu", 
+        "sref": "app.submenu", 
+        "translate": "sidebar.nav.menu.SUBMENU" 
+      }    
+    ],
+    "translate": "sidebar.nav.menu.MENU"
+  }
+]
