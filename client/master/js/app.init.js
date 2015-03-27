@@ -25,7 +25,6 @@ var App = angular.module('angle', [
     'cfp.loadingBar',
     'ngSanitize',
     'ngResource',
-    // 'ebike-services',
     'ui.utils'
   ]);
 

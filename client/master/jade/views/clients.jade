@@ -1,33 +1,17 @@
 h3
   | 客户
-.container-fluid(ng-controller="ClientsController")
-  // START DATATABLE 1 
-  .row
-    .col-lg-12
-      .panel.panel-default
-        .panel-heading 
-          | Data Tables | 
-          small Zero Configuration
-        .panel-body
-          table#datatable1.table.table-striped.table-hover
-            thead
-              tr
-                th Rendering engine
-                th Browser
-                th Platform(s)
-                th.sort-numeric Engine version
-                th.sort-alpha CSS grade
-            tbody
-              tr.gradeX
-                td Trident
-                td Internet Explorer 4.0
-                td Win 95+
-                td 4
-                td X
-              tr.gradeC
-                td Trident
-                td Internet Explorer 5.0
-                td Win 95+
-                td 5
-                td C
-  // END DATATABLE 1 
+.container-fluid(ng-controller="ClientsController as clients")
+  
+  // Export CSV Example
+  .panel.panel-default
+    .panel-heading
+      a.pull-right.btn.btn-sm.btn-info(ng-mousedown='csv.generate()', ng-href='{{ csv.link() }}', download='test.csv') Export to CSV
+      .panel-title 客户
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams', export-csv='csv')
+        tbody
+          tr(ng-repeat='user in $data')
+            td(data-title="'用户名'") {{user.username}}
+            td(data-title="'省'") {{user.region.province}}
+            td(data-title="'城市'") {{user.region.city}}
+            td(data-title="'注册日期'") {{user.created}}

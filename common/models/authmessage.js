@@ -29,24 +29,24 @@ module.exports = function(Authmessage) {
     };
 
     var error = null
-    // var req = https.request(options,function(res){
-    //   res.setEncoding('utf8');
-    //   res.on('data', function (chunk) {
-    //     var result = JSON.parse(chunk)
-    //     if(result.error != 0) {
-    //       error = new Error(result.msg)
-    //       error.status = 400
-    //     }
-    //   });
-    //   res.on('end',function(){
-    //     if(error) return next(error)
-    //     next()
-    //   });
-    // });
-    //
-    // req.write(content);
-    // req.end();
-    next()
+    var req = https.request(options,function(res){
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+        var result = JSON.parse(chunk)
+        if(result.error != 0) {
+          error = new Error(result.msg)
+          error.status = 400
+        }
+      });
+      res.on('end',function(){
+        if(error) return next(error)
+        next()
+      });
+    });
+
+    req.write(content);
+    req.end();
+    // next()
   }
 
 };

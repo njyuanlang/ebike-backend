@@ -15,10 +15,11 @@
     },
     "nav": {
       "DASHBOARD": "控制面板",
-      "CLIENTS": "客户管理",
-      "menu": {
-        "MENU": "Menu",
-        "SUBMENU": "Sub Menu"
+      "CLIENT": "客户管理",
+      "mbm": {
+        "MBM": "厂商品牌",
+        "MANUFACTURER": "制造商",
+        "BRAND": "车辆品牌"
       }
     }
   }

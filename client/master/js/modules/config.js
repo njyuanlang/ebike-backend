@@ -23,7 +23,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons')
+        resolve: helper.resolveFor('modernizr', 'icons', 'ebike-services')
     })
     .state('app.dashboard', {
         url: '/dashboard',
@@ -33,12 +33,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',
-        templateUrl: helper.basepath('clients.html')
+        templateUrl: helper.basepath('clients.html'),
+        resolve: helper.resolveFor('ngTable', 'ngTableExport')
     })
-    .state('app.submenu', {
-        url: '/submenu',
-        title: 'Submenu',
-        templateUrl: helper.basepath('submenu.html')
+    .state('app.manufacturers', {
+        url: '/manufacturers',
+        title: 'Manufacturers',
+        templateUrl: helper.basepath('manufacturers.html')
+    })
+    .state('app.brands', {
+        url: '/brands',
+        title: 'Brands',
+        templateUrl: helper.basepath('brands.html')
     })
     // 
     // CUSTOM RESOLVES

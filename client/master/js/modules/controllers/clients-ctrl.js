@@ -3,10 +3,17 @@
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', function ($scope, $controller) {
+App.controller('ClientsController', function ($scope, User, ngTableParams) {
   
-  $controller('ListCtrl', {$scope: $scope})
-  // $scope.resource = User
-  $scope.search.orFields = ['username']
-  
+  $scope.tableParams = new ngTableParams({
+    count: 2
+  }, {
+    getData: function($defer, params) {
+      User.find({}, $defer.resolve)
+    }
+  }) 
+
+  User.count(function (result) {
+    $scope.tableParams.total(result.count)
+  })
 })

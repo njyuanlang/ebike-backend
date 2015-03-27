@@ -25,7 +25,6 @@ var App = angular.module('angle', [
     'cfp.loadingBar',
     'ngSanitize',
     'ngResource',
-    // 'ebike-services',
     'ui.utils'
   ]);
 
@@ -95,7 +94,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons')
+        resolve: helper.resolveFor('modernizr', 'icons', 'ebike-services')
     })
     .state('app.dashboard', {
         url: '/dashboard',
@@ -105,12 +104,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',
-        templateUrl: helper.basepath('clients.html')
+        templateUrl: helper.basepath('clients.html'),
+        resolve: helper.resolveFor('ngTable', 'ngTableExport')
     })
-    .state('app.submenu', {
-        url: '/submenu',
-        title: 'Submenu',
-        templateUrl: helper.basepath('submenu.html')
+    .state('app.manufacturers', {
+        url: '/manufacturers',
+        title: 'Manufacturers',
+        templateUrl: helper.basepath('manufacturers.html')
+    })
+    .state('app.brands', {
+        url: '/brands',
+        title: 'Brands',
+        templateUrl: helper.basepath('brands.html')
     })
     // 
     // CUSTOM RESOLVES
@@ -213,7 +218,11 @@ App
     },
     // Angular based script (use the right module name)
     modules: [
-      // { name: 'toaster', files: ['vendor/angularjs-toaster/toaster.js','vendor/angularjs-toaster/toaster.css'] }
+      {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
+                                                  'vendor/ng-table/dist/ng-table.min.css']},
+      {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},
+      {name: 'ebike-services',            files: ['vendor/ebike-services/ebike-lbservices.js',
+                                                  'vendor/ebike-services/ebike-services.js'] }
     ]
 
   })
@@ -223,12 +232,19 @@ App
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', ["$scope", "$controller", function ($scope, $controller) {
+App.controller('ClientsController', ["$scope", "User", "ngTableParams", function ($scope, User, ngTableParams) {
   
-  $controller('ListCtrl', {$scope: $scope})
-  // $scope.resource = User
-  $scope.search.orFields = ['username']
-  
+  $scope.tableParams = new ngTableParams({
+    count: 2
+  }, {
+    getData: function($defer, params) {
+      User.find({}, $defer.resolve)
+    }
+  }) 
+
+  User.count(function (result) {
+    $scope.tableParams.total(result.count)
+  })
 }])
 /**
  * List Controller

@@ -14,18 +14,22 @@
     "text": "Clients",
     "sref": "app.clients",
     "icon": "icon-users",
-    "translate": "sidebar.nav.CLIENTS"
+    "translate": "sidebar.nav.CLIENT"
   },
   {
-    "text": "Menu",
+    "text": "MBM",
     "sref": "#",
-    "icon": "icon-folder",
+    "icon": "icon-tag",
     "submenu": [
-      { "text": "Sub Menu", 
-        "sref": "app.submenu", 
-        "translate": "sidebar.nav.menu.SUBMENU" 
+      { "text": "Manufacturers", 
+        "sref": "app.manufacturers", 
+        "translate": "sidebar.nav.mbm.MANUFACTURER" 
+      },
+      { "text": "Brands", 
+        "sref": "app.brands", 
+        "translate": "sidebar.nav.mbm.BRAND" 
       }    
     ],
-    "translate": "sidebar.nav.menu.MENU"
+    "translate": "sidebar.nav.mbm.MBM"
   }
 ]
