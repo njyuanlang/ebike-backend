@@ -1,4 +1,6 @@
 [
+  "bower_components/angularjs-toaster/toaster.js",
+  "bower_components/angularjs-toaster/toaster.css",
   "bower_components/ng-table/dist/ng-table.min.js",
   "bower_components/ng-table/dist/ng-table.min.css",
   "bower_components/ng-table-export/ng-table-export.js",

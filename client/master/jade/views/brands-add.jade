@@ -1,0 +1,34 @@
+h3 新增车辆品牌
+
+.container-fluid(ng-controller="BrandsAddController")
+  // START row
+  .row
+    .col-md-12
+      form.form-validate.form-horizontal(name="formValidate", ng-submit="submitForm()", novalidate="")
+        // START panel
+        .panel.panel-default
+          .panel-body
+            fieldset.b0
+              legend 品牌资料
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 品牌名称
+                .col-sm-6
+                  input.form-control(type='text', name='name', required='', ng-model="entity.name")
+                  span.text-danger(ng-show="validateInput('name', 'required')") 品牌名称不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 所属制造商
+                .col-sm-6
+                  select.form-control(name='manufacturer', ng-model="entity.manufacturerId")
+                    option(ng-repeat="m in manufacturers" value="m.id") {{m.name}}
+                .col-sm-4
+                  small.text-muted 可选
+          .panel-footer.text-center
+            button.mb-sm.btn.btn-lg.btn-info(type='submit') 提交   
+            button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.brands()") 取消
+        // END panel
+  // END row
+                

@@ -6,7 +6,7 @@
 App.controller('ClientsController', function ($scope, User, ngTableParams) {
   
   $scope.tableParams = new ngTableParams({
-    count: 2
+    count: 10
   }, {
     getData: function($defer, params) {
       User.find({}, $defer.resolve)

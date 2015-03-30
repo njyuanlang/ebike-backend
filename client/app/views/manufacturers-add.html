@@ -1,0 +1,70 @@
+<h3>新增车辆制造商</h3>
+<div ng-controller="ManufacturersAddController" class="container-fluid">
+   <!-- START row-->
+   <div class="row">
+      <div class="col-md-12">
+         <form name="formValidate" ng-submit="submitForm()" novalidate="" class="form-validate form-horizontal">
+            <!-- START panel-->
+            <div class="panel panel-default">
+               <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+               <div class="panel-body">
+                  <fieldset class="b0">
+                     <legend>制造商资料登记</legend>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">制造商名称</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" required="" ng-model="entity.name" class="form-control" />
+                           <span ng-show="validateInput('name', 'required')" class="text-danger">品牌名称不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">联系电话</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" ng-model="entity.phone" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">可选</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">电子邮件</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" ng-model="entity.email" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">可选</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">联系地址</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" ng-model="entity.address" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">可选</small>
+                        </div>
+                     </div>
+                  </fieldset>
+               </div>
+               <div class="panel-footer text-center">
+                  <button type="submit" class="mb-sm btn btn-lg btn-info">提交</button>
+                  <button ui-sref="app.manufacturers()" class="mb-sm btn btn-lg btn-default">取消</button>
+               </div>
+            </div>
+            <!-- END panel-->
+         </form>
+      </div>
+   </div>
+   <!-- END row-->
+</div>

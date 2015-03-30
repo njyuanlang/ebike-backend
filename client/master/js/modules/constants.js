@@ -36,6 +36,8 @@ App
     },
     // Angular based script (use the right module name)
     modules: [
+      {name: 'toaster',                   files: ['vendor/angularjs-toaster/toaster.js',
+                                                  'vendor/angularjs-toaster/toaster.css']},
       {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
                                                   'vendor/ng-table/dist/ng-table.min.css']},
       {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},

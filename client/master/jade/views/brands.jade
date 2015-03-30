@@ -1,6 +1,18 @@
-h3 Sub Menu
-  small Subtitle
-
-.row
-  .col-lg-12
-    p A row with content
+h3
+  | 车辆品牌
+  a.pull-right.btn.btn-sm.btn-info(ui-sref="app.brands-add()") 
+    span.btn-label
+      i.icon-plus
+    | 新增
+  
+.container-fluid(ng-controller="BrandsController as brands")
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'品牌名称'") {{entity.name}}
+            td(data-title="'所属制造商'") {{entity.manufacturer.name}}
+            td(data-title="'下属型号'") {{entity.models.length}}
+            td(data-title="'登记日期'") {{entity.created}}

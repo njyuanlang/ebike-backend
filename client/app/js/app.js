@@ -94,7 +94,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons', 'ebike-services')
+        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ebike-services', 'ngTable')
     })
     .state('app.dashboard', {
         url: '/dashboard',
@@ -112,10 +112,20 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Manufacturers',
         templateUrl: helper.basepath('manufacturers.html')
     })
+    .state('app.manufacturers-add', {
+        url: '/manufacturers-add',
+        title: 'Manufacturers',
+        templateUrl: helper.basepath('manufacturers-add.html')
+    })
     .state('app.brands', {
         url: '/brands',
         title: 'Brands',
         templateUrl: helper.basepath('brands.html')
+    })
+    .state('app.brands-add', {
+        url: '/brands-add',
+        title: 'Brands Add',
+        templateUrl: helper.basepath('brands-add.html')
     })
     // 
     // CUSTOM RESOLVES
@@ -218,6 +228,8 @@ App
     },
     // Angular based script (use the right module name)
     modules: [
+      {name: 'toaster',                   files: ['vendor/angularjs-toaster/toaster.js',
+                                                  'vendor/angularjs-toaster/toaster.css']},
       {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
                                                   'vendor/ng-table/dist/ng-table.min.css']},
       {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},
@@ -228,6 +240,49 @@ App
   })
 ;
 /**=========================================================
+ * Module: brands-ctrl.js
+ * Brands Controller
+ =========================================================*/
+
+App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function ($scope, Brand, ngTableParams) {
+  
+  $scope.tableParams = new ngTableParams({
+    count: 10
+  }, {
+    getData: function($defer, params) {
+      Brand.find({}, $defer.resolve)
+    }
+  }) 
+
+  Brand.count(function (result) {
+    $scope.tableParams.total(result.count)
+  })
+}])
+
+App.controller('BrandsAddController', ["$scope", "Brand", function ($scope, Brand) {
+
+  $scope.entity = {}
+  
+  $scope.manufacturers = [{id:123, name:"test"}, {id:456, name:"test2"}]
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      Brand.create($scope.entity)
+    } else {
+      console.log('Not valid!!');
+      return false;
+    }
+  };
+  
+}])
+/**=========================================================
  * Module: clients-ctrl.js
  * Clients Controller
  =========================================================*/
@@ -235,7 +290,7 @@ App
 App.controller('ClientsController', ["$scope", "User", "ngTableParams", function ($scope, User, ngTableParams) {
   
   $scope.tableParams = new ngTableParams({
-    count: 2
+    count: 10
   }, {
     getData: function($defer, params) {
       User.find({}, $defer.resolve)
@@ -460,6 +515,55 @@ App.controller('AppController',
 
 }]);
 
+/**=========================================================
+ * Module: manufacturers-ctrl.js
+ * Manufacturers Controller
+ =========================================================*/
+
+App.controller('ManufacturersController', ["$scope", "Manufacturer", "ngTableParams", function ($scope, Manufacturer, ngTableParams) {
+  
+  $scope.tableParams = new ngTableParams({
+    count: 10
+  }, {
+    getData: function($defer, params) {
+      Manufacturer.find({}, $defer.resolve)
+    }
+  }) 
+
+  Manufacturer.count(function (result) {
+    $scope.tableParams.total(result.count)
+  })
+}])
+
+App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer", "toaster", function ($scope, $state, Manufacturer, toaster) {
+
+  $scope.entity = {}
+  
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      Manufacturer.create($scope.entity, function (entity) {
+        toaster.pop('success', '新增制造商成功', '已经添加制造商 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.manufacturers')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '新增制造商错误', res.data.error.message)
+        console.log(res)
+      })
+    } else {
+      return false;
+    }
+  };
+  
+}])
 /**=========================================================
  * Module: sidebar-menu.js
  * Handle sidebar collapsible elements

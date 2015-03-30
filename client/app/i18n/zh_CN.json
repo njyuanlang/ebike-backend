@@ -16,11 +16,22 @@
     "nav": {
       "DASHBOARD": "控制面板",
       "CLIENT": "客户管理",
+      "BIKE": "车辆管理",
+      "CRUISE": "巡航纪录",
+      "TEST": "故障检测",
       "mbm": {
         "MBM": "厂商品牌",
         "MANUFACTURER": "制造商",
         "BRAND": "车辆品牌"
-      }
+      },
+      "DEVICE": "出厂设备",
+      "statistic": {
+        "STATISTIC": "统计汇总",
+        "BRAND": "品牌统计",
+        "REGION": "区域统计",
+        "FAULT": "故障统计"
+      },
+      "ACCOUNT": "账号管理"
     }
   }
 }
