@@ -259,7 +259,7 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
   })
 }])
 
-App.controller('BrandsAddController', ["$scope", "Brand", function ($scope, Brand) {
+App.controller('BrandsAddController', ["$scope", "Brand", "$state", "toaster", function ($scope, Brand, $state, toaster) {
 
   $scope.entity = {}
   
@@ -274,9 +274,16 @@ App.controller('BrandsAddController', ["$scope", "Brand", function ($scope, Bran
   $scope.submitForm = function() {
     $scope.submitted = true;
     if ($scope.formValidate.$valid) {
-      Brand.create($scope.entity)
+      Brand.create($scope.entity, function (entity) {
+        toaster.pop('success', '新增品牌成功', '已经添加品牌 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.brands')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '新增品牌错误', res.data.error.message)
+        console.log(res)
+      })
     } else {
-      console.log('Not valid!!');
       return false;
     }
   };

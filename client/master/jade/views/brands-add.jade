@@ -7,6 +7,7 @@ h3 新增车辆品牌
       form.form-validate.form-horizontal(name="formValidate", ng-submit="submitForm()", novalidate="")
         // START panel
         .panel.panel-default
+          toaster-container(toaster-options="{'position-class': 'toast-top-right', 'close-button':true}")
           .panel-body
             fieldset.b0
               legend 品牌资料
