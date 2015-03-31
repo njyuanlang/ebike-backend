@@ -24,7 +24,7 @@ h3 新增车辆品牌
                 label.col-sm-2.control-label 所属制造商
                 .col-sm-6
                   select.form-control(name='manufacturer', ng-model="entity.manufacturerId")
-                    option(ng-repeat="m in manufacturers" value="m.id") {{m.name}}
+                    option(ng-repeat="m in manufacturers" value="{{m.id}}") {{m.name}}
                 .col-sm-4
                   small.text-muted 可选
           .panel-footer.text-center

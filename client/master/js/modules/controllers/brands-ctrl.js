@@ -9,7 +9,7 @@ App.controller('BrandsController', function ($scope, Brand, ngTableParams) {
     count: 10
   }, {
     getData: function($defer, params) {
-      Brand.find({}, $defer.resolve)
+      Brand.find({include:['manufacturer']}, $defer.resolve)
     }
   }) 
 
@@ -18,11 +18,11 @@ App.controller('BrandsController', function ($scope, Brand, ngTableParams) {
   })
 })
 
-App.controller('BrandsAddController', function ($scope, Brand, $state, toaster) {
+App.controller('BrandsAddController', function ($scope, Brand, $state, toaster, Manufacturer) {
 
   $scope.entity = {}
   
-  $scope.manufacturers = [{id:123, name:"test"}, {id:456, name:"test2"}]
+  $scope.manufacturers = Manufacturer.query()
   $scope.submitted = false;
   $scope.validateInput = function(name, type) {
     var input = $scope.formValidate[name];

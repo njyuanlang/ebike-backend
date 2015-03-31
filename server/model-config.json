@@ -43,10 +43,6 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "model": {
-    "dataSource": "mongodb",
-    "public": true
-  },
   "authmessage": {
     "dataSource": "mongodb",
     "public": true

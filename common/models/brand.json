@@ -9,7 +9,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "manufacturer": {
+      "type": "belongsTo",
+      "model": "manufacturer",
+      "foreignKey": "manufacturerId"
+    }
+  },
   "acls": [],
   "methods": []
 }
