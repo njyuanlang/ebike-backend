@@ -34,12 +34,12 @@ App.controller('BrandsAddController', function ($scope, Brand, $state, toaster, 
     $scope.submitted = true;
     if ($scope.formValidate.$valid) {
       Brand.create($scope.entity, function (entity) {
-        toaster.pop('success', '新增品牌成功', '已经添加品牌 '+entity.name)
+        toaster.pop('success', '新增成功', '已经添加品牌 '+entity.name)
         setTimeout(function () {
           $state.go('app.brands')
         }, 2000)
       }, function (res) {
-        toaster.pop('error', '新增品牌错误', res.data.error.message)
+        toaster.pop('error', '新增错误', res.data.error.message)
         console.log(res)
       })
     } else {

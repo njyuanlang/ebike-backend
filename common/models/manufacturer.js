@@ -1,18 +1,15 @@
 module.exports = function(Manufacturer) {
 
-  Manufacturer.beforeCreate = function (next, manufacturer) {
-    
-    Manufacturer.findOne({where:{name:manufacturer.name}}, function (err, entity) {
-      if(entity) {
-        err = new Error('制造商已经存在')
-        err.status = 400
-        next(err)
-      } else {
-        manufacturer.created = new Date()
-        next()
-      }
-    })
-    
-  }
+  Brand.validatesUniquenessOf('name', {message: "制造商已经存在"})
+  Brand.observe('before save', function timeStamp(ctx, next) {
+    var now = new Date()
+    if(ctx.instance) {
+      ctx.instance.updated = now
+      if(!ctx.instance.id) ctx.instance.created = now
+    } else {
+      ctx.data.updated = now
+    }
+    next()
+  })
   
 };
