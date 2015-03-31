@@ -255,7 +255,7 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
     count: 10
   }, {
     getData: function($defer, params) {
-      Brand.find({include:['manufacturer']}, $defer.resolve)
+      Brand.find({include:"manufacturer"}, $defer.resolve)
     }
   }) 
 
@@ -326,6 +326,9 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
   
   $scope.addNewModel = function () {
     if($scope.model === '') return
+    if(!$scope.entity.models) $scope.entity.models = []
+    if($scope.entity.models.indexOf($scope.model) >= 0) return
+    console.log($scope.entity.models.indexOf($scope.model))
     $scope.entity.models.push($scope.model)
   }
     

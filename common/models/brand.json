@@ -6,6 +6,10 @@
     "name": {
       "type": "string",
       "required": true
+    },
+    "manufacturerId": {
+      "type": "ObjectId",
+      "required": false
     }
   },
   "validations": [],
