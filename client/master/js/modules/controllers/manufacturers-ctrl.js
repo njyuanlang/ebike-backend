@@ -9,7 +9,9 @@ App.controller('ManufacturersController', function ($scope, Manufacturer, ngTabl
     count: 10
   }, {
     getData: function($defer, params) {
-      Manufacturer.find({}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      Manufacturer.find({filter:{limit:count, skip: skip}}, $defer.resolve)
     }
   }) 
 

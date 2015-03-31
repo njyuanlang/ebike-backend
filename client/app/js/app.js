@@ -254,8 +254,11 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
   $scope.tableParams = new ngTableParams({
     count: 10
   }, {
+    total: 12,
     getData: function($defer, params) {
-      Brand.find({include:"manufacturer"}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      Brand.find({filter:{include:"manufacturer", limit:count, skip: skip}}, $defer.resolve)
     }
   }) 
 
@@ -345,7 +348,9 @@ App.controller('ClientsController', ["$scope", "User", "ngTableParams", function
     count: 10
   }, {
     getData: function($defer, params) {
-      User.find({}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      User.find({filter:{limit:count, skip: skip, where:{realm:'client'}}}, $defer.resolve)
     }
   }) 
 
@@ -578,7 +583,9 @@ App.controller('ManufacturersController', ["$scope", "Manufacturer", "ngTablePar
     count: 10
   }, {
     getData: function($defer, params) {
-      Manufacturer.find({}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      Manufacturer.find({filter:{limit:count, skip: skip}}, $defer.resolve)
     }
   }) 
 

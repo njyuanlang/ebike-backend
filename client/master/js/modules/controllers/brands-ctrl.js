@@ -8,8 +8,11 @@ App.controller('BrandsController', function ($scope, Brand, ngTableParams) {
   $scope.tableParams = new ngTableParams({
     count: 10
   }, {
+    total: 12,
     getData: function($defer, params) {
-      Brand.find({include:"manufacturer"}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      Brand.find({filter:{include:"manufacturer", limit:count, skip: skip}}, $defer.resolve)
     }
   }) 
 

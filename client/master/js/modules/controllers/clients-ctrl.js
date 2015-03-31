@@ -9,7 +9,9 @@ App.controller('ClientsController', function ($scope, User, ngTableParams) {
     count: 10
   }, {
     getData: function($defer, params) {
-      User.find({}, $defer.resolve)
+      var count = params.count()
+      var skip = (params.page()-1)*count
+      User.find({filter:{limit:count, skip: skip, where:{realm:'client'}}}, $defer.resolve)
     }
   }) 
 
