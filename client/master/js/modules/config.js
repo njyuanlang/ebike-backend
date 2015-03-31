@@ -56,6 +56,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Brands Add',
         templateUrl: helper.basepath('brands-add.html')
     })
+    .state('app.brand', {
+        url: '/brands/:brandId',
+        title: 'Brands detail',
+        templateUrl: helper.basepath('brand.html')
+    })
     // 
     // CUSTOM RESOLVES
     //   Add your own resolves properties

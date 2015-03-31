@@ -1,0 +1,77 @@
+<h3>车辆品牌详情
+   <a ui-sref="app.brands()" class="pull-right btn btn-sm btn-default">
+      <span class="btn-label"><i class="icon-arrow-left"></i>
+      </span>返回</a>
+</h3>
+<div ng-controller="BrandController" class="container-fluid">
+   <!-- START row-->
+   <div class="row">
+      <div class="col-md-12">
+         <form name="formValidate" ng-submit="submitForm()" novalidate="" class="form-validate form-horizontal">
+            <!-- START panel-->
+            <div class="panel panel-default">
+               <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+               <div class="panel-body">
+                  <fieldset class="b0">
+                     <legend>品牌资料</legend>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">品牌名称</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" required="" ng-model="entity.name" class="form-control" />
+                           <span ng-show="validateInput('name', 'required')" class="text-danger">品牌名称不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">所属制造商</label>
+                        <div class="col-sm-6">
+                           <select name="manufacturer" ng-model="entity.manufacturerId" class="form-control">
+                              <option ng-repeat="m in manufacturers" value="{{m.id}}">{{m.name}}</option>
+                           </select>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">可选</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <div class="panel-title">下属型号</div>
+                  <div class="table-responsive">
+                     <table ng-table="tableParams" class="table table-bordered table-striped">
+                        <tbody>
+                           <tr ng-repeat="model in entity.models">
+                              <td data-title="'序号'">{{$index+1}}</td>
+                              <td data-title="'型号名称'">{{model}}</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <div class="input-group pull-right col-sm-6">
+                     <input type="text" ng-model="model" placeholder="请输入新型号名称" class="form-control" />
+                     <span class="input-group-btn">
+                        <a ng-click="addNewModel()" class="pull-right btn btn-sm btn-success">
+                           <span class="btn-label"><i class="icon-plus"></i>
+                           </span>新增</a>
+                     </span>
+                  </div>
+               </div>
+               <div class="panel-footer text-center">
+                  <button type="submit" class="mb-sm btn btn-lg btn-info">
+                     <span class="btn-lable"> <i class="fa fa-save"></i>
+                     </span>保存</button>
+                  <button ui-sref="app.brands()" class="mb-sm btn btn-lg btn-default">
+                     <span class="btn-lable"> <i class="icon-arrow-left"></i>
+                     </span>返回</button>
+               </div>
+            </div>
+            <!-- END panel-->
+         </form>
+      </div>
+   </div>
+   <!-- END row-->
+</div>

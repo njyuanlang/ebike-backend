@@ -127,6 +127,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Brands Add',
         templateUrl: helper.basepath('brands-add.html')
     })
+    .state('app.brand', {
+        url: '/brands/:brandId',
+        title: 'Brands detail',
+        templateUrl: helper.basepath('brand.html')
+    })
     // 
     // CUSTOM RESOLVES
     //   Add your own resolves properties
@@ -289,6 +294,43 @@ App.controller('BrandsAddController', ["$scope", "Brand", "$state", "toaster", "
   };
   
 }])
+
+App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manufacturer", "ngTableParams", function ($scope, Brand, $state, toaster, Manufacturer, ngTableParams) {
+
+  $scope.manufacturers = Manufacturer.query()
+  $scope.entity = Brand.findById({id:$state.params.brandId})
+  $scope.model = ""
+  
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      Brand.upsert($scope.entity, function (entity) {
+        toaster.pop('success', '更新成功', '已经更新品牌 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.brands')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '更新错误', res.data.error.message)
+      })
+    } else {
+      return false;
+    }
+  };
+  
+  $scope.addNewModel = function () {
+    if($scope.model === '') return
+    $scope.entity.models.push($scope.model)
+  }
+    
+}])
+
 /**=========================================================
  * Module: clients-ctrl.js
  * Clients Controller

@@ -1,0 +1,60 @@
+h3 车辆品牌详情
+  a.pull-right.btn.btn-sm.btn-default(ui-sref="app.brands()") 
+    span.btn-label
+      i.icon-arrow-left
+    | 返回 
+
+.container-fluid(ng-controller="BrandController")
+  // START row
+  .row
+    .col-md-12
+      form.form-validate.form-horizontal(name="formValidate", ng-submit="submitForm()", novalidate="")
+        // START panel
+        .panel.panel-default
+          toaster-container(toaster-options="{'position-class': 'toast-top-right', 'close-button':true}")
+          .panel-body
+            fieldset.b0
+              legend 品牌资料
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 品牌名称
+                .col-sm-6
+                  input.form-control(type='text', name='name', required='', ng-model="entity.name")
+                  span.text-danger(ng-show="validateInput('name', 'required')") 品牌名称不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 所属制造商
+                .col-sm-6
+                  select.form-control(name='manufacturer', ng-model="entity.manufacturerId")
+                    option(ng-repeat="m in manufacturers" value="{{m.id}}") {{m.name}}
+                .col-sm-4
+                  small.text-muted 可选
+            .panel-title 下属型号
+            .table-responsive
+              table.table.table-bordered.table-striped(ng-table='tableParams')
+                tbody
+                  tr(ng-repeat='model in entity.models')
+                    td(data-title="'序号'") {{$index+1}}
+                    td(data-title="'型号名称'") {{model}}
+            .input-group.pull-right.col-sm-6
+              input.form-control(type='text', ng-model="model", placeholder="请输入新型号名称")
+              span.input-group-btn
+                a.pull-right.btn.btn-sm.btn-success(ng-click="addNewModel()") 
+                  span.btn-label
+                    i.icon-plus
+                  | 新增
+            
+          .panel-footer.text-center
+            button.mb-sm.btn.btn-lg.btn-info(type='submit') 
+              span.btn-lable 
+                i.fa.fa-save
+              | 保存   
+            button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.brands()") 
+              span.btn-lable 
+                i.icon-arrow-left
+              | 返回
+        // END panel
+  // END row
+                
