@@ -1,0 +1,1 @@
+!function(e,r){"use strict";var i=r.module("ebike-services",["lbServices"]);i.service("CurrentUser",function(){return{}})}(window,window.angular);
