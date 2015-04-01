@@ -46,5 +46,17 @@
   "authmessage": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "cruise": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "test": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "device": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

@@ -33,12 +33,32 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',
+        controller: 'ClientsController',
         templateUrl: helper.basepath('clients.html'),
-        resolve: helper.resolveFor('ngTable', 'ngTableExport')
+        resolve: helper.resolveFor('ngTableExport')
+    })
+    .state('app.bikes', {
+        url: '/bikes',
+        title: 'Bikes',
+        controller: 'BikesController',
+        templateUrl: helper.basepath('bikes.html')
+    })
+    .state('app.cruises', {
+        url: '/cruises',
+        title: 'Cruises',
+        controller: 'CruisesController',
+        templateUrl: helper.basepath('cruises.html')
+    })
+    .state('app.tests', {
+        url: '/tests',
+        title: 'Tests',
+        controller: 'TestsController',
+        templateUrl: helper.basepath('tests.html')
     })
     .state('app.manufacturers', {
         url: '/manufacturers',
         title: 'Manufacturers',
+        controller: 'ManufacturersController',
         templateUrl: helper.basepath('manufacturers.html')
     })
     .state('app.manufacturers-add', {
@@ -62,22 +82,36 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Brands detail',
         templateUrl: helper.basepath('brand.html')
     })
-    // 
-    // CUSTOM RESOLVES
-    //   Add your own resolves properties
-    //   following this object extend
-    //   method
-    // ----------------------------------- 
-    // .state('app.someroute', {
-    //   url: '/some_url',
-    //   templateUrl: 'path_to_template.html',
-    //   controller: 'someController',
-    //   resolve: angular.extend(
-    //     helper.resolveFor(), {
-    //     // YOUR RESOLVES GO HERE
-    //     }
-    //   )
-    // })
+    .state('app.devices', {
+        url: '/devices',
+        title: 'Devices',
+        controller: 'DevicesController',
+        templateUrl: helper.basepath('devices.html')
+    })
+    .state('app.statistic-brand', {
+        url: '/statistic-brand',
+        title: 'Statistic Brand',
+        controller: 'StatisticBrandController',
+        templateUrl: helper.basepath('statistic-brand.html')
+    })
+    .state('app.statistic-region', {
+        url: '/statistic-region',
+        title: 'Statistic Region',
+        controller: 'StatisticRegionController',
+        templateUrl: helper.basepath('statistic-region.html')
+    })
+    .state('app.statistic-fault', {
+        url: '/statistic-fault',
+        title: 'Statistic Fault',
+        controller: 'StatisticFaultController',
+        templateUrl: helper.basepath('statistic-fault.html')
+    })
+    .state('app.accounts', {
+        url: '/accounts',
+        title: 'Accounts',
+        controller: 'AccountsController',
+        templateUrl: helper.basepath('accounts.html')
+    })
     ;
 
 

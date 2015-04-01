@@ -1,0 +1,21 @@
+h3
+  | 车辆列表
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入电动车序列号", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'车辆编号'") {{entity.serialNumber}}
+            td(data-title="'品牌'") {{entity.brand}}
+            td(data-title="'型号'") {{entity.model}}
+            td(data-title="'车主'") {{entity.owner}}
+            td(data-title="'注册地'") {{entity.region.province}} {{entity.region.city}}
+            td(data-title="'注册日期'") {{entity.created}}

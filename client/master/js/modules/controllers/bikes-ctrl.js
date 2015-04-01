@@ -1,9 +1,9 @@
 /**=========================================================
- * Module: clients-ctrl.js
- * Clients Controller
+ * Module: bikes-ctrl.js
+ * Bikes Controller
  =========================================================*/
 
-App.controller('ClientsController', function ($scope, User, ngTableParams) {
+App.controller('BikesController', function ($scope, Bike, ngTableParams) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -14,12 +14,11 @@ App.controller('ClientsController', function ($scope, User, ngTableParams) {
       var opt = {}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
-      opt.where = {realm: "client"}
       if($scope.filter.text != '') {
-        opt.where.username = {like: $scope.filter.text}
+        opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      User.find({filter:opt}, $defer.resolve)
-      User.count({where: opt.where}, function (result) {
+      Bike.find({filter:opt}, $defer.resolve)
+      Bike.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
       })
     }

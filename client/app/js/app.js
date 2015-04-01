@@ -104,12 +104,32 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',
+        controller: 'ClientsController',
         templateUrl: helper.basepath('clients.html'),
-        resolve: helper.resolveFor('ngTable', 'ngTableExport')
+        resolve: helper.resolveFor('ngTableExport')
+    })
+    .state('app.bikes', {
+        url: '/bikes',
+        title: 'Bikes',
+        controller: 'BikesController',
+        templateUrl: helper.basepath('bikes.html')
+    })
+    .state('app.cruises', {
+        url: '/cruises',
+        title: 'Cruises',
+        controller: 'CruisesController',
+        templateUrl: helper.basepath('cruises.html')
+    })
+    .state('app.tests', {
+        url: '/tests',
+        title: 'Tests',
+        controller: 'TestsController',
+        templateUrl: helper.basepath('tests.html')
     })
     .state('app.manufacturers', {
         url: '/manufacturers',
         title: 'Manufacturers',
+        controller: 'ManufacturersController',
         templateUrl: helper.basepath('manufacturers.html')
     })
     .state('app.manufacturers-add', {
@@ -133,22 +153,36 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Brands detail',
         templateUrl: helper.basepath('brand.html')
     })
-    // 
-    // CUSTOM RESOLVES
-    //   Add your own resolves properties
-    //   following this object extend
-    //   method
-    // ----------------------------------- 
-    // .state('app.someroute', {
-    //   url: '/some_url',
-    //   templateUrl: 'path_to_template.html',
-    //   controller: 'someController',
-    //   resolve: angular.extend(
-    //     helper.resolveFor(), {
-    //     // YOUR RESOLVES GO HERE
-    //     }
-    //   )
-    // })
+    .state('app.devices', {
+        url: '/devices',
+        title: 'Devices',
+        controller: 'DevicesController',
+        templateUrl: helper.basepath('devices.html')
+    })
+    .state('app.statistic-brand', {
+        url: '/statistic-brand',
+        title: 'Statistic Brand',
+        controller: 'StatisticBrandController',
+        templateUrl: helper.basepath('statistic-brand.html')
+    })
+    .state('app.statistic-region', {
+        url: '/statistic-region',
+        title: 'Statistic Region',
+        controller: 'StatisticRegionController',
+        templateUrl: helper.basepath('statistic-region.html')
+    })
+    .state('app.statistic-fault', {
+        url: '/statistic-fault',
+        title: 'Statistic Fault',
+        controller: 'StatisticFaultController',
+        templateUrl: helper.basepath('statistic-fault.html')
+    })
+    .state('app.accounts', {
+        url: '/accounts',
+        title: 'Accounts',
+        controller: 'AccountsController',
+        templateUrl: helper.basepath('accounts.html')
+    })
     ;
 
 
@@ -245,6 +279,59 @@ App
 
   })
 ;
+/**=========================================================
+ * Module: accounts-ctrl.js
+ * Accounts Controller
+ =========================================================*/
+
+App.controller('AccountsController', ["$scope", "User", "ngTableParams", function ($scope, User, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      opt.where = {realm: "administrator"}
+      if($scope.filter.text != '') {
+        opt.where.name = {like: $scope.filter.text}
+      }
+      User.find({filter:opt}, $defer.resolve)
+      User.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
+    }
+  })   
+}])
+/**=========================================================
+ * Module: bikes-ctrl.js
+ * Bikes Controller
+ =========================================================*/
+
+App.controller('BikesController', ["$scope", "Bike", "ngTableParams", function ($scope, Bike, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"serialNumber": {like: $scope.filter.text}}
+      }
+      Bike.find({filter:opt}, $defer.resolve)
+      Bike.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
+    }
+  })   
+}])
 /**=========================================================
  * Module: brands-ctrl.js
  * Brands Controller
@@ -349,19 +436,77 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
 
 App.controller('ClientsController', ["$scope", "User", "ngTableParams", function ($scope, User, ngTableParams) {
   
+  $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
-    count: 10
+    count: 10,
+    filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var count = params.count()
-      var skip = (params.page()-1)*count
-      User.find({filter:{limit:count, skip: skip, where:{realm:'client'}}}, $defer.resolve)
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      opt.where = {realm: "client"}
+      if($scope.filter.text != '') {
+        opt.where.username = {like: $scope.filter.text}
+      }
+      User.find({filter:opt}, $defer.resolve)
+      User.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
     }
-  }) 
+  })   
+}])
+/**=========================================================
+ * Module: cruises-ctrl.js
+ * Cruises Controller
+ =========================================================*/
 
-  User.count(function (result) {
-    $scope.tableParams.total(result.count)
-  })
+App.controller('CruisesController', ["$scope", "Cruise", "ngTableParams", function ($scope, Cruise, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"serialNumber": {like: $scope.filter.text}}
+      }
+      Cruise.find({filter:opt}, $defer.resolve)
+      Cruise.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
+    }
+  })   
+}])
+/**=========================================================
+ * Module: devices-ctrl.js
+ * Devices Controller
+ =========================================================*/
+
+App.controller('DevicesController', ["$scope", "Device", "ngTableParams", function ($scope, Device, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"serialNumber": {like: $scope.filter.text}}
+      }
+      Device.find({filter:opt}, $defer.resolve)
+      Device.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
+    }
+  })   
 }])
 /**
  * List Controller
@@ -584,19 +729,25 @@ App.controller('AppController',
 
 App.controller('ManufacturersController', ["$scope", "Manufacturer", "ngTableParams", function ($scope, Manufacturer, ngTableParams) {
   
+  $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
-    count: 10
+    count: 10,
+    filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var count = params.count()
-      var skip = (params.page()-1)*count
-      Manufacturer.find({filter:{limit:count, skip: skip}}, $defer.resolve)
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"name": {like: $scope.filter.text}}
+      }
+      Manufacturer.find({filter:opt}, $defer.resolve)
+      Manufacturer.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
     }
-  }) 
+  })   
 
-  Manufacturer.count(function (result) {
-    $scope.tableParams.total(result.count)
-  })
 }])
 
 App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer", "toaster", function ($scope, $state, Manufacturer, toaster) {
@@ -732,6 +883,48 @@ App.controller('SidebarController', ['$rootScope', '$scope', '$state', '$http', 
 
 }]);
 
+/**=========================================================
+ * Module: statistic-ctrl.js
+ * Statistic Controllers
+ =========================================================*/
+
+App.controller('StatisticBrandController', ["$scope", function ($scope) {
+    
+}])
+
+App.controller('StatisticRegionController', ["$scope", function ($scope) {
+    
+}])
+
+App.controller('StatisticFaultController', ["$scope", function ($scope) {
+    
+}])
+/**=========================================================
+ * Module: tests-ctrl.js
+ * Tests Controller
+ =========================================================*/
+
+App.controller('TestsController', ["$scope", "Test", "ngTableParams", function ($scope, Test, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"serialNumber": {like: $scope.filter.text}}
+      }
+      Test.find({filter:opt}, $defer.resolve)
+      Test.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
+    }
+  })   
+}])
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key

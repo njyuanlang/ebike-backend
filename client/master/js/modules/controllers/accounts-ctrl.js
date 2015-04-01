@@ -1,9 +1,9 @@
 /**=========================================================
- * Module: clients-ctrl.js
- * Clients Controller
+ * Module: accounts-ctrl.js
+ * Accounts Controller
  =========================================================*/
 
-App.controller('ClientsController', function ($scope, User, ngTableParams) {
+App.controller('AccountsController', function ($scope, User, ngTableParams) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -14,9 +14,9 @@ App.controller('ClientsController', function ($scope, User, ngTableParams) {
       var opt = {}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
-      opt.where = {realm: "client"}
+      opt.where = {realm: "administrator"}
       if($scope.filter.text != '') {
-        opt.where.username = {like: $scope.filter.text}
+        opt.where.name = {like: $scope.filter.text}
       }
       User.find({filter:opt}, $defer.resolve)
       User.count({where: opt.where}, function (result) {

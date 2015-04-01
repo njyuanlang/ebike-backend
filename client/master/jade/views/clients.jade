@@ -1,12 +1,15 @@
 h3
   | 客户
-.container-fluid(ng-controller="ClientsController as clients")
+  a.pull-right.btn.btn-sm.btn-info(ng-mousedown='csv.generate()', ng-href='{{ csv.link() }}', download='test.csv') 导出用户
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入用户手机号码", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
   
-  // Export CSV Example
+.container-fluid
+  
   .panel.panel-default
-    .panel-heading
-      a.pull-right.btn.btn-sm.btn-info(ng-mousedown='csv.generate()', ng-href='{{ csv.link() }}', download='test.csv') Export to CSV
-      .panel-title 客户
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams', export-csv='csv')
         tbody

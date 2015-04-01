@@ -1,10 +1,15 @@
-<h3>客户</h3>
-<div ng-controller="ClientsController as clients" class="container-fluid">
-   <!-- Export CSV Example-->
-   <div class="panel panel-default">
-      <div class="panel-heading"><a ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-info">Export to CSV</a>
-         <div class="panel-title">客户</div>
+<h3>客户<a ng-mousedown="csv.generate()" ng-href="{{ csv.link() }}" download="test.csv" class="pull-right btn btn-sm btn-info">导出用户</a>
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入用户手机号码" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
       </div>
+   </from>
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
       <div class="table-responsive">
          <table ng-table="tableParams" export-csv="csv" class="table table-bordered table-striped">
             <tbody>

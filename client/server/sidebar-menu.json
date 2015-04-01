@@ -62,15 +62,15 @@
     "icon": "icon-bar-chart",
     "submenu": [
       { "text": "Brand", 
-        "sref": "app.statistic.brand", 
+        "sref": "app.statistic-brand", 
         "translate": "sidebar.nav.statistic.BRAND" 
       },
       { "text": "Region", 
-        "sref": "app.statistic.region", 
+        "sref": "app.statistic-region", 
         "translate": "sidebar.nav.statistic.REGION" 
       },
       { "text": "Fault", 
-        "sref": "app.statistic.fault", 
+        "sref": "app.statistic-fault", 
         "translate": "sidebar.nav.statistic.FAULT" 
       }
     ],

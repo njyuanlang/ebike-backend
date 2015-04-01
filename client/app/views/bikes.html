@@ -1,0 +1,28 @@
+<h3>车辆列表
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入电动车序列号" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
+      </div>
+   </from>
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'车辆编号'">{{entity.serialNumber}}</td>
+                  <td data-title="'品牌'">{{entity.brand}}</td>
+                  <td data-title="'型号'">{{entity.model}}</td>
+                  <td data-title="'车主'">{{entity.owner}}</td>
+                  <td data-title="'注册地'">{{entity.region.province}} {{entity.region.city}}</td>
+                  <td data-title="'注册日期'">{{entity.created}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

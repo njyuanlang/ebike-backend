@@ -4,8 +4,15 @@ h3
     span.btn-label
       i.icon-plus
     | 新增
+  // START SEARCH INPUT
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入厂商名称", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  // END SEARCH INPUT
   
-.container-fluid(ng-controller="ManufacturersController as brands")
+.container-fluid
   
   .panel.panel-default
     .table-responsive

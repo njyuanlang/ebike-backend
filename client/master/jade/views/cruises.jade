@@ -1,0 +1,23 @@
+h3
+  | 巡航记录
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入电动车序列号", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'车辆编号'") {{entity.serialNumber}}
+            td(data-title="'品牌'") {{entity.brand}}
+            td(data-title="'型号'") {{entity.model}}
+            td(data-title="'平均时速'") {{entity.speed}}
+            td(data-title="'电量'") {{entity.power}}
+            td(data-title="'电流'") {{entity.current}}
+            td(data-title="'城市'") {{entity.region.city}}
+            td(data-title="'登记时间'") {{entity.created}}

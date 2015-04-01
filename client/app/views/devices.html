@@ -1,0 +1,24 @@
+<h3>出厂设备
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入设备序列号" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
+      </div>
+   </from>
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'设备编号'">{{entity.serialNumber}}</td>
+                  <td data-title="'登记时间'">{{entity.created}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

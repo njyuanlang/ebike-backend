@@ -1,0 +1,15 @@
+{
+  "name": "cruise",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "properties": {
+    "bikeId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

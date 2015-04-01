@@ -5,19 +5,25 @@
 
 App.controller('ManufacturersController', function ($scope, Manufacturer, ngTableParams) {
   
+  $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
-    count: 10
+    count: 10,
+    filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var count = params.count()
-      var skip = (params.page()-1)*count
-      Manufacturer.find({filter:{limit:count, skip: skip}}, $defer.resolve)
+      var opt = {}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      if($scope.filter.text != '') {
+        opt.where = {"name": {like: $scope.filter.text}}
+      }
+      Manufacturer.find({filter:opt}, $defer.resolve)
+      Manufacturer.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+      })
     }
-  }) 
+  })   
 
-  Manufacturer.count(function (result) {
-    $scope.tableParams.total(result.count)
-  })
 })
 
 App.controller('ManufacturersAddController', function ($scope, $state, Manufacturer, toaster) {
