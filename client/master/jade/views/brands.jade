@@ -4,8 +4,13 @@ h3
     span.btn-label
       i.icon-plus
     | 新增
-  
-.container-fluid(ng-controller="BrandsController as brands")
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入品牌名称", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+
+.container-fluid
   
   .panel.panel-default
     .table-responsive

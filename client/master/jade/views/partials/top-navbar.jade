@@ -24,10 +24,6 @@ nav.navbar.topnavbar(role='navigation')
 
       // START Right Navbar
       ul.nav.navbar-nav.navbar-right
-        // Search icon
-        li
-          a(search-open="")
-            em.icon-magnifier
         // START Offsidebar button
         li
           a(toggle-state="offsidebar-open", no-persist)
@@ -35,13 +31,5 @@ nav.navbar.topnavbar(role='navigation')
         // END Offsidebar menu
       // END Right Navbar
     // END Nav wrapper
-    
-    // START Search form
-    form.navbar-form(role='search', action="search.html")
-      .form-group.has-feedback
-        input.form-control(type='text', placeholder="{{ 'topbar.search.PLACEHOLDER' | translate }}")
-        .fa.fa-times.form-control-feedback(search-dismiss)
-      button.hidden.btn.btn-default(type='submit') Submit
-    // END Search form
 
 // END Top Navbar

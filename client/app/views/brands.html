@@ -2,8 +2,16 @@
    <a ui-sref="app.brands-add()" class="pull-right btn btn-sm btn-info">
       <span class="btn-label"><i class="icon-plus"></i>
       </span>新增</a>
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入品牌名称" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
+      </div>
+   </from>
 </h3>
-<div ng-controller="BrandsController as brands" class="container-fluid">
+<div class="container-fluid">
    <div class="panel panel-default">
       <div class="table-responsive">
          <table ng-table="tableParams" class="table table-bordered table-striped">

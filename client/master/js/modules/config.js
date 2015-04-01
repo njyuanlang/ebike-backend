@@ -49,6 +49,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.brands', {
         url: '/brands',
         title: 'Brands',
+        controller: 'BrandsController',
         templateUrl: helper.basepath('brands.html')
     })
     .state('app.brands-add', {
