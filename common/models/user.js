@@ -42,6 +42,8 @@ module.exports = function(User) {
         user.created = user.created||now
         user.lastUpdated = user.lastUpdated||now
         user.status = 'active'         
+        user.name = user.name || user.username
+        user.phone = user.phone || user.username
         next()
       }
     })  

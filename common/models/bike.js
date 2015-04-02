@@ -1,6 +1,14 @@
 module.exports = function(Bike) {
   
-  Bike.validatesUniquenessOf('serialNumber', {message: "序列号意见存在"})
+  Bike.beforeRemote('create', function (ctx, unused, next) {
+    if(ctx.req.accessToken) {
+      ctx.req.body.ownerId = ctx.req.accessToken.userId
+    }
+    next()
+  })
+  
+  Bike.validatesUniquenessOf('serialNumber', {message: "序列号已经存在"})
+  
   Bike.observe('before save', function timeStamp(ctx, next) {
     var now = new Date()
     if(ctx.instance) {
@@ -10,6 +18,5 @@ module.exports = function(Bike) {
       ctx.data.updated = now
     }
     next()
-  })  
-  
+  })
 };
