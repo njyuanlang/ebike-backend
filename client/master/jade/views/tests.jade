@@ -13,12 +13,11 @@ h3
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
           tr(ng-repeat='entity in $data')
-            td(data-title="'检测结果'") {{entity.status}}
-            td(data-title="'车辆编号'") {{entity.serialNumber}}
-            td(data-title="'品牌'") {{entity.brand}}
-            td(data-title="'型号'") {{entity.model}}
-            td(data-title="'总里程'") {{entity.odo}}
-            td(data-title="'故障项目'") {{entity.items.length}}
+            td(data-title="'检测结果'") {{entity.state | testState}}
+            td(data-title="'车辆编号'") {{entity.bike.serialNumber}}
+            td(data-title="'品牌'") {{entity.bike.brand.name}}
+            td(data-title="'型号'") {{entity.bike.model}}
+            td(data-title="'总里程'") {{entity.bike.odo}}
+            td(data-title="'故障项目'") {{entity.items | testCountError}}
             td(data-title="'修复率'") {{entity.items.length}}
-            td(data-title="'城市'") {{entity.region.city}}
             td(data-title="'登记时间'") {{entity.created}}
