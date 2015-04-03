@@ -18,9 +18,8 @@
                   <td data-title="'车辆编号'">{{entity.bike.serialNumber}}</td>
                   <td data-title="'品牌'">{{entity.bike.brand.name}}</td>
                   <td data-title="'型号'">{{entity.bike.model}}</td>
-                  <td data-title="'总里程'">{{entity.bike.odo}}</td>
                   <td data-title="'故障项目'">{{entity.items | testCountError}}</td>
-                  <td data-title="'修复率'">{{entity.items.length}}</td>
+                  <td data-title="'修复率'">{{entity.items | testRepairedPercent}}</td>
                   <td data-title="'登记时间'">{{entity.created}}</td>
                </tr>
             </tbody>

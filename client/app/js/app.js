@@ -1569,6 +1569,19 @@ App.filter("testState", function () {
     return errors
   }
 })
+
+.filter("testRepairedPercent", function () {
+  return function (items) {
+    var errors = 0
+    var repaireds = 0
+    items.forEach(function (item) {
+      if(item.state !== 'pass') errors++
+      if(item.state === 'repaired') repaireds++
+    })
+    
+    return Math.round(repaireds*100/errors)+'%'
+  }
+})
 // To run this code, edit file 
 // index.html or index.jade and change
 // html data-ng-app attribute from

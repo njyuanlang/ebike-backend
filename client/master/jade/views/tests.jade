@@ -17,7 +17,6 @@ h3
             td(data-title="'车辆编号'") {{entity.bike.serialNumber}}
             td(data-title="'品牌'") {{entity.bike.brand.name}}
             td(data-title="'型号'") {{entity.bike.model}}
-            td(data-title="'总里程'") {{entity.bike.odo}}
             td(data-title="'故障项目'") {{entity.items | testCountError}}
-            td(data-title="'修复率'") {{entity.items.length}}
+            td(data-title="'修复率'") {{entity.items | testRepairedPercent}}
             td(data-title="'登记时间'") {{entity.created}}
