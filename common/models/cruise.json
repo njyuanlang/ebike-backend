@@ -9,7 +9,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "bike": {
+      "type": "belongsTo",
+      "model": "bike",
+      "foreignKey": "bikeId"
+    }
+  },
   "acls": [],
   "methods": []
 }

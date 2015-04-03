@@ -11,7 +11,7 @@ App.controller('CruisesController', function ($scope, Cruise, ngTableParams) {
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {include:'bike'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
