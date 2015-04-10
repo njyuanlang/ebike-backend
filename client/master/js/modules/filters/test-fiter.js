@@ -36,6 +36,6 @@ App.filter("testState", function () {
       if(item.state === 'repaired') repaireds++
     })
     
-    return Math.round(repaireds*100/errors)+'%'
+    return errors ? Math.round(repaireds*100/errors)+'%': 'N/A'
   }
 })
