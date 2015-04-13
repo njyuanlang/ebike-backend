@@ -43,7 +43,10 @@
     "simple-line-icons": "0.1.1",
     "ng-table": "~0.5.4",
     "ng-table-export": "*",
-    "angularjs-toaster": "~0.4.11"
+    "angularjs-toaster": "~0.4.11",
+    "flot": "~0.8.3",
+    "flot-spline": "*",
+    "flot.tooltip": "~0.8.4"
   },
   "resolutions": {
     "jquery": "2.1.3",

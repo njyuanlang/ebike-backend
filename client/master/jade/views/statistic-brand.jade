@@ -1,2 +1,31 @@
 h3 
   | 品牌统计
+  
+.container-fluid(ng-controller="StatisticBrandController")
+  // START chart
+  .row
+    .col-lg-12
+      #panelChart2.panel.panel-default
+        .panel-heading
+          paneltool(tool-collapse, tool-dismiss)
+          .panel-title 品牌
+        .panel-wrapper(collapse="panelChart2")
+          .panel-body
+            flot(dataset='barData', options='barOptions', height="300px")
+  // END chart
+  
+  // START table
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'品牌'") {{entity.state | testState}}
+            td(data-title="'新增'") {{entity.bike.serialNumber}}
+            td(data-title="'新增占比'") {{entity.bike.brand.name}}
+            td(data-title="'活跃'") {{entity.bike.model}}
+            td(data-title="'活跃占比'") {{entity.items | testCountError}}
+            td(data-title="'累计'") {{entity.items | testRepairedPercent}}
+            td(data-title="'累计占比'") {{entity.created}}
+  // END chart
+            

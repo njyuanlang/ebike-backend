@@ -1,2 +1,40 @@
 <h3>
    品牌统计</h3>
+<div ng-controller="StatisticBrandController" class="container-fluid">
+   <!-- START chart-->
+   <div class="row">
+      <div class="col-lg-12">
+         <div id="panelChart2" class="panel panel-default">
+            <div class="panel-heading">
+               <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+               <div class="panel-title">品牌</div>
+            </div>
+            <div collapse="panelChart2" class="panel-wrapper">
+               <div class="panel-body">
+                  <flot dataset="barData" options="barOptions" height="300px"></flot>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END chart-->
+   <!-- START table-->
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'品牌'">{{entity.state | testState}}</td>
+                  <td data-title="'新增'">{{entity.bike.serialNumber}}</td>
+                  <td data-title="'新增占比'">{{entity.bike.brand.name}}</td>
+                  <td data-title="'活跃'">{{entity.bike.model}}</td>
+                  <td data-title="'活跃占比'">{{entity.items | testCountError}}</td>
+                  <td data-title="'累计'">{{entity.items | testRepairedPercent}}</td>
+                  <td data-title="'累计占比'">{{entity.created}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <!-- END chart-->
+</div>

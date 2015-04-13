@@ -163,7 +163,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         url: '/statistic-brand',
         title: 'Statistic Brand',
         controller: 'StatisticBrandController',
-        templateUrl: helper.basepath('statistic-brand.html')
+        templateUrl: helper.basepath('statistic-brand.html'),
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.statistic-region', {
         url: '/statistic-region',
@@ -262,6 +263,13 @@ App
   .constant('APP_REQUIRES', {
     // jQuery based and standalone scripts
     scripts: {
+      'flot-chart':         ['vendor/flot/jquery.flot.js'],
+      'flot-chart-plugins': ['vendor/flot.tooltip/js/jquery.flot.tooltip.min.js',
+                             'vendor/flot/jquery.flot.resize.js',
+                             'vendor/flot/jquery.flot.pie.js',
+                             'vendor/flot/jquery.flot.time.js',
+                             'vendor/flot/jquery.flot.categories.js',
+                             'vendor/flot-spline/js/jquery.flot.spline.min.js'],
       'modernizr':          ['vendor/modernizr/modernizr.js'],
       'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
                              'vendor/simple-line-icons/css/simple-line-icons.css']
@@ -888,8 +896,66 @@ App.controller('SidebarController', ['$rootScope', '$scope', '$state', '$http', 
  * Statistic Controllers
  =========================================================*/
 
-App.controller('StatisticBrandController', ["$scope", function ($scope) {
-    
+App.controller('StatisticBrandController', ["$scope", "Brand", function ($scope, Brand) {
+  
+  $scope.barData = [{
+    label: "新增用户",
+    color: "#9cd159",
+    data: [
+      ["品牌A", 100],
+      ["品牌B", 80],
+      ["品牌C", 70],
+      ["品牌D", 60],
+      ["品牌E", 50],
+      ["品牌F", 40],
+      ["品牌G", 30],
+      ["品牌H", 20],
+      ["品牌I", 10],
+      ["品牌J", 0]
+    ]
+  }]
+  
+  $scope.barOptions = {
+    series: {
+        bars: {
+            align: 'center',
+            lineWidth: 0,
+            show: true,
+            barWidth: 0.6,
+            fill: 0.9
+        }
+    },
+    grid: {
+        borderColor: '#eee',
+        borderWidth: 1,
+        hoverable: true,
+        backgroundColor: '#fcfcfc'
+    },
+    tooltip: true,
+    tooltipOpts: {
+        content: function (label, x, y) { return x + ' : ' + y; }
+    },
+    xaxis: {
+        tickColor: '#fcfcfc',
+        mode: 'categories'
+    },
+    yaxis: {
+        position: ($scope.app.layout.isRTL ? 'right' : 'left'),
+        tickColor: '#eee'
+    },
+    shadowSize: 0
+  };
+  
+  Brand.stat({beginDate: '"2015-04-02"', endDate: '"2015-04-09"'}, function (results) {
+    $scope.barData = [{
+      label: "新增用户",
+      color: "#9cd159",
+      data: []
+    }]
+    results.forEach(function (item) {
+      $scope.barData[0].data.push([item._id, item.count])
+    })
+  })
 }])
 
 App.controller('StatisticRegionController', ["$scope", function ($scope) {
@@ -925,6 +991,107 @@ App.controller('TestsController', ["$scope", "Test", "ngTableParams", function (
     }
   })   
 }])
+/**=========================================================
+ * Module: flot.js
+ * Initializes the Flot chart plugin and handles data refresh
+ =========================================================*/
+
+App.directive('flot', ['$http', '$timeout', function($http, $timeout) {
+  'use strict';
+  return {
+    restrict: 'EA',
+    template: '<div></div>',
+    scope: {
+      dataset: '=?',
+      options: '=',
+      series: '=',
+      callback: '=',
+      src: '='
+    },
+    link: linkFunction
+  };
+  
+  function linkFunction(scope, element, attributes) {
+    var height, plot, plotArea, width;
+    var heightDefault = 220;
+
+    plot = null;
+
+    width = attributes.width || '100%';
+    height = attributes.height || heightDefault;
+
+    plotArea = $(element.children()[0]);
+    plotArea.css({
+      width: width,
+      height: height
+    });
+
+    function init() {
+      var plotObj;
+      if(!scope.dataset || !scope.options) return;
+      plotObj = $.plot(plotArea, scope.dataset, scope.options);
+      scope.$emit('plotReady', plotObj);
+      if (scope.callback) {
+        scope.callback(plotObj, scope);
+      }
+
+      return plotObj;
+    }
+
+    function onDatasetChanged(dataset) {
+      if (plot) {
+        plot.setData(dataset);
+        plot.setupGrid();
+        return plot.draw();
+      } else {
+        plot = init();
+        onSerieToggled(scope.series);
+        return plot;
+      }
+    }
+    scope.$watchCollection('dataset', onDatasetChanged, true);
+
+    function onSerieToggled (series) {
+      if( !plot || !series ) return;
+      var someData = plot.getData();
+      for(var sName in series) {
+        angular.forEach(series[sName], toggleFor(sName));
+      }
+      
+      plot.setData(someData);
+      plot.draw();
+      
+      function toggleFor(sName) {
+        return function (s, i){
+          if(someData[i] && someData[i][sName])
+            someData[i][sName].show = s;
+        };
+      }
+    }
+    scope.$watch('series', onSerieToggled, true);
+    
+    function onSrcChanged(src) {
+
+      if( src ) {
+
+        $http.get(src)
+          .success(function (data) {
+
+            $timeout(function(){
+              scope.dataset = data;
+            });
+
+        }).error(function(){
+          $.error('Flot chart: Bad request.');
+        });
+        
+      }
+    }
+    scope.$watch('src', onSrcChanged);
+  }
+
+}]);
+
 /**=========================================================
  * Module: navbar-search.js
  * Navbar search toggler * Auto dismiss on ESC key

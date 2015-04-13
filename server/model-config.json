@@ -58,5 +58,9 @@
   "device": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "stat-brand": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

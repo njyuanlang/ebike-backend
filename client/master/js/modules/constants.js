@@ -30,6 +30,13 @@ App
   .constant('APP_REQUIRES', {
     // jQuery based and standalone scripts
     scripts: {
+      'flot-chart':         ['vendor/flot/jquery.flot.js'],
+      'flot-chart-plugins': ['vendor/flot.tooltip/js/jquery.flot.tooltip.min.js',
+                             'vendor/flot/jquery.flot.resize.js',
+                             'vendor/flot/jquery.flot.pie.js',
+                             'vendor/flot/jquery.flot.time.js',
+                             'vendor/flot/jquery.flot.categories.js',
+                             'vendor/flot-spline/js/jquery.flot.spline.min.js'],
       'modernizr':          ['vendor/modernizr/modernizr.js'],
       'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
                              'vendor/simple-line-icons/css/simple-line-icons.css']

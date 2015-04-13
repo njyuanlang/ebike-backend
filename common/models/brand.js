@@ -12,4 +12,37 @@ module.exports = function(Brand) {
     next()
   })
   
+  Brand.stat = function (beginDate, endDate, next) {
+    var collection = Brand.getDataSource().connector.collection('stat-brand')
+    collection.aggregate(
+      [
+        {
+          $match: {day: {$gt: new Date(beginDate), $lte: new Date(endDate)}}
+        },
+        {
+          $group: {
+            _id: "$brandName",
+            count: {$sum: "$count"},
+            total: {$first: "$total"}
+          }
+        }
+      ],
+      function (err, results) {
+        if(err) next(err)
+        next(err, results)
+      }
+    )    
+  }
+  
+  Brand.remoteMethod(
+    'stat',
+    {
+      accepts: [
+        {arg:'beginDate', type: 'Date'},
+        {arg:'endDate', type: 'Date'}
+      ],
+      returns: {arg:'data', type: 'array', root:true},
+      http: {verb: 'get'}
+    }
+  )
 };

@@ -92,7 +92,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         url: '/statistic-brand',
         title: 'Statistic Brand',
         controller: 'StatisticBrandController',
-        templateUrl: helper.basepath('statistic-brand.html')
+        templateUrl: helper.basepath('statistic-brand.html'),
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.statistic-region', {
         url: '/statistic-region',
