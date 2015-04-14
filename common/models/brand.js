@@ -13,25 +13,74 @@ module.exports = function(Brand) {
   })
   
   Brand.stat = function (beginDate, endDate, next) {
-    var collection = Brand.getDataSource().connector.collection('stat-brand')
-    collection.aggregate(
-      [
+    var result = {}
+    var collection = Brand.getDataSource().connector.collection('bike')
+    collection.aggregate([
+      {
+        $match: {
+          created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+        }
+      },
+      {
+        $group: {
+          _id: "$brand.name",
+          count: {$sum: 1}
+        }
+      },
+      {
+        $sort: {count: -1}
+      }
+    ],function (err, results) {
+      if(err) next(err)
+      result.data = results
+      
+      collection.aggregate([
         {
-          $match: {day: {$gt: new Date(beginDate), $lte: new Date(endDate)}}
+          $match: {
+            created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+          }
         },
         {
           $group: {
-            _id: "$brandName",
-            count: {$sum: "$count"},
-            total: {$first: "$total"}
+            _id: null,
+            total: {$sum: 1}
           }
         }
-      ],
-      function (err, results) {
-        if(err) next(err)
-        next(err, results)
-      }
-    )    
+      ], function (err, results) {
+        result.total = results[0].total
+        collection.count({}, function (err, count) {
+          result.aggregateTotal = count
+          collection.aggregate([
+            {
+              $match: {
+                created: {$lte: new Date(endDate)},
+                "brand.name": {$in: result.data.map(function (item) {
+                  return item._id
+                })}
+              }
+            },
+            {
+              $group: {
+                _id: "$brand.name",
+                aggregate: {$sum: 1}
+              }
+            },
+            {
+              $sort: {_id: -1}
+            }
+          ], function (err, results) {
+            var res = {}
+            results.forEach(function (item) {
+              res[item._id] = item.aggregate
+            })
+            result.data.forEach(function (item, index) {
+              item.aggregate = res[item._id]
+            })
+            next(err, result)
+          })
+        })
+      })
+    })    
   }
   
   Brand.remoteMethod(
@@ -41,7 +90,7 @@ module.exports = function(Brand) {
         {arg:'beginDate', type: 'Date'},
         {arg:'endDate', type: 'Date'}
       ],
-      returns: {arg:'data', type: 'array', root:true},
+      returns: {arg:'data', type: 'Object', root: true},
       http: {verb: 'get'}
     }
   )

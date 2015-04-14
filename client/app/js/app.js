@@ -896,24 +896,7 @@ App.controller('SidebarController', ['$rootScope', '$scope', '$state', '$http', 
  * Statistic Controllers
  =========================================================*/
 
-App.controller('StatisticBrandController', ["$scope", "Brand", function ($scope, Brand) {
-  
-  $scope.barData = [{
-    label: "新增用户",
-    color: "#9cd159",
-    data: [
-      ["品牌A", 100],
-      ["品牌B", 80],
-      ["品牌C", 70],
-      ["品牌D", 60],
-      ["品牌E", 50],
-      ["品牌F", 40],
-      ["品牌G", 30],
-      ["品牌H", 20],
-      ["品牌I", 10],
-      ["品牌J", 0]
-    ]
-  }]
+App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", function ($scope, Brand, ngTableParams) {
   
   $scope.barOptions = {
     series: {
@@ -946,16 +929,26 @@ App.controller('StatisticBrandController', ["$scope", "Brand", function ($scope,
     shadowSize: 0
   };
   
-  Brand.stat({beginDate: '"2015-04-02"', endDate: '"2015-04-09"'}, function (results) {
-    $scope.barData = [{
-      label: "新增用户",
-      color: "#9cd159",
-      data: []
-    }]
-    results.forEach(function (item) {
-      $scope.barData[0].data.push([item._id, item.count])
-    })
-  })
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+  }, {
+    getData: function($defer, params) {
+      Brand.stat({beginDate: '"2015-04-02"', endDate: '"2015-04-09"'}, function (result) {
+        $scope.total = result.total
+        $scope.aggregateTotal = result.aggregateTotal
+        $defer.resolve(result.data)
+        $scope.barData = [{
+          label: "新增用户",
+          color: "#9cd159",
+          data: []
+        }]
+        result.data.forEach(function (item) {
+          $scope.barData[0].data.push([item._id, item.count])
+        })
+      })
+    }
+  })   
+
 }])
 
 App.controller('StatisticRegionController', ["$scope", function ($scope) {
@@ -1708,6 +1701,16 @@ App.service('Utils', ["$window", "APP_MEDIAQUERY", function($window, APP_MEDIAQU
       }
     };
 }]);
+/**=========================================================
+ * Module: filters.js
+ * Common userful filter
+ =========================================================*/
+
+App.filter("percentage", ["$filter", function ($filter) {
+  return function (input, decimals) {
+    return $filter('number')(input * 100, decimals || 0) + '%';
+  }
+}])
 /**=========================================================
  * Module: test-filter.js
  * Test task filter

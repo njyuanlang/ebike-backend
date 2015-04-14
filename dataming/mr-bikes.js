@@ -54,7 +54,7 @@ var finalize = function (key, reduceValue) {
 
 var mrOptions = {
     // query: {createdAt: {$gte:1387871468}}, 
-    out: "stat-brand",
+    out: "stat-bike",
     finalize: finalize,
     scope: {reduceFunc: reduce} 
 }
@@ -65,33 +65,52 @@ var mrOptions = {
 //   mrOptions
 // )
 
-db.bike.aggregate(
+
+var ud = {
+  year: 2015,
+  month: 4,
+  dayOfMonth: 3
+}
+var groupByCreatedBikes = db.bike.aggregate(
   [
+    {
+      $match: {
+        "created": { 
+          $gte: new Date(ud.year, ud.month-1, ud.dayOfMonth),
+          $lt: new Date(ud.year, ud.month-1, ud.dayOfMonth)
+        }
+      }
+    },
     {
       $group: {
         _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
         total: {$sum: 1}
       }
-    },
-    {
-      $out: {merge: "stat-bike"}
     }
   ]
-)
+).toArray()
 
-// db.bike.aggregate(
-//   [
-//     {
-//       $group: {
-//         _id: 0,
-//         total: {$sum: 1}
-//       }
-//     },
-//     {
-//       $out: "stat-bike"
-//     }
-//   ]
-// )
+db['stat-bike'].insert(groupByCreatedBikes)
+
+db["stat-bike"].aggregate(
+  [
+    {
+      $match: {"_id.year": {$lte: ud.year}, "_id.month": {$lte: ud.month}, "_id.dayOfMonth": {$lte: ud.dayOfMonth}}
+    },
+    {
+      $group: {
+        _id: 0,
+        totalAll: {$sum: "$total"}
+      }
+    }
+  ]
+).forEach(function (item) {
+  db["stat-bike"].update(
+    {_id: ud},
+    {$set:{totalAll: item.totalAll}},
+    {upsert: true}
+  )
+})
 
 db.bike.aggregate(
   [
@@ -117,21 +136,41 @@ db['stat-bike'].find().forEach(function (item) {
   )
 })
 
-var beginDate = new Date(2015, 3, 2)
-var endDate = new Date(2015, 3, 9)
-db['stat-brand'].aggregate(
+var beginDate = "2015/04/03"
+var endDate = "2015/04/09"
+db.bike.aggregate(
   [
     {
-      $match: {day: {$gt: beginDate, $lte: endDate}}
+      $match: {
+        created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+      }
     },
     {
       $group: {
-        _id: "$brandName",
-        count: {$sum: "$count"}
+        _id: "$brand.name",
+        count: {$sum: 1}
+      }
+    },
+    {
+      $sort: {count: -1}
+    }
+  ]
+).forEach(printjson)
+db.bike.aggregate(
+  [
+    {
+      $match: {
+        created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        count: {$sum: 1}
       }
     }
   ]
-)
+).forEach(printjson)
 // ===================
 // Weekly
 // ===================
