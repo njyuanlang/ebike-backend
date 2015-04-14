@@ -933,7 +933,7 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
     count: 10,
   }, {
     getData: function($defer, params) {
-      Brand.stat({beginDate: '"2015-04-02"', endDate: '"2015-04-09"'}, function (result) {
+      Brand.stat({beginDate: '"'+$scope.beginDate+'"', endDate: '"'+$scope.endDate+'"'}, function (result) {
         $scope.total = result.total
         $scope.aggregateTotal = result.aggregateTotal
         $defer.resolve(result.data)
@@ -948,7 +948,17 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
       })
     }
   })   
+  
+  $scope.endDate = "2015-04-09"
+  $scope.beginDate = "2015-04-02"
+  $scope.openeds = [false, false]
+  $scope.open = function($event, index) {
+    $event.preventDefault();
+    $event.stopPropagation();
 
+    $scope.openeds[index] = true
+    $scope.openeds[++index%2] = false
+  };
 }])
 
 App.controller('StatisticRegionController', ["$scope", function ($scope) {

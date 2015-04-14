@@ -1,6 +1,29 @@
 <h3>
-   品牌统计</h3>
-<div ng-controller="StatisticBrandController" class="container-fluid">
+   品牌统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
+   <div class="pull-right col-sm-6">
+      <div class="col-sm-6">
+         <p class="input-group">
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <span class="input-group-btn">
+               <button type="button" ng-click="open($event, 1)" class="btn btn-default">
+                  <em class="fa fa-calendar"></em>
+               </button>
+            </span>
+         </p>
+      </div>
+      <div class="col-sm-6">
+         <p class="input-group">
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <span class="input-group-btn">
+               <button type="button" ng-click="open($event, 0)" class="btn btn-default">
+                  <em class="fa fa-calendar"></em>
+               </button>
+            </span>
+         </p>
+      </div>
+   </div>
+</h3>
+<div class="container-fluid">
    <!-- START chart-->
    <div class="row">
       <div class="col-lg-12">
