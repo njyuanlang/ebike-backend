@@ -45,7 +45,7 @@ App.controller('StatisticBrandController', function ($scope, Brand, ngTableParam
         $scope.aggregateTotal = result.aggregateTotal
         $defer.resolve(result.data)
         $scope.barData = [{
-          label: "新增用户",
+          label: "新增车辆",
           color: "#9cd159",
           data: []
         }]

@@ -12,13 +12,14 @@
                <em class="icon-user-follow fa-3x"></em>
             </div>
             <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">100
+               <div class="h2 mt0">{{statistic.user.added}}
                   <small>人</small>
                </div>
                <div class="text-uppercase">新增用户</div>
             </div>
          </div>
       </div>
+      <!-- END date widget-->
    </div>
    <div class="col-lg-3 col-sm-6">
       <!-- START widget-->
@@ -28,13 +29,14 @@
                <em class="icon-users fa-3x"></em>
             </div>
             <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">20700
+               <div class="h2 mt0">{{statistic.user.total}}
                   <small>人</small>
                </div>
                <div class="text-uppercase">累计用户</div>
             </div>
          </div>
       </div>
+      <!-- END date widget-->
    </div>
    <div class="col-lg-3 col-md-6 col-sm-12">
       <!-- START widget-->
@@ -44,29 +46,27 @@
                <em class="fa fa-bicycle fa-3x"></em>
             </div>
             <div class="col-xs-8 pv-lg">
-               <div class="h2 mt0">500
+               <div class="h2 mt0">{{statistic.bike.added}}
                   <small>辆</small>
                </div>
                <div class="text-uppercase">新增车辆</div>
             </div>
          </div>
       </div>
+      <!-- END date widget-->
    </div>
    <div class="col-lg-3 col-md-6 col-sm-12">
-      <!-- START date widget-->
-      <div class="panel widget">
+      <!-- START widget-->
+      <div class="panel widget bg-green">
          <div class="row row-table">
-            <div class="col-xs-4 text-center bg-green pv-lg">
-               <!-- See formats: https://docs.angularjs.org/api/ng/filter/date-->
-               <now format="MMMM" class="text-sm"></now>
-               <br/>
-               <now format="d" class="h2 mt0"></now>
+            <div class="col-xs-4 text-center bg-green-dark pv-lg">
+               <em class="fa fa-bicycle fa-3x"></em>
             </div>
             <div class="col-xs-8 pv-lg">
-               <now format="EEEE" class="text-uppercase"></now>
-               <br/>
-               <now format="h:mm" class="h2 mt0"></now>
-               <now format="a" class="text-muted text-sm"></now>
+               <div class="h2 mt0">{{statistic.bike.total}}
+                  <small>辆</small>
+               </div>
+               <div class="text-uppercase">累计车辆</div>
             </div>
          </div>
       </div>
@@ -74,3 +74,33 @@
    </div>
 </div>
 <!-- END widgets box-->
+<!-- START chart-->
+<div class="row">
+   <div class="col-lg-6">
+      <div id="panelChart2" class="panel panel-default">
+         <div class="panel-heading">
+            <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+            <div class="panel-title">用户</div>
+         </div>
+         <div class="panel-wrapper">
+            <div class="panel-body">
+               <flot dataset="userData" options="splineOptions" height="300px"></flot>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-6">
+      <div id="panelChart2" class="panel panel-default">
+         <div class="panel-heading">
+            <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+            <div class="panel-title">车辆</div>
+         </div>
+         <div class="panel-wrapper">
+            <div class="panel-body">
+               <flot dataset="userData" options="splineOptions" height="300px"></flot>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- END chart-->

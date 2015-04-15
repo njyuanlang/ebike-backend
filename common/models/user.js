@@ -1,3 +1,5 @@
+var Promise = require("promise");
+
 module.exports = function(User) {
   
   User.beforeRemote('create', function (ctx, unused, next) {
@@ -48,5 +50,40 @@ module.exports = function(User) {
       }
     })  
   }
+  
+  User.stat = function (beginDate, endDate, next) {
+    var collection = User.getDataSource().connector.collection('user')
+    collection.aggregate([
+      {
+        $match: {
+          created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+        }
+      },
+      {
+        $group: {
+          _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
+          count: {$sum: 1}
+        }
+      }
+    ],function (err, results) {
+      if(err) {
+        next(err)
+      } else {
+        next(null, results)
+      }
+    })    
+  }
+  
+  User.remoteMethod(
+    'stat',
+    {
+      accepts: [
+        {arg:'beginDate', type: 'Date'},
+        {arg:'endDate', type: 'Date'}
+      ],
+      returns: {arg:'data', type: 'Array', root: true},
+      http: {verb: 'get'}
+    }
+  )
   
 };

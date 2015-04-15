@@ -11,9 +11,10 @@ h3
         .col-xs-4.text-center.bg-primary-dark.pv-lg
           em.icon-user-follow.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 100
+          .h2.mt0 {{statistic.user.added}}
             small 人
           .text-uppercase 新增用户
+    // END date widget
   .col-lg-3.col-sm-6
     // START widget
     .panel.widget.bg-purple
@@ -21,9 +22,10 @@ h3
         .col-xs-4.text-center.bg-purple-dark.pv-lg
           em.icon-users.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 20700
+          .h2.mt0 {{statistic.user.total}}
             small 人
           .text-uppercase 累计用户
+    // END date widget
   .col-lg-3.col-md-6.col-sm-12
     // START widget
     .panel.widget.bg-green
@@ -31,24 +33,41 @@ h3
         .col-xs-4.text-center.bg-green-dark.pv-lg
           em.fa.fa-bicycle.fa-3x
         .col-xs-8.pv-lg
-          .h2.mt0 500
+          .h2.mt0 {{statistic.bike.added}}
             small 辆
           .text-uppercase 新增车辆
+    // END date widget
   .col-lg-3.col-md-6.col-sm-12
-    // START date widget
-    .panel.widget
+    // START widget
+    .panel.widget.bg-green
       .row.row-table
-        .col-xs-4.text-center.bg-green.pv-lg
-          // See formats: https://docs.angularjs.org/api/ng/filter/date
-          now.text-sm(format='MMMM')
-          br
-          now.h2.mt0(format="d")
+        .col-xs-4.text-center.bg-green-dark.pv-lg
+          em.fa.fa-bicycle.fa-3x
         .col-xs-8.pv-lg
-          now.text-uppercase(format='EEEE')
-          br
-          now.h2.mt0(format='h:mm')
-          now.text-muted.text-sm(format='a')
+          .h2.mt0 {{statistic.bike.total}}
+            small 辆
+          .text-uppercase 累计车辆
     // END date widget
 // END widgets box
 
+
+// START chart
+.row
+  .col-lg-6
+    #panelChart2.panel.panel-default
+      .panel-heading
+        paneltool(tool-collapse, tool-dismiss)
+        .panel-title 用户
+      .panel-wrapper
+        .panel-body
+          flot(dataset='userData', options='splineOptions', height="300px")
+  .col-lg-6
+    #panelChart2.panel.panel-default
+      .panel-heading
+        paneltool(tool-collapse, tool-dismiss)
+        .panel-title 车辆
+      .panel-wrapper
+        .panel-body
+          flot(dataset='userData', options='splineOptions', height="300px")
+// END chart
 

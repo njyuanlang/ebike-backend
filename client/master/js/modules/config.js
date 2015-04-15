@@ -28,7 +28,9 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     .state('app.dashboard', {
         url: '/dashboard',
         title: 'Dashboard',
-        templateUrl: helper.basepath('dashboard.html')
+        controller: 'DashboardController',
+        templateUrl: helper.basepath('dashboard.html'),
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.clients', {
         url: '/clients',

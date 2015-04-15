@@ -15,7 +15,6 @@ module.exports = function(Brand) {
   })
   
   Brand.stat = function (beginDate, endDate, next) {
-    var result = {}
     var collection = Brand.getDataSource().connector.collection('bike')
     var p1 = new Promise(function (resolve, reject) {
       collection.aggregate([
