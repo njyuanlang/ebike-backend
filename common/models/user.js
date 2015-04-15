@@ -56,13 +56,18 @@ module.exports = function(User) {
     collection.aggregate([
       {
         $match: {
-          created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+          created: {$gte: new Date(beginDate), $lt: new Date(endDate)}
         }
       },
       {
         $group: {
           _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
           count: {$sum: 1}
+        }
+      },
+      {
+        $sort: {
+          _id: 1
         }
       }
     ],function (err, results) {

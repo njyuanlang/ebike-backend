@@ -37,6 +37,7 @@ App
                              'vendor/flot/jquery.flot.time.js',
                              'vendor/flot/jquery.flot.categories.js',
                              'vendor/flot-spline/js/jquery.flot.spline.min.js'],
+      'moment' :            ['vendor/moment/min/moment-with-locales.min.js'],
       'modernizr':          ['vendor/modernizr/modernizr.js'],
       'icons':              ['vendor/fontawesome/css/font-awesome.min.css',
                              'vendor/simple-line-icons/css/simple-line-icons.css']

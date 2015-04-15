@@ -53,19 +53,11 @@ h3
 
 // START chart
 .row
-  .col-lg-6
+  .col-lg-12
     #panelChart2.panel.panel-default
       .panel-heading
         paneltool(tool-collapse, tool-dismiss)
-        .panel-title 用户
-      .panel-wrapper
-        .panel-body
-          flot(dataset='userData', options='splineOptions', height="300px")
-  .col-lg-6
-    #panelChart2.panel.panel-default
-      .panel-heading
-        paneltool(tool-collapse, tool-dismiss)
-        .panel-title 车辆
+        .panel-title 趋势图
       .panel-wrapper
         .panel-body
           flot(dataset='userData', options='splineOptions', height="300px")

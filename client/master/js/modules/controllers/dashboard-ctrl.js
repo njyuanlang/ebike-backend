@@ -11,31 +11,47 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
   }
   
   $scope.stat = function () {
-    var now = new Date()
-    var today = new Date(now.getFullYear(), 2, 25)
-    console.log(today)
-    User.count({where: {created: {gte: today}}}, function (result) {
+    var days = 15
+    var today = moment('2015-04-03', 'YYYY-MM-DD')
+    var endDate = today.format('YYYY-MM-DD')
+    var beginDate = moment(today).subtract(days, 'days').format('YYYY-MM-DD')
+
+    User.count({where: {created: {gte: endDate}}}, function (result) {
       $scope.statistic.user.added = result.count
     })
     User.count({}, function (result) {
       $scope.statistic.user.total = result.count
     })
-    Bike.count({where: {created: {gt: today}}}, function (result) {
+    Bike.count({where: {created: {gte: endDate}}}, function (result) {
       $scope.statistic.bike.added = result.count
     })
     Bike.count({}, function (result) {
       $scope.statistic.bike.total = result.count
     })
 
-    User.stat({beginDate: '"2015-01-01"', endDate: '"2015-04-15"'}, function (result) {
+    User.stat({beginDate: '"'+beginDate+'"', endDate: '"'+endDate+'"'}, function (results) {
       $scope.userData = [{
         label: "新增用户",
         color: "#768294",
         data: []
       }]
-      result.forEach(function (item) {
-        $scope.userData[0].data.push([item._id.month+'/'+item._id.dayOfMonth, item.count])
-      })
+      for (var d = 0, i = 0; d < days; d++) {
+        var day = moment(today).subtract(days-d, 'days')
+        var day2 = null
+        while(i < results.length) {
+          day2 = moment(results[i]._id.year+'-'+results[i]._id.month+'-'+results[i]._id.dayOfMonth, 'YYYY-MM-DD')
+          if(day.isBefore(day2, 'day')) {
+            day2 = null
+            break;
+          } else if(day.isSame(day2, 'day')) {
+            break
+          } else {
+            day2 = null
+            i++
+          }
+        }
+        $scope.userData[0].data.push([day.format('MM/DD'), day2? results[i].count:0])
+      }
     })
   }
   
@@ -73,7 +89,7 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
       },
       yaxis: {
           min: 0,
-          max: 100,
+          max: 10,
           tickColor: '#eee',
           position: ($scope.app.layout.isRTL ? 'right' : 'left'),
           tickFormatter: function (v) {

@@ -30,7 +30,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Dashboard',
         controller: 'DashboardController',
         templateUrl: helper.basepath('dashboard.html'),
-        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'moment')
     })
     .state('app.clients', {
         url: '/clients',
