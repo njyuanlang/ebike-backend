@@ -70,24 +70,11 @@ module.exports = function(Brand) {
     })
     
     var p2 = new Promise(function (resolve, reject) {
-      collection.aggregate([
-        {
-          $match: {
-            created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
-          }
-        },
-        {
-          $group: {
-            _id: null,
-            total: {$sum: 1}
-          }
-        }
-      ], function (err, results) {
+      collection.count({created:{$gt: new Date(beginDate), $lte: new Date(endDate)}}, function (err, count) {
         if(err) {
           reject(err)
         } else {
-          var ret = results[0] || {total:0}
-          resolve(ret.total)
+          resolve(count)
         }
       })
     })

@@ -507,7 +507,8 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
   
   $scope.stat = function () {
     var days = 15
-    var today = moment('2015-04-03', 'YYYY-MM-DD')
+    var today = moment()
+    // var today = moment('2015-04-03', 'YYYY-MM-DD')
     var endDate = today.format('YYYY-MM-DD')
     var beginDate = moment(today).subtract(days, 'days').format('YYYY-MM-DD')
 
