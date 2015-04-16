@@ -1,2 +1,61 @@
 <h3>
-   地区统计</h3>
+   地区统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
+   <div class="pull-right col-sm-6">
+      <div class="col-sm-6">
+         <p class="input-group">
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <span class="input-group-btn">
+               <button type="button" ng-click="open($event, 1)" class="btn btn-default">
+                  <em class="fa fa-calendar"></em>
+               </button>
+            </span>
+         </p>
+      </div>
+      <div class="col-sm-6">
+         <p class="input-group">
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <span class="input-group-btn">
+               <button type="button" ng-click="open($event, 0)" class="btn btn-default">
+                  <em class="fa fa-calendar"></em>
+               </button>
+            </span>
+         </p>
+      </div>
+   </div>
+</h3>
+<div class="container-fluid">
+   <!-- START chart-->
+   <div class="row">
+      <div class="col-lg-12">
+         <div id="panelChart2" class="panel panel-default">
+            <div class="panel-heading">
+               <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+               <div class="panel-title">地区排名</div>
+            </div>
+            <div class="panel-wrapper">
+               <div class="panel-body">
+                  <flot dataset="barData" options="barOptions" height="300px"></flot>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END chart-->
+   <!-- START table-->
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'地区'">{{entity._id || "其他"}}</td>
+                  <td data-title="'新增'">{{entity.count}}</td>
+                  <td data-title="'新增占比'">{{ entity.count/total| percentage: 1 }}</td>
+                  <td data-title="'累计'">{{entity.aggregate}}</td>
+                  <td data-title="'累计占比'">{{entity.aggregate/aggregateTotal| percentage}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <!-- END chart-->
+</div>

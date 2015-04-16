@@ -13705,6 +13705,7 @@ label + .form-control + .parsley-errors-list + .form-control-feedback {
  ========================================================================== */
 
 body .bootstrap-tagsinput {
+  box-shadow: 0 0 0 #000 !important;
   display: block;
   width: 100%;
   height: 35px;
@@ -13721,10 +13722,41 @@ body .bootstrap-tagsinput {
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-  box-shadow: 0 0 0 #000 !important;
   height: auto;
   min-height: 35px;
   margin-bottom: 0;
+}
+
+body .bootstrap-tagsinput:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+body .bootstrap-tagsinput::-moz-placeholder {
+  color: #b7bac9;
+  opacity: 1;
+}
+
+body .bootstrap-tagsinput:-ms-input-placeholder {
+  color: #b7bac9;
+}
+
+body .bootstrap-tagsinput::-webkit-input-placeholder {
+  color: #b7bac9;
+}
+
+body .bootstrap-tagsinput[disabled],
+body .bootstrap-tagsinput[readonly],
+fieldset[disabled] body .bootstrap-tagsinput {
+  cursor: not-allowed;
+  background-color: #edf1f2;
+  opacity: 1;
+}
+
+textareabody .bootstrap-tagsinput {
+  height: auto;
 }
 
 body .bootstrap-tagsinput:focus {
@@ -14317,6 +14349,314 @@ body .ng-table-pager:after {
 
 .ngGrid input {
   line-height: 18px;
+}
+
+/* ========================================================================
+   Component: plugins.less
+   - User this stylesheet to include single css styles and fixes 
+     for plugins
+ ========================================================================== */
+
+/**
+ * Bootstrap Slider
+ */
+
+.bs-slider {
+  display: inline-block;
+}
+
+.bs-slider .slider-handle,
+.bs-slider .slider-track,
+.bs-slider .slider-selection {
+  background-image: none;
+  box-shadow: 0 0 0 #000;
+}
+
+.bs-slider .slider-handle {
+  background-color: #fff;
+  border: 1px solid #5d9cec;
+  opacity: 1;
+}
+
+.bs-slider .slider-track {
+  background-color: #fff;
+  border: 1px solid #5d9cec;
+}
+
+.bs-slider .slider-selection {
+  background-color: #5d9cec;
+}
+
+.bs-slider .slider .tooltip.top .tooltip-arrow {
+  border-top-color: #2c3037;
+}
+
+.bs-slider .slider .tooltip.right .tooltip-arrow {
+  border-left-color: #2c3037;
+}
+
+.bs-slider .slider .tooltip-inner {
+  background-color: #2c3037;
+}
+
+.bs-slider .slider-lg {
+  width: 380px;
+}
+
+body {
+  /**
+   * Chosen
+   */
+  /* Support for input groups */
+  /**
+   * Filestyle
+   */
+}
+
+body .chosen-container {
+  max-width: 100%;
+}
+
+body .chosen-container-multi .chosen-choices {
+  box-shadow: 0 0 0 #000 !important;
+  display: block;
+  width: 100%;
+  height: 35px;
+  padding: 6px 16px;
+  font-size: 14px;
+  line-height: 1.52857143;
+  color: #3a3f51;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #dde6e9;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+body .chosen-container-multi .chosen-choices:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+body .chosen-container-multi .chosen-choices::-moz-placeholder {
+  color: #b7bac9;
+  opacity: 1;
+}
+
+body .chosen-container-multi .chosen-choices:-ms-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-multi .chosen-choices::-webkit-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-multi .chosen-choices[disabled],
+body .chosen-container-multi .chosen-choices[readonly],
+fieldset[disabled] body .chosen-container-multi .chosen-choices {
+  cursor: not-allowed;
+  background-color: #edf1f2;
+  opacity: 1;
+}
+
+textareabody .chosen-container-multi .chosen-choices {
+  height: auto;
+}
+
+body .chosen-container-multi .chosen-choices:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+body .chosen-container-multi .chosen-choices::-moz-placeholder {
+  color: #b7bac9;
+  opacity: 1;
+}
+
+body .chosen-container-multi .chosen-choices:-ms-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-multi .chosen-choices::-webkit-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-multi .chosen-choices[disabled],
+body .chosen-container-multi .chosen-choices[readonly],
+fieldset[disabled] body .chosen-container-multi .chosen-choices {
+  cursor: not-allowed;
+  background-color: #edf1f2;
+  opacity: 1;
+}
+
+textareabody .chosen-container-multi .chosen-choices {
+  height: auto;
+}
+
+body .chosen-container-multi .chosen-choices li.search-field input[type=text] {
+  height: auto;
+  padding: 0;
+}
+
+body .chosen-container-multi .chosen-choices li.search-choice {
+  margin: 0 0 3px 5px;
+  background-color: #f5f6f7;
+  border: 1px solid #e7e9ec;
+  background-image: none;
+}
+
+body .chosen-container .chosen-results li.highlighted {
+  background-color: #a1a2a3;
+  background-image: none;
+}
+
+body .chosen-container .chosen-drop {
+  border-color: #ddd;
+}
+
+body .chosen-container .chosen-results li.group-result {
+  color: #747576;
+  letter-spacing: 0.02em;
+}
+
+body .chosen-container-single .chosen-single,
+body .chosen-container-active.chosen-with-drop .chosen-single {
+  box-shadow: 0 0 0 #000 !important;
+  display: block;
+  width: 100%;
+  height: 35px;
+  padding: 6px 16px;
+  font-size: 14px;
+  line-height: 1.52857143;
+  color: #3a3f51;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #dde6e9;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+body .chosen-container-single .chosen-single:focus,
+body .chosen-container-active.chosen-with-drop .chosen-single:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+body .chosen-container-single .chosen-single::-moz-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-moz-placeholder {
+  color: #b7bac9;
+  opacity: 1;
+}
+
+body .chosen-container-single .chosen-single:-ms-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single:-ms-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-single .chosen-single::-webkit-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-webkit-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-single .chosen-single[disabled],
+body .chosen-container-active.chosen-with-drop .chosen-single[disabled],
+body .chosen-container-single .chosen-single[readonly],
+body .chosen-container-active.chosen-with-drop .chosen-single[readonly],
+fieldset[disabled] body .chosen-container-single .chosen-single,
+fieldset[disabled] body .chosen-container-active.chosen-with-drop .chosen-single {
+  cursor: not-allowed;
+  background-color: #edf1f2;
+  opacity: 1;
+}
+
+textareabody .chosen-container-single .chosen-single,
+textareabody .chosen-container-active.chosen-with-drop .chosen-single {
+  height: auto;
+}
+
+body .chosen-container-single .chosen-single:focus,
+body .chosen-container-active.chosen-with-drop .chosen-single:focus {
+  border-color: #66afe9;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+body .chosen-container-single .chosen-single::-moz-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-moz-placeholder {
+  color: #b7bac9;
+  opacity: 1;
+}
+
+body .chosen-container-single .chosen-single:-ms-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single:-ms-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-single .chosen-single::-webkit-input-placeholder,
+body .chosen-container-active.chosen-with-drop .chosen-single::-webkit-input-placeholder {
+  color: #b7bac9;
+}
+
+body .chosen-container-single .chosen-single[disabled],
+body .chosen-container-active.chosen-with-drop .chosen-single[disabled],
+body .chosen-container-single .chosen-single[readonly],
+body .chosen-container-active.chosen-with-drop .chosen-single[readonly],
+fieldset[disabled] body .chosen-container-single .chosen-single,
+fieldset[disabled] body .chosen-container-active.chosen-with-drop .chosen-single {
+  cursor: not-allowed;
+  background-color: #edf1f2;
+  opacity: 1;
+}
+
+textareabody .chosen-container-single .chosen-single,
+textareabody .chosen-container-active.chosen-with-drop .chosen-single {
+  height: auto;
+}
+
+body .chosen-container-single .chosen-drop {
+  margin-top: -3px;
+}
+
+body .chosen-container-single .chosen-single div {
+  top: 6px;
+  left: 5px;
+}
+
+body .chosen-container-multi .chosen-choices li.search-field input[type=text] {
+  color: #b7bac9;
+}
+
+body .input-group .chosen-container:last-child > a {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+body .input-group select:first-child + .chosen-container > a {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+body [classyloader] {
+  max-width: 100%;
+}
+
+body .ui-select-bootstrap .ui-select-toggle {
+  text-align: right;
 }
 
 /* ========================================================================

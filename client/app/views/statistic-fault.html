@@ -1,2 +1,71 @@
 <h3>
-   故障统计</h3>
+   故障统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
+   <div class="pull-right col-sm-6">
+      <div class="col-sm-6">
+         <select chosen="" ng-model="searchState" class="chosen-select form-control">
+            <optgroup label="Alaskan/Hawaiian Time Zone">
+               <option value="AK">Alaska</option>
+               <option value="HI">Hawaii</option>
+            </optgroup>
+            <optgroup label="Pacific Time Zone">
+               <option value="CA">California</option>
+               <option value="NV">Nevada</option>
+               <option value="OR">Oregon</option>
+               <option value="WA">Washington</option>
+            </optgroup>
+         </select>
+      </div>
+      <div class="col-sm-6">
+         <select chosen="" ng-model="searchState" class="chosen-select form-control">
+            <optgroup label="Alaskan/Hawaiian Time Zone">
+               <option value="AK">Alaska</option>
+               <option value="HI">Hawaii</option>
+            </optgroup>
+            <optgroup label="Pacific Time Zone">
+               <option value="CA">California</option>
+               <option value="NV">Nevada</option>
+               <option value="OR">Oregon</option>
+               <option value="WA">Washington</option>
+            </optgroup>
+         </select>
+      </div>
+   </div>
+</h3>
+<div class="container-fluid">
+   <!-- START chart-->
+   <div class="row">
+      <div class="col-lg-12">
+         <div id="panelChart2" class="panel panel-default">
+            <div class="panel-heading">
+               <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
+               <div class="panel-title">故障统计</div>
+            </div>
+            <div class="panel-wrapper">
+               <div class="panel-body">
+                  <flot dataset="barStackedData" options="barStackedOptions" height="300px"></flot>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- END chart-->
+   <!-- START table-->
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="entity in $data">
+                  <td data-title="'时间'">{{entity._id}}</td>
+                  <td data-title="'品牌'">{{entity.brandName}}</td>
+                  <td data-title="'地区'">{{entity.regionName}}</td>
+                  <td data-title="'转把'">{{entity.data[0]}}</td>
+                  <td data-title="'电机'">{{entity.data[0]}}</td>
+                  <td data-title="'刹车'">{{entity.data[0]}}</td>
+                  <td data-title="'控制器'">{{entity.data[0]}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <!-- END chart-->
+</div>

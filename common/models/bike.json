@@ -5,20 +5,14 @@
   "properties": {
     "serialNumber": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "created": {
       "type": "date"
     }
   },
   "validations": [],
-  "relations": {
-    "owner": {
-      "type": "belongsTo",
-      "model": "user",
-      "foreignKey": "ownerId"
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": []
 }

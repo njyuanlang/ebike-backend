@@ -23,14 +23,14 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ebike-services', 'ngTable')
+        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ebike-services', 'ngTable', 'moment')
     })
     .state('app.dashboard', {
         url: '/dashboard',
         title: 'Dashboard',
         controller: 'DashboardController',
         templateUrl: helper.basepath('dashboard.html'),
-        resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'moment')
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.clients', {
         url: '/clients',
@@ -101,13 +101,15 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         url: '/statistic-region',
         title: 'Statistic Region',
         controller: 'StatisticRegionController',
-        templateUrl: helper.basepath('statistic-region.html')
+        templateUrl: helper.basepath('statistic-region.html'),
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.statistic-fault', {
         url: '/statistic-fault',
         title: 'Statistic Fault',
         controller: 'StatisticFaultController',
-        templateUrl: helper.basepath('statistic-fault.html')
+        templateUrl: helper.basepath('statistic-fault.html'),
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
     .state('app.accounts', {
         url: '/accounts',

@@ -1,2 +1,43 @@
 h3 
   | 地区统计
+  a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
+  .pull-right.col-sm-6
+    .col-sm-6
+      p.input-group
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="beginDate", is-open='openeds[1]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        span.input-group-btn
+          button.btn.btn-default(type='button', ng-click='open($event, 1)')
+            em.fa.fa-calendar  
+    .col-sm-6
+      p.input-group
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="endDate", is-open='openeds[0]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        span.input-group-btn
+          button.btn.btn-default(type='button', ng-click='open($event, 0)')
+            em.fa.fa-calendar
+        
+.container-fluid
+  // START chart
+  .row
+    .col-lg-12
+      #panelChart2.panel.panel-default
+        .panel-heading
+          paneltool(tool-collapse, tool-dismiss)
+          .panel-title 地区排名
+        .panel-wrapper
+          .panel-body
+            flot(dataset='barData', options='barOptions', height="300px")
+  // END chart
+  
+  // START table
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr(ng-repeat='entity in $data')
+            td(data-title="'地区'") {{entity._id || "其他"}}
+            td(data-title="'新增'") {{entity.count}}
+            td(data-title="'新增占比'")  {{ entity.count/total| percentage: 1 }}
+            td(data-title="'累计'") {{entity.aggregate}}
+            td(data-title="'累计占比'") {{entity.aggregate/aggregateTotal| percentage}}
+  // END chart
+            
