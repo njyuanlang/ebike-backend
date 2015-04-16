@@ -51,13 +51,14 @@ module.exports = function(User) {
     })  
   }
   
-  User.stat = function (beginDate, endDate, next) {
-    var collection = User.getDataSource().connector.collection('user')
+  User.stat = function (filter, next) {
+    filter.where = User._coerce(filter.where)
+    var connector = User.getDataSource().connector
+    filter.where = connector.buildWhere('user', filter.where)
+    var collection = connector.collection('user')
     collection.aggregate([
       {
-        $match: {
-          created: {$gte: new Date(beginDate), $lt: new Date(endDate)}
-        }
+        $match: filter.where
       },
       {
         $group: {
@@ -83,12 +84,10 @@ module.exports = function(User) {
     'stat',
     {
       accepts: [
-        {arg:'beginDate', type: 'Date'},
-        {arg:'endDate', type: 'Date'}
+        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true}
       ],
       returns: {arg:'data', type: 'Array', root: true},
       http: {verb: 'get'}
     }
   )
-  
 };

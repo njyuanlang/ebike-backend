@@ -6,6 +6,9 @@
     "serialNumber": {
       "type": "string",
       "required": true
+    },
+    "created": {
+      "type": "date"
     }
   },
   "validations": [],
