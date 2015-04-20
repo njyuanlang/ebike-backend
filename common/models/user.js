@@ -34,7 +34,27 @@ module.exports = function(User) {
   }
   
   User.beforeRemote('create', function (ctx, unused, next) {
-    validateCode(ctx.req.body, next)
+    var user = ctx.req.body
+    validateCode(user, function (err) {
+      if(err) return next(err)
+
+      User.findOne({where:{and:[{realm:user.realm}, {username:user.username}]}}, function (err, theUser) {
+        if(theUser) {
+          err = new Error('username already exist')
+          err.status = 400
+          next(err)
+        } else {
+          var now = Date.now()
+          user.created = user.created||now
+          user.lastUpdated = user.lastUpdated||now
+          user.status = 'active'         
+          user.name = user.name || user.username
+          user.phone = user.phone || user.username
+          next()
+        }
+      })  
+    })
+    
   })
   
   User.beforeRemote('resetPassword', function (ctx, unused, next) {
@@ -56,25 +76,6 @@ module.exports = function(User) {
       })  
     })
   })
-  
-  User.beforeCreate = function (next, user) {
-    
-    User.findOne({where:{and:[{realm:user.realm}, {username:user.username}]}}, function (err, theUser) {
-      if(theUser && theUser.realm === user.realm) {
-        err = new Error('username already exist')
-        err.status = 400
-        next(err)
-      } else {
-        var now = Date.now()
-        user.created = user.created||now
-        user.lastUpdated = user.lastUpdated||now
-        user.status = 'active'         
-        user.name = user.name || user.username
-        user.phone = user.phone || user.username
-        next()
-      }
-    })  
-  }
   
   User.stat = function (filter, next) {
     filter.where = User._coerce(filter.where)
