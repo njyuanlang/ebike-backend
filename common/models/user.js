@@ -2,27 +2,28 @@ var Promise = require("promise");
 
 module.exports = function(User) {
   
-  User.beforeRemote('create', function (ctx, unused, next) {
-    if (ctx.req.body.authcode) {
-      User.app.models.Authmessage.findOne({
-        where:{phone: ctx.req.body.username}, 
+  var validateCode = function (body, next) {
+    if (body.authcode) {
+      var Authmessage = User.app.models.Authmessage
+      Authmessage.findOne({
+        where:{phone: body.username}, 
         order:'created DESC'
-      }, function (err, authmessage) {
-        if(!authmessage) {
+      }, function (err, message) {
+        if(!message) {
           err = new Error('not found auth code')
           err.status = 404
-        } else if(authmessage.code !== parseInt(ctx.req.body.authcode, 10)){
+        } else if(message.code !== parseInt(body.authcode, 10)){
           err = new Error('invalid auth code')
           err.status = 400
-        } else if(authmessage.created+60*1000 < Date.now()) {
+        } else if(message.created+60*1000 < Date.now()) {
           err = new Error('outdate auth code')
           err.status = 400
-          User.app.models.Authmessage.destroyById(authmessage.id)
+          Authmessage.destroyById(message.id)
         } else {
-          User.app.models.Authmessage.destroyById(authmessage.id)
+          Authmessage.destroyById(message.id)
         }
         if(err) next(err)
-        delete ctx.req.body.authcode
+        delete body.authcode
         next()
       })
     } else {
@@ -30,6 +31,30 @@ module.exports = function(User) {
       error.status = 400
       next(error)
     }
+  }
+  
+  User.beforeRemote('create', function (ctx, unused, next) {
+    validateCode(ctx.req.body, next)
+  })
+  
+  User.beforeRemote('resetPassword', function (ctx, unused, next) {
+    
+    var body = ctx.req.body
+    validateCode(body, function (err) {
+      if(err) return next(err)
+      
+      User.findOne({where:{and:[{realm:body.realm}, {username:body.username}]}}, function (err, user) {
+        if(user) {
+          user.updateAttribute('password', body.password, function (err, user) {
+            next(err)
+          })
+        } else {
+          err = new Error('user not exist')
+          err.status = 400
+          next(err)
+        }
+      })  
+    })
   })
   
   User.beforeCreate = function (next, user) {

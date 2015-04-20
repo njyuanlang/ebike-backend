@@ -3,7 +3,8 @@ var querystring = require('querystring');
     
 module.exports = function(Authmessage) {
   
-  Authmessage.beforeCreate = function (next, authmessage) {
+  Authmessage.observe('before save', function(ctx, next) {
+    var authmessage = ctx.instance
     var now = Date.now()
     authmessage.created = now
     authmessage.code = now%10000
@@ -47,6 +48,6 @@ module.exports = function(Authmessage) {
     req.write(content);
     req.end();
     // next()
-  }
+  })
 
 };
