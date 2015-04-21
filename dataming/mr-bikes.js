@@ -1,12 +1,10 @@
 // ===================
 // Perpare
 // ===================
-// db.merchants.find().forEach(function (merchant) {
-//   db.skus.update(
-//     {shopID: { $in: merchant.shopIDs}},
-//     {$set:{merchantID: merchant._id}},
-//     {multi: true}
-//   )
+// db.test.find({"bike.created":{$exists: true}}).forEach(function (item) {
+//   item.bike.created = new Date(item.bike.created)
+//   item.bike.updated = new Date(item.bike.updated)
+//   db.test.save(item)
 // })
 
 // ===================
@@ -66,111 +64,97 @@ var mrOptions = {
 // )
 
 
-var ud = {
-  year: 2015,
-  month: 4,
-  dayOfMonth: 3
-}
-var groupByCreatedBikes = db.bike.aggregate(
-  [
-    {
-      $match: {
-        "created": { 
-          $gte: new Date(ud.year, ud.month-1, ud.dayOfMonth),
-          $lt: new Date(ud.year, ud.month-1, ud.dayOfMonth)
-        }
-      }
-    },
-    {
-      $group: {
-        _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
-        total: {$sum: 1}
-      }
-    }
-  ]
-).toArray()
+// var ud = {
+//   year: 2015,
+//   month: 4,
+//   dayOfMonth: 3
+// }
+// var groupByCreatedBikes = db.bike.aggregate(
+//   [
+//     {
+//       $match: {
+//         "created": {
+//           $gte: new Date(ud.year, ud.month-1, ud.dayOfMonth),
+//           $lt: new Date(ud.year, ud.month-1, ud.dayOfMonth)
+//         }
+//       }
+//     },
+//     {
+//       $group: {
+//         _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
+//         total: {$sum: 1}
+//       }
+//     }
+//   ]
+// ).toArray()
+//
+// db['stat-bike'].insert(groupByCreatedBikes)
+//
+// db["stat-bike"].aggregate(
+//   [
+//     {
+//       $match: {"_id.year": {$lte: ud.year}, "_id.month": {$lte: ud.month}, "_id.dayOfMonth": {$lte: ud.dayOfMonth}}
+//     },
+//     {
+//       $group: {
+//         _id: 0,
+//         totalAll: {$sum: "$total"}
+//       }
+//     }
+//   ]
+// ).forEach(function (item) {
+//   db["stat-bike"].update(
+//     {_id: ud},
+//     {$set:{totalAll: item.totalAll}},
+//     {upsert: true}
+//   )
+// })
+//
+// db.bike.aggregate(
+//   [
+//     {
+//       $group: {
+//         _id: {brandId: "$brand.id", year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
+//         day: {$first: "$created"},
+//         brandName: {$first: "$brand.name"},
+//         count: { $sum: 1 }
+//       }
+//     },
+//     {
+//       $out: "stat-brand"
+//     }
+//   ]
+// )
+//
+// db['stat-bike'].find().forEach(function (item) {
+//   db['stat-brand'].update(
+//     {"_id.year": item._id.year, "_id.month": item._id.month, "_id.dayOfMonth": item._id.dayOfMonth},
+//     {$set:{total: item.total}},
+//     {multi: true}
+//   )
+// })
 
-db['stat-bike'].insert(groupByCreatedBikes)
+// var beginDate = "2015/04/03"
+// var endDate = "2015/04/09"
+// db.bike.aggregate(
+//   [
+//     {
+//       $match: {
+//         created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
+//       }
+//     },
+//     {
+//       $group: {
+//         _id: "$brand.name",
+//         count: {$sum: 1}
+//       }
+//     },
+//     {
+//       $sort: {count: -1}
+//     }
+//   ]
+// ).forEach(printjson)
 
-db["stat-bike"].aggregate(
-  [
-    {
-      $match: {"_id.year": {$lte: ud.year}, "_id.month": {$lte: ud.month}, "_id.dayOfMonth": {$lte: ud.dayOfMonth}}
-    },
-    {
-      $group: {
-        _id: 0,
-        totalAll: {$sum: "$total"}
-      }
-    }
-  ]
-).forEach(function (item) {
-  db["stat-bike"].update(
-    {_id: ud},
-    {$set:{totalAll: item.totalAll}},
-    {upsert: true}
-  )
-})
-
-db.bike.aggregate(
-  [
-    {
-      $group: {
-        _id: {brandId: "$brand.id", year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}}, 
-        day: {$first: "$created"},
-        brandName: {$first: "$brand.name"},
-        count: { $sum: 1 }
-      }
-    },
-    {
-      $out: "stat-brand"
-    }
-  ]
-)
-
-db['stat-bike'].find().forEach(function (item) {
-  db['stat-brand'].update(
-    {"_id.year": item._id.year, "_id.month": item._id.month, "_id.dayOfMonth": item._id.dayOfMonth},
-    {$set:{total: item.total}},
-    {multi: true}
-  )
-})
-
-var beginDate = "2015/04/03"
-var endDate = "2015/04/09"
-db.bike.aggregate(
-  [
-    {
-      $match: {
-        created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
-      }
-    },
-    {
-      $group: {
-        _id: "$brand.name",
-        count: {$sum: 1}
-      }
-    },
-    {
-      $sort: {count: -1}
-    }
-  ]
-).forEach(printjson)
-db.bike.aggregate(
-  [
-    {
-      $match: {
-        created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
-      }
-    },
-    {
-      $group: {
-        _id: null,
-        count: {$sum: 1}
-      }
-    }
-  ]
-).forEach(printjson)
 // ===================
 // Weekly
 // ===================

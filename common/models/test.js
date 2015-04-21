@@ -1,5 +1,18 @@
 module.exports = function(Test) {
 
+  Test.beforeRemote('create', function (ctx, unused, next) {
+    if(ctx.req.body.bikeId) {
+      Test.app.models.Bike.findById(ctx.req.body.bikeId, function (err, bike) {
+        if(err) return next(err)
+        ctx.req.body.bike = bike
+        delete ctx.req.body.bikeId
+        next()
+      })
+    } else {
+      next(new Error('no bikeId'))
+    }
+  })
+
   Test.observe('before save', function timeStamp(ctx, next) {
     var now = new Date()
     if(ctx.instance) {

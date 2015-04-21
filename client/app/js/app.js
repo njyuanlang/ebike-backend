@@ -1090,8 +1090,8 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
     }
   })   
   
-  $scope.endDate = "2015-04-09"
-  $scope.beginDate = "2015-04-02"
+  $scope.endDate = moment().format('YYYY-MM-DD')
+  $scope.beginDate = moment().subtract(30, 'days').format('YYYY-MM-DD')
   $scope.openeds = [false, false]
   $scope.open = function($event, index) {
     $event.preventDefault();
