@@ -26,6 +26,7 @@ module.exports = function(Test) {
 
   Test.stat = function (filter, next) {
     var Model = Test
+    filter = filter || {}
     filter.where = Model._coerce(filter.where)
     var connector = Model.getDataSource().connector
     filter.where = connector.buildWhere(Model.modelName, filter.where)
@@ -34,10 +35,33 @@ module.exports = function(Test) {
       {
         $match: filter.where
       },
+      { $unwind: "$items"},
+      { 
+        $project: {
+          items: 1,
+          period: {
+            $let: {
+              vars: {
+                interval: {$multiply: [86400000, 30]},
+                duration: {$subtract: ["$created", "$bike.created"]}
+              },
+              in: {
+                $multiply: [ 
+                  30, 
+                  { $add : [1, {$divide: [{$subtract:["$$duration", {$mod: ["$$duration", "$$interval"]}]}, "$$interval"]}] } 
+                ] 
+              }
+            }
+          }
+        }
+      },
       {
-        $group: {
-          _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
-          count: {$sum: 1}
+        $group: { 
+          _id: "$period",
+          brake: {$sum: {$cond: [{$and: [{$eq: ["$items.id", "brake"]}, {$ne: ["$items.state", "pass"]}]}, 1, 0]}}, 
+          motor: {$sum: {$cond: [{$and: [{$eq: ["$items.id", "motor"]}, {$ne: ["$items.state", "pass"]}]}, 1, 0]}},
+          controller: {$sum: {$cond: [{$and: [{$eq: ["$items.id", "controller"]}, {$ne: ["$items.state", "pass"]}]}, 1, 0]}},
+          steering: {$sum: {$cond: [{$and: [{$eq: ["$items.id", "steering"]}, {$ne: ["$items.state", "pass"]}]}, 1, 0]}}
         }
       },
       {
@@ -58,7 +82,7 @@ module.exports = function(Test) {
     'stat',
     {
       accepts: [
-        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true}
+        {arg:'filter', type: 'Object', http: {source: 'query'}}
       ],
       returns: {arg:'data', type: 'Array', root: true},
       http: {verb: 'get'}

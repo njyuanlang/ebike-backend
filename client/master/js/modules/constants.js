@@ -36,6 +36,7 @@ App
                              'vendor/flot/jquery.flot.pie.js',
                              'vendor/flot/jquery.flot.time.js',
                              'vendor/flot/jquery.flot.categories.js',
+                             'vendor/flot/jquery.flot.stack.js',
                              'vendor/flot-spline/js/jquery.flot.spline.min.js'],
       'moment' :            ['vendor/moment/min/moment-with-locales.min.js'],
       'modernizr':          ['vendor/modernizr/modernizr.js'],

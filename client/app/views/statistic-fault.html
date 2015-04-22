@@ -2,7 +2,12 @@
    故障统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
    <div class="pull-right col-sm-9">
       <div class="col-sm-4">
-         <select chosen="" ng-model="searchState" class="chosen-select form-control">
+         <select chosen="" ng-model="brand" ng-options="b.name for b in brands" class="chosen-select form-control">
+            <option value=""></option>
+         </select>
+      </div>
+      <div class="col-sm-4">
+         <select ng-model="region" class="chosen-select form-control">
             <optgroup label="Alaskan/Hawaiian Time Zone">
                <option value="AK">Alaska</option>
                <option value="HI">Hawaii</option>
@@ -16,31 +21,12 @@
          </select>
       </div>
       <div class="col-sm-4">
-         <select chosen="" ng-model="searchState" class="chosen-select form-control">
-            <optgroup label="Alaskan/Hawaiian Time Zone">
-               <option value="AK">Alaska</option>
-               <option value="HI">Hawaii</option>
-            </optgroup>
-            <optgroup label="Pacific Time Zone">
-               <option value="CA">California</option>
-               <option value="NV">Nevada</option>
-               <option value="OR">Oregon</option>
-               <option value="WA">Washington</option>
-            </optgroup>
-         </select>
-      </div>
-      <div class="col-sm-4">
-         <select chosen="" ng-model="searchState" class="chosen-select form-control">
-            <optgroup label="Alaskan/Hawaiian Time Zone">
-               <option value="AK">Alaska</option>
-               <option value="HI">Hawaii</option>
-            </optgroup>
-            <optgroup label="Pacific Time Zone">
-               <option value="CA">California</option>
-               <option value="NV">Nevada</option>
-               <option value="OR">Oregon</option>
-               <option value="WA">Washington</option>
-            </optgroup>
+         <select ng-model="type" class="chosen-select form-control">
+            <option value="all">全部故障</option>
+            <option value="brake">刹车</option>
+            <option value="motor">电机</option>
+            <option value="controller">控制器</option>
+            <option value="steering">转把</option>
          </select>
       </div>
    </div>
@@ -69,13 +55,11 @@
          <table ng-table="tableParams" class="table table-bordered table-striped">
             <tbody>
                <tr ng-repeat="entity in $data">
-                  <td data-title="'时间'">{{entity._id}}</td>
-                  <td data-title="'品牌'">{{entity.brandName}}</td>
-                  <td data-title="'地区'">{{entity.regionName}}</td>
-                  <td data-title="'转把'">{{entity.data[0]}}</td>
-                  <td data-title="'电机'">{{entity.data[0]}}</td>
-                  <td data-title="'刹车'">{{entity.data[0]}}</td>
-                  <td data-title="'控制器'">{{entity.data[0]}}</td>
+                  <td data-title="'时间'">{{entity._id}} 天</td>
+                  <td data-title="'刹车'">{{entity.brake}}</td>
+                  <td data-title="'电机'">{{entity.motor}}</td>
+                  <td data-title="'控制器'">{{entity.controller}}</td>
+                  <td data-title="'转把'">{{entity.steering}}</td>
                </tr>
             </tbody>
          </table>

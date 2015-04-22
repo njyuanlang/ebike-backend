@@ -3,7 +3,10 @@ h3
   a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
   .pull-right.col-sm-9
     .col-sm-4
-      select.chosen-select.form-control(chosen="", ng-model="searchState")
+      select.chosen-select.form-control(chosen="", ng-model="brand", ng-options="b.name for b in brands")
+        option(value='')
+    .col-sm-4
+      select.chosen-select.form-control(ng-model="region")
         optgroup(label='Alaskan/Hawaiian Time Zone')
           option(value='AK') Alaska
           option(value='HI') Hawaii
@@ -13,26 +16,13 @@ h3
           option(value='OR') Oregon
           option(value='WA') Washington
     .col-sm-4
-      select.chosen-select.form-control(chosen="", ng-model="searchState")
-        optgroup(label='Alaskan/Hawaiian Time Zone')
-          option(value='AK') Alaska
-          option(value='HI') Hawaii
-        optgroup(label='Pacific Time Zone')
-          option(value='CA') California
-          option(value='NV') Nevada
-          option(value='OR') Oregon
-          option(value='WA') Washington
-    .col-sm-4
-      select.chosen-select.form-control(chosen="", ng-model="searchState")
-        optgroup(label='Alaskan/Hawaiian Time Zone')
-          option(value='AK') Alaska
-          option(value='HI') Hawaii
-        optgroup(label='Pacific Time Zone')
-          option(value='CA') California
-          option(value='NV') Nevada
-          option(value='OR') Oregon
-          option(value='WA') Washington
-        
+      select.chosen-select.form-control(ng-model="type")
+        option(value="all") 全部故障
+        option(value='brake') 刹车
+        option(value='motor') 电机
+        option(value='controller') 控制器
+        option(value='steering') 转把
+                
 .container-fluid
   // START chart
   .row
@@ -52,12 +42,10 @@ h3
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
           tr(ng-repeat='entity in $data')
-            td(data-title="'时间'") {{entity._id}}
-            td(data-title="'品牌'") {{entity.brandName}}
-            td(data-title="'地区'") {{entity.regionName}}
-            td(data-title="'转把'") {{entity.data[0]}}
-            td(data-title="'电机'") {{entity.data[0]}}
-            td(data-title="'刹车'") {{entity.data[0]}}
-            td(data-title="'控制器'") {{entity.data[0]}}
+            td(data-title="'时间'") {{entity._id}} 天
+            td(data-title="'刹车'") {{entity.brake}}
+            td(data-title="'电机'") {{entity.motor}}
+            td(data-title="'控制器'") {{entity.controller}}
+            td(data-title="'转把'") {{entity.steering}}
   // END chart
             

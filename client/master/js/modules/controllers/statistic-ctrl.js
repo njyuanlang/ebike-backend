@@ -133,7 +133,8 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
   };
 })
 
-App.controller('StatisticFaultController', function ($scope, Test, ngTableParams) {
+App.controller('StatisticFaultController', function ($scope, Test, ngTableParams, Brand) {
+  
   $scope.barStackedOptions = {
       series: {
           stack: true,
@@ -157,12 +158,10 @@ App.controller('StatisticFaultController', function ($scope, Test, ngTableParams
       },
       xaxis: {
           tickColor: '#fcfcfc',
-          mode: 'categories'
+          mode: 'categories',
+          categories: ["30", "60", "90", "120", "150", "180", "360", "720"]
       },
       yaxis: {
-          min: 0,
-          max: 200, // optional: use it for a clear represetation
-          position: ($scope.app.layout.isRTL ? 'right' : 'left'),
           tickColor: '#eee'
       },
       shadowSize: 0
@@ -172,6 +171,28 @@ App.controller('StatisticFaultController', function ($scope, Test, ngTableParams
     count: 10,
   }, {
     getData: function($defer, params) {
+      Test.stat({}, function (result) {
+        $defer.resolve(result)
+        $scope.barStackedData = [
+          { label: "刹车", color: "#9cd159", data: [] },
+          { label: "电机", color: "#4a8ef1", data: [] },
+          { label: "控制器", color: "#f0693a", data: [] },
+          { label: "转把", color: "#51bff2", data: [] }
+        ]
+        result.forEach(function (item) {
+          $scope.barStackedData[0].data.push([item._id, item.brake])
+          $scope.barStackedData[1].data.push([item._id, item.motor])
+          $scope.barStackedData[2].data.push([item._id, item.controller])
+          $scope.barStackedData[3].data.push([item._id, item.steering])
+        })
+      })
     }
   })   
+
+  $scope.brands = Brand.find({filter:{fields:{name:true}}})
+  $scope.type = "all"
+  $scope.filter = {
+    brand: null,
+    region: null,
+  }
 })
