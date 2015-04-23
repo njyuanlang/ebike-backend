@@ -79,10 +79,11 @@ module.exports = function(User) {
   })
   
   User.stat = function (filter, next) {
+    var Model = User
     filter.where = User._coerce(filter.where)
     var connector = User.getDataSource().connector
-    filter.where = connector.buildWhere('user', filter.where)
-    var collection = connector.collection('user')
+    filter.where = connector.buildWhere(Model.modelName, filter.where)
+    var collection = connector.collection(Model.modelName)
     collection.aggregate([
       {
         $match: filter.where

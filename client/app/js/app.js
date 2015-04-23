@@ -344,7 +344,7 @@ App.controller('LoginFormController', ["$scope", "$state", "User", function($sco
       User.login($scope.account, function (user) {
         $state.go('app.dashboard');
       }, function (error) {
-        $scope.authMsg = error
+        $scope.authMsg = error.data.error.message
       })
     }
     else {
@@ -611,18 +611,17 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
   
   $scope.stat = function () {
     var days = 15
-    var today = moment()
-    // var today = moment('2015-04-03', 'YYYY-MM-DD')
-    var endDate = today.format('YYYY-MM-DD')
-    var beginDate = moment(today).subtract(days, 'days').format('YYYY-MM-DD')
+    var today = moment().endOf('day')
+    var startOfDay = moment().startOf('day')
+    var beginDate = moment().subtract(days, 'days').startOf('day')
 
-    User.count({where: {created: {gte: endDate}}}, function (result) {
+    User.count({where: {created: {gte: startOfDay}, realm: 'client' }}, function (result) {
       $scope.statistic.user.added = result.count
     })
     User.count({}, function (result) {
       $scope.statistic.user.total = result.count
     })
-    Bike.count({where: {created: {gte: endDate}}}, function (result) {
+    Bike.count({where: {created: {gte: startOfDay}}}, function (result) {
       $scope.statistic.bike.added = result.count
     })
     Bike.count({}, function (result) {
@@ -631,7 +630,7 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
     
     var userData = null
     var bikeData = null
-    User.stat({filter:{where:{created: {between: [beginDate, endDate]}}}}, function (results) {
+    User.stat({filter:{where:{created: {between: [beginDate, today]}, realm: 'client' }}}, function (results) {
       userData = {
         label: "新增用户",
         color: "#768294",
@@ -658,7 +657,7 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
         $scope.chartData = [userData, bikeData]
       }
     })
-    Bike.stat({filter:{where:{created: {between: [beginDate, endDate]}}}}, function (results) {
+    Bike.stat({filter:{where:{created: {between: [beginDate, today]}}}}, function (results) {
       bikeData = {
         label: "新增车辆",
         color: "#1f92fe",
@@ -689,20 +688,15 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
   
   $scope.stat()
   
-  $scope.splineOptions = {
+  $scope.lineOptions = {
       series: {
           lines: {
-              show: false
+              show: true,
+              fill: 0.01
           },
           points: {
               show: true,
               radius: 4
-          },
-          splines: {
-              show: true,
-              tension: 0.4,
-              lineWidth: 1,
-              fill: 0.5
           }
       },
       grid: {
@@ -716,17 +710,12 @@ App.controller('DashboardController', ["$scope", "User", "Bike", "ngTableParams"
           content: function (label, x, y) { return x + ' : ' + y; }
       },
       xaxis: {
-          tickColor: '#fcfcfc',
+          tickColor: '#eee',
           mode: 'categories'
       },
       yaxis: {
-          min: 0,
-          max: 10,
-          tickColor: '#eee',
           position: ($scope.app.layout.isRTL ? 'right' : 'left'),
-          tickFormatter: function (v) {
-              return v/* + ' visitors'*/;
-          }
+          tickColor: '#eee'
       },
       shadowSize: 0
   };
@@ -2104,6 +2093,20 @@ App.filter("percentage", ["$filter", function ($filter) {
     return $filter('number')(input * 100, decimals || 0) + '%';
   }
 }])
+/**=========================================================
+ * Module: login-filter.js
+ * Login filter
+ =========================================================*/
+
+App.filter("loginError", function () {
+  var dictionary =  {
+    "login failed": '登录失败'
+  }
+  return function (state) {
+    return dictionary[state]
+  }
+})
+
 /**=========================================================
  * Module: test-filter.js
  * Test task filter

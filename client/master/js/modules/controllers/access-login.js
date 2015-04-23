@@ -18,7 +18,7 @@ App.controller('LoginFormController', function($scope, $state, User) {
       User.login($scope.account, function (user) {
         $state.go('app.dashboard');
       }, function (error) {
-        $scope.authMsg = error
+        $scope.authMsg = error.data.error.message
       })
     }
     else {

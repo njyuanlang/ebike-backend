@@ -27,7 +27,7 @@
         
         button.btn.btn-block.btn-primary.mt-lg(type='submit') 登录
       
-      .alert.alert-danger.text-center(ng-show='authMsg') {{authMsg}}
+      .alert.alert-danger.text-center(ng-show='authMsg') {{authMsg | loginError}}
   // END panel
   .p-lg.text-center
     span &copy; 
