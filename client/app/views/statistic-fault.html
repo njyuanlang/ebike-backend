@@ -2,23 +2,10 @@
    故障统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
    <div class="pull-right col-sm-9">
       <div class="col-sm-4">
-         <select chosen="" ng-model="brand" ng-options="b.name for b in brands" class="chosen-select form-control">
-            <option value=""></option>
-         </select>
+         <select ng-model="brand" ng-options="b.name for b in brands" class="chosen-select form-control"></select>
       </div>
       <div class="col-sm-4">
-         <select ng-model="region" class="chosen-select form-control">
-            <optgroup label="Alaskan/Hawaiian Time Zone">
-               <option value="AK">Alaska</option>
-               <option value="HI">Hawaii</option>
-            </optgroup>
-            <optgroup label="Pacific Time Zone">
-               <option value="CA">California</option>
-               <option value="NV">Nevada</option>
-               <option value="OR">Oregon</option>
-               <option value="WA">Washington</option>
-            </optgroup>
-         </select>
+         <select ng-model="province" ng-options="p.name for p in provinces" class="chosen-select form-control"></select>
       </div>
       <div class="col-sm-4">
          <select ng-model="type" class="chosen-select form-control">

@@ -109,7 +109,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Statistic Fault',
         controller: 'StatisticFaultController',
         templateUrl: helper.basepath('statistic-fault.html'),
-        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'angularjs-region')
     })
     .state('app.accounts', {
         url: '/accounts',

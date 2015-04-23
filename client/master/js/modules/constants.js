@@ -50,6 +50,7 @@ App
       {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
                                                   'vendor/ng-table/dist/ng-table.min.css']},
       {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},
+      {name: 'angularjs-region',          files: ['vendor/angularjs-region/angularjs-region.js']},
       {name: 'ebike-services',            files: ['vendor/ebike-services/ebike-lbservices.js',
                                                   'vendor/ebike-services/ebike-services.js'] }
     ]

@@ -3,18 +3,9 @@ h3
   a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
   .pull-right.col-sm-9
     .col-sm-4
-      select.chosen-select.form-control(chosen="", ng-model="brand", ng-options="b.name for b in brands")
-        option(value='')
+      select.chosen-select.form-control(ng-model="brand", ng-options="b.name for b in brands")
     .col-sm-4
-      select.chosen-select.form-control(ng-model="region")
-        optgroup(label='Alaskan/Hawaiian Time Zone')
-          option(value='AK') Alaska
-          option(value='HI') Hawaii
-        optgroup(label='Pacific Time Zone')
-          option(value='CA') California
-          option(value='NV') Nevada
-          option(value='OR') Oregon
-          option(value='WA') Washington
+      select.chosen-select.form-control(ng-model="province", ng-options="p.name for p in provinces")
     .col-sm-4
       select.chosen-select.form-control(ng-model="type")
         option(value="all") 全部故障

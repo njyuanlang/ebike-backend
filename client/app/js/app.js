@@ -180,7 +180,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Statistic Fault',
         controller: 'StatisticFaultController',
         templateUrl: helper.basepath('statistic-fault.html'),
-        resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
+        resolve: helper.resolveFor('flot-chart','flot-chart-plugins', 'angularjs-region')
     })
     .state('app.accounts', {
         url: '/accounts',
@@ -287,6 +287,7 @@ App
       {name: 'ngTable',                   files: ['vendor/ng-table/dist/ng-table.min.js',
                                                   'vendor/ng-table/dist/ng-table.min.css']},
       {name: 'ngTableExport',             files: ['vendor/ng-table-export/ng-table-export.js']},
+      {name: 'angularjs-region',          files: ['vendor/angularjs-region/angularjs-region.js']},
       {name: 'ebike-services',            files: ['vendor/ebike-services/ebike-lbservices.js',
                                                   'vendor/ebike-services/ebike-services.js'] }
     ]
@@ -1168,7 +1169,7 @@ App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", 
   };
 }])
 
-App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "Brand", function ($scope, Test, ngTableParams, Brand) {
+App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "Brand", "ChinaRegion", function ($scope, Test, ngTableParams, Brand, ChinaRegion) {
   
   $scope.barStackedOptions = {
       series: {
@@ -1194,7 +1195,7 @@ App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "
       xaxis: {
           tickColor: '#fcfcfc',
           mode: 'categories',
-          categories: ["30", "60", "90", "120", "150", "180", "360", "720"]
+          categories: ["30", "60", "90", "120", "150", "180", "210", "240", "270", "300", "330", "360"]
       },
       yaxis: {
           tickColor: '#eee'
@@ -1206,7 +1207,14 @@ App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "
     count: 10,
   }, {
     getData: function($defer, params) {
-      Test.stat({}, function (result) {
+      var filter = null
+      if(($scope.brand && $scope.brand.name !== "全部品牌") 
+        || ($scope.province && $scope.province.name !== "全部地区") ) {
+        filter = {where:{}}
+        if($scope.brand.name !== "全部品牌") filter.where["bike.brand.name"] = $scope.brand.name
+        if($scope.province.name !== "全部地区") filter.where["bike.owner.region.province"] = $scope.province.name
+      }
+      Test.stat({filter: filter}, function (result) {
         $defer.resolve(result)
         $scope.barStackedData = [
           { label: "刹车", color: "#9cd159", data: [] },
@@ -1215,21 +1223,27 @@ App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "
           { label: "转把", color: "#51bff2", data: [] }
         ]
         result.forEach(function (item) {
-          $scope.barStackedData[0].data.push([item._id, item.brake])
-          $scope.barStackedData[1].data.push([item._id, item.motor])
-          $scope.barStackedData[2].data.push([item._id, item.controller])
-          $scope.barStackedData[3].data.push([item._id, item.steering])
+          if($scope.type === "all" || $scope.type === "brake")
+            $scope.barStackedData[0].data.push([item._id, item.brake])
+          if($scope.type === "all" || $scope.type === "motor")
+            $scope.barStackedData[1].data.push([item._id, item.motor])
+          if($scope.type === "all" || $scope.type === "controller")
+            $scope.barStackedData[2].data.push([item._id, item.controller])
+          if($scope.type === "all" || $scope.type === "steering")
+            $scope.barStackedData[3].data.push([item._id, item.steering])
         })
       })
     }
   })   
 
-  $scope.brands = Brand.find({filter:{fields:{name:true}}})
+  Brand.find({filter:{fields:{name:true}}}, function (result) {
+    $scope.brands = [{name: "全部品牌"}].concat(result)
+    $scope.brand = $scope.brands[0]
+  })
+  $scope.provinces = [{name: "全部地区"}].concat(ChinaRegion.provinces)
+  $scope.province = $scope.provinces[0]
   $scope.type = "all"
-  $scope.filter = {
-    brand: null,
-    region: null,
-  }
+  $scope.filter = { where:{} }
 }])
 /**=========================================================
  * Module: tests-ctrl.js

@@ -47,7 +47,8 @@
     "flot": "~0.8.3",
     "flot-spline": "*",
     "flot.tooltip": "~0.8.4",
-    "moment": "~2.10.2"
+    "moment": "~2.10.2",
+    "angularjs-region": "https://github.com/guanbo/angularjs-region.git"
   },
   "resolutions": {
     "jquery": "2.1.3",

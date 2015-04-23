@@ -133,7 +133,7 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
   };
 })
 
-App.controller('StatisticFaultController', function ($scope, Test, ngTableParams, Brand) {
+App.controller('StatisticFaultController', function ($scope, Test, ngTableParams, Brand, ChinaRegion) {
   
   $scope.barStackedOptions = {
       series: {
@@ -159,7 +159,7 @@ App.controller('StatisticFaultController', function ($scope, Test, ngTableParams
       xaxis: {
           tickColor: '#fcfcfc',
           mode: 'categories',
-          categories: ["30", "60", "90", "120", "150", "180", "360", "720"]
+          categories: ["30", "60", "90", "120", "150", "180", "210", "240", "270", "300", "330", "360"]
       },
       yaxis: {
           tickColor: '#eee'
@@ -171,7 +171,14 @@ App.controller('StatisticFaultController', function ($scope, Test, ngTableParams
     count: 10,
   }, {
     getData: function($defer, params) {
-      Test.stat({}, function (result) {
+      var filter = null
+      if(($scope.brand && $scope.brand.name !== "全部品牌") 
+        || ($scope.province && $scope.province.name !== "全部地区") ) {
+        filter = {where:{}}
+        if($scope.brand.name !== "全部品牌") filter.where["bike.brand.name"] = $scope.brand.name
+        if($scope.province.name !== "全部地区") filter.where["bike.owner.region.province"] = $scope.province.name
+      }
+      Test.stat({filter: filter}, function (result) {
         $defer.resolve(result)
         $scope.barStackedData = [
           { label: "刹车", color: "#9cd159", data: [] },
@@ -180,19 +187,25 @@ App.controller('StatisticFaultController', function ($scope, Test, ngTableParams
           { label: "转把", color: "#51bff2", data: [] }
         ]
         result.forEach(function (item) {
-          $scope.barStackedData[0].data.push([item._id, item.brake])
-          $scope.barStackedData[1].data.push([item._id, item.motor])
-          $scope.barStackedData[2].data.push([item._id, item.controller])
-          $scope.barStackedData[3].data.push([item._id, item.steering])
+          if($scope.type === "all" || $scope.type === "brake")
+            $scope.barStackedData[0].data.push([item._id, item.brake])
+          if($scope.type === "all" || $scope.type === "motor")
+            $scope.barStackedData[1].data.push([item._id, item.motor])
+          if($scope.type === "all" || $scope.type === "controller")
+            $scope.barStackedData[2].data.push([item._id, item.controller])
+          if($scope.type === "all" || $scope.type === "steering")
+            $scope.barStackedData[3].data.push([item._id, item.steering])
         })
       })
     }
   })   
 
-  $scope.brands = Brand.find({filter:{fields:{name:true}}})
+  Brand.find({filter:{fields:{name:true}}}, function (result) {
+    $scope.brands = [{name: "全部品牌"}].concat(result)
+    $scope.brand = $scope.brands[0]
+  })
+  $scope.provinces = [{name: "全部地区"}].concat(ChinaRegion.provinces)
+  $scope.province = $scope.provinces[0]
   $scope.type = "all"
-  $scope.filter = {
-    brand: null,
-    region: null,
-  }
+  $scope.filter = { where:{} }
 })

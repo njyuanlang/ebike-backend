@@ -1,6 +1,7 @@
 
 db.test.aggregate(
   [
+    { $match: { 'bike.brand.name': '雅迪', 'bike.owner.region.province': '江苏'} },
     { $unwind: "$items"},
     { 
       $project: {

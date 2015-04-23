@@ -30,6 +30,7 @@ module.exports = function(Test) {
     filter.where = Model._coerce(filter.where)
     var connector = Model.getDataSource().connector
     filter.where = connector.buildWhere(Model.modelName, filter.where)
+    console.log(filter)
     var collection = connector.collection(Model.modelName)
     collection.aggregate([
       {
