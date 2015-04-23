@@ -12,7 +12,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
   $locationProvider.html5Mode(false);
 
   // default route
-  $urlRouterProvider.otherwise('/app/dashboard');
+  $urlRouterProvider.otherwise('/page/login');
 
   // 
   // Application Routes
@@ -23,7 +23,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ebike-services', 'ngTable', 'moment')
+        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ngTable', 'moment')
     })
     .state('app.dashboard', {
         url: '/dashboard',
@@ -117,6 +117,32 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         controller: 'AccountsController',
         templateUrl: helper.basepath('accounts.html')
     })
+    .state('app.accounts-add', {
+        url: '/accounts-add',
+        title: 'Accounts Add',
+        templateUrl: helper.basepath('accounts-add.html')
+    })
+    // 
+    // Single Page Routes
+    // ----------------------------------- 
+    .state('page', {
+        url: '/page',
+        templateUrl: 'app/pages/page.html',
+        resolve: helper.resolveFor('modernizr', 'icons', 'ebike-services'),
+        controller: function($rootScope) {
+            $rootScope.app.layout.isBoxed = false;
+        }
+    })
+    .state('page.login', {
+        url: '/login',
+        title: "Login",
+        templateUrl: 'app/pages/login.html'
+    })
+    .state('page.recover', {
+        url: '/recover',
+        title: "Recover",
+        templateUrl: 'app/pages/recover.html'
+    })
     ;
 
 
@@ -162,4 +188,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
+.config(function(LoopBackResourceProvider) {
+    LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+})
 ;

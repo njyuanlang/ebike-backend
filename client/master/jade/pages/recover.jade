@@ -1,0 +1,26 @@
+.block-center.mt-xl.wd-xl(ng-controller="ResetPasswordFormController")
+  // START panel
+  .panel.panel-dark.panel-flat
+    .panel-heading.text-center
+      a(href="#")
+        img.block-center.img-rounded(src='app/img/logo.png', alt='Image')
+    .panel-body
+      p.text-center.pv 密码重置
+      form.form-validate(role='form', name="recoverForm", novalidate='' ng-submit="reset()")
+        p.text-center 填入注册时登记的电子邮箱，重置后您将会收到一封重新设定密码的邮件。
+        .form-group.has-feedback
+          label.text-muted 电子邮件地址
+          input.form-control(type='email', name='email', placeholder='输入电子邮件', autocomplete="off", ng-model="recover.email", required='')
+          span.fa.fa-envelope.form-control-feedback.text-muted
+          span.text-danger(ng-show="recoverForm.email.$dirty && recoverForm.email.$error.required") 邮箱地址不能为空
+          span.text-danger(ng-show="recoverForm.email.$dirty && recoverForm.email.$error.email") 这不是一个有效的电子邮箱地址
+        button.btn.btn-danger.btn-block(type='submit') 重置
+            
+  // END panel
+  .p-lg.text-center
+    span &copy; 
+    span(ng-bind="app.year") 
+    span  - 
+    span(ng-bind="app.name")
+    br
+    span(ng-bind="app.description")

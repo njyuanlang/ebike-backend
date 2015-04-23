@@ -25,6 +25,7 @@ var App = angular.module('angle', [
     'cfp.loadingBar',
     'ngSanitize',
     'ngResource',
+    'ebike-services',
     'ui.utils'
   ]);
 
@@ -83,7 +84,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
   $locationProvider.html5Mode(false);
 
   // default route
-  $urlRouterProvider.otherwise('/app/dashboard');
+  $urlRouterProvider.otherwise('/page/login');
 
   // 
   // Application Routes
@@ -94,7 +95,7 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         abstract: true,
         templateUrl: helper.basepath('app.html'),
         controller: 'AppController',
-        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ebike-services', 'ngTable', 'moment')
+        resolve: helper.resolveFor('modernizr', 'icons', 'toaster', 'ngTable', 'moment')
     })
     .state('app.dashboard', {
         url: '/dashboard',
@@ -188,6 +189,32 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         controller: 'AccountsController',
         templateUrl: helper.basepath('accounts.html')
     })
+    .state('app.accounts-add', {
+        url: '/accounts-add',
+        title: 'Accounts Add',
+        templateUrl: helper.basepath('accounts-add.html')
+    })
+    // 
+    // Single Page Routes
+    // ----------------------------------- 
+    .state('page', {
+        url: '/page',
+        templateUrl: 'app/pages/page.html',
+        resolve: helper.resolveFor('modernizr', 'icons', 'ebike-services'),
+        controller: ["$rootScope", function($rootScope) {
+            $rootScope.app.layout.isBoxed = false;
+        }]
+    })
+    .state('page.login', {
+        url: '/login',
+        title: "Login",
+        templateUrl: 'app/pages/login.html'
+    })
+    .state('page.recover', {
+        url: '/recover',
+        title: "Recover",
+        templateUrl: 'app/pages/recover.html'
+    })
     ;
 
 
@@ -232,6 +259,9 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
 
     $tooltipProvider.options({appendToBody: true});
 
+}])
+.config(["LoopBackResourceProvider", function(LoopBackResourceProvider) {
+    LoopBackResourceProvider.setAuthHeader('X-Access-Token');
 }])
 ;
 
@@ -295,6 +325,47 @@ App
   })
 ;
 /**=========================================================
+ * Module: access-login.js
+ * Demo for login api
+ =========================================================*/
+
+App.controller('LoginFormController', ["$scope", "$state", "User", function($scope, $state, User) {
+
+  // bind here all data from the form
+  $scope.account = {realm: 'administrator', rememberMe: true};
+  // place the message if something goes wrong
+  $scope.authMsg = '';
+
+  $scope.login = function() {
+    $scope.authMsg = '';
+
+    if($scope.loginForm.$valid) {
+
+      User.login($scope.account, function (user) {
+        $state.go('app.dashboard');
+      }, function (error) {
+        $scope.authMsg = error
+      })
+    }
+    else {
+      // set as dirty if the user click directly to login so we show the validation messages
+      $scope.loginForm.account_email.$dirty = true;
+      $scope.loginForm.account_password.$dirty = true;
+    }
+  };
+
+}]);
+
+App.controller('ResetPasswordFormController', ["$scope", "$state", "User", function($scope, $state, User) {
+  
+  $scope.recover = {}
+  
+  $scope.reset = function () {
+    $state.go('page.login')
+  }
+}])
+
+/**=========================================================
  * Module: accounts-ctrl.js
  * Accounts Controller
  =========================================================*/
@@ -320,6 +391,36 @@ App.controller('AccountsController', ["$scope", "User", "ngTableParams", functio
       })
     }
   })   
+}])
+
+App.controller('AccountsAddController', ["$scope", "User", "$state", "toaster", function ($scope, User, $state, toaster) {
+
+  $scope.entity = {realm:'administrator'}
+  
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      $scope.entity.username = $scope.entity.email
+      User.create($scope.entity, function (entity) {
+        toaster.pop('success', '新增成功', '已经添加帐号 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.accounts')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '新增错误', res.data.error.message)
+      })
+    } else {
+      return false;
+    }
+  };
+  
 }])
 /**=========================================================
  * Module: bikes-ctrl.js
@@ -396,7 +497,6 @@ App.controller('BrandsAddController', ["$scope", "Brand", "$state", "toaster", "
         }, 2000)
       }, function (res) {
         toaster.pop('error', '新增错误', res.data.error.message)
-        console.log(res)
       })
     } else {
       return false;
@@ -756,8 +856,8 @@ App.controller('CreateModalInstanceCtrl', ["$scope", "$modalInstance", function 
  =========================================================*/
 
 App.controller('AppController',
-  ['$rootScope', '$scope', '$state', '$translate', '$window', '$localStorage', '$timeout', 'toggleStateService', 'colors', 'browser', 'cfpLoadingBar',
-  function($rootScope, $scope, $state, $translate, $window, $localStorage, $timeout, toggle, colors, browser, cfpLoadingBar) {
+  ['$rootScope', '$scope', '$state', '$translate', '$window', '$localStorage', '$timeout', 'toggleStateService', 'colors', 'browser', 'cfpLoadingBar', 'User',
+  function($rootScope, $scope, $state, $translate, $window, $localStorage, $timeout, toggle, colors, browser, cfpLoadingBar, User) {
     "use strict";
 
     // Setup the layout mode
@@ -833,6 +933,12 @@ App.controller('AppController',
     // {{ colorByName('primary') }}
     $scope.colorByName = colors.byName;
 
+    // Logout 
+    $scope.logout = function () {
+      User.logout()
+      $state.go('page.login')
+    }
+    
     // Internationalization
     // ----------------------
 

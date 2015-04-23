@@ -14,8 +14,6 @@
   "bower_components/ng-table/dist/ng-table.min.css",
   "bower_components/ng-table-export/ng-table-export.js",
   "bower_components/angularjs-region/angularjs-region.js",
-  "bower_components/ebike-services/ebike-lbservices.js",
-  "bower_components/ebike-services/ebike-services.js",
   "bower_components/modernizr/modernizr.js",
   "bower_components/fontawesome/css/font-awesome.min.css",
   "bower_components/fontawesome/fonts/*",

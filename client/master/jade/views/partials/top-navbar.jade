@@ -24,11 +24,11 @@ nav.navbar.topnavbar(role='navigation')
 
       // START Right Navbar
       ul.nav.navbar-nav.navbar-right
-        // START Offsidebar button
+        // START logout
         li
-          a(toggle-state="offsidebar-open", no-persist)
-            em.icon-notebook
-        // END Offsidebar menu
+          a(ng-click="logout()", title="Logout")
+            em.icon-logout
+        // END logout
       // END Right Navbar
     // END Nav wrapper
 

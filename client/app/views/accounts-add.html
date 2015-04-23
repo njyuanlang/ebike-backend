@@ -1,0 +1,73 @@
+<h3>新增车辆品牌</h3>
+<div ng-controller="AccountsAddController" class="container-fluid">
+   <!-- START row-->
+   <div class="row">
+      <div class="col-md-12">
+         <form name="formValidate" ng-submit="submitForm()" novalidate="" class="form-validate form-horizontal">
+            <!-- START panel-->
+            <div class="panel panel-default">
+               <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+               <div class="panel-body">
+                  <fieldset class="b0">
+                     <legend>帐号资料</legend>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">帐号真名</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="name" required="" ng-model="entity.name" class="form-control" />
+                           <span ng-show="validateInput('name', 'required')" class="text-danger">帐号真名不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">注册邮箱</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="email" required="" ng-model="entity.email" class="form-control" />
+                           <span ng-show="validateInput('email', 'required')" class="text-danger">注册邮箱不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="password" required="" ng-model="entity.password" class="form-control" />
+                           <span ng-show="validateInput('password', 'required')" class="text-danger">密码不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">联系电话</label>
+                        <div class="col-sm-6">
+                           <input type="text" name="phone" required="" ng-model="entity.phone" class="form-control" />
+                           <span ng-show="validateInput('password', 'required')" class="text-danger">联系电话不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">可选</small>
+                        </div>
+                     </div>
+                  </fieldset>
+               </div>
+               <div class="panel-footer text-center">
+                  <button type="submit" class="mb-sm btn btn-lg btn-info">提交</button>
+                  <button ui-sref="app.accounts()" class="mb-sm btn btn-lg btn-default">取消</button>
+               </div>
+            </div>
+            <!-- END panel-->
+         </form>
+      </div>
+   </div>
+   <!-- END row-->
+</div>

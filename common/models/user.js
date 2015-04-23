@@ -3,6 +3,7 @@ var Promise = require("promise");
 module.exports = function(User) {
   
   var validateCode = function (body, next) {
+    if (body.realm !== 'client') return next()
     if (body.authcode) {
       var Authmessage = User.app.models.Authmessage
       Authmessage.findOne({

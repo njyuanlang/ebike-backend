@@ -47,7 +47,6 @@ App.controller('BrandsAddController', function ($scope, Brand, $state, toaster, 
         }, 2000)
       }, function (res) {
         toaster.pop('error', '新增错误', res.data.error.message)
-        console.log(res)
       })
     } else {
       return false;

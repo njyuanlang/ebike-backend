@@ -1,0 +1,51 @@
+h3 新增车辆品牌
+
+.container-fluid(ng-controller="AccountsAddController")
+  // START row
+  .row
+    .col-md-12
+      form.form-validate.form-horizontal(name="formValidate", ng-submit="submitForm()", novalidate="")
+        // START panel
+        .panel.panel-default
+          toaster-container(toaster-options="{'position-class': 'toast-top-right', 'close-button':true}")
+          .panel-body
+            fieldset.b0
+              legend 帐号资料
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 帐号真名
+                .col-sm-6
+                  input.form-control(type='text', name='name', required='', ng-model="entity.name")
+                  span.text-danger(ng-show="validateInput('name', 'required')") 帐号真名不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 注册邮箱
+                .col-sm-6
+                  input.form-control(type='text', name='email', required='', ng-model="entity.email")
+                  span.text-danger(ng-show="validateInput('email', 'required')") 注册邮箱不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 密码
+                .col-sm-6
+                  input.form-control(type='text', name='password', required='', ng-model="entity.password")
+                  span.text-danger(ng-show="validateInput('password', 'required')") 密码不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 联系电话
+                .col-sm-6
+                  input.form-control(type='text', name='phone', required='', ng-model="entity.phone")
+                  span.text-danger(ng-show="validateInput('password', 'required')") 联系电话不能为空
+                .col-sm-4
+                  small.text-muted 可选
+          .panel-footer.text-center
+            button.mb-sm.btn.btn-lg.btn-info(type='submit') 提交   
+            button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.accounts()") 取消
+        // END panel
+  // END row
+                

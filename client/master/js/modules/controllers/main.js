@@ -4,8 +4,8 @@
  =========================================================*/
 
 App.controller('AppController',
-  ['$rootScope', '$scope', '$state', '$translate', '$window', '$localStorage', '$timeout', 'toggleStateService', 'colors', 'browser', 'cfpLoadingBar',
-  function($rootScope, $scope, $state, $translate, $window, $localStorage, $timeout, toggle, colors, browser, cfpLoadingBar) {
+  ['$rootScope', '$scope', '$state', '$translate', '$window', '$localStorage', '$timeout', 'toggleStateService', 'colors', 'browser', 'cfpLoadingBar', 'User',
+  function($rootScope, $scope, $state, $translate, $window, $localStorage, $timeout, toggle, colors, browser, cfpLoadingBar, User) {
     "use strict";
 
     // Setup the layout mode
@@ -81,6 +81,12 @@ App.controller('AppController',
     // {{ colorByName('primary') }}
     $scope.colorByName = colors.byName;
 
+    // Logout 
+    $scope.logout = function () {
+      User.logout()
+      $state.go('page.login')
+    }
+    
     // Internationalization
     // ----------------------
 
