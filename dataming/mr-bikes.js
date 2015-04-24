@@ -1,11 +1,11 @@
 // ===================
 // Perpare
 // ===================
-// db.test.find({"bike.created":{$exists: true}}).forEach(function (item) {
-//   item.bike.created = new Date(item.bike.created)
-//   item.bike.updated = new Date(item.bike.updated)
-//   db.test.save(item)
-// })
+db.test.find({"bike.created":{$exists: true}}).forEach(function (item) {
+  item.bike.created = new Date(item.bike.created)
+  item.bike.updated = new Date(item.bike.updated)
+  db.test.save(item)
+})
 
 // ===================
 // Dialy
