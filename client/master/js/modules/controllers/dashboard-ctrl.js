@@ -19,7 +19,7 @@ App.controller('DashboardController', function ($scope, User, Bike, ngTableParam
     User.count({where: {created: {gte: startOfDay}, realm: 'client' }}, function (result) {
       $scope.statistic.user.added = result.count
     })
-    User.count({}, function (result) {
+    User.count({where: {realm: 'client' }}, function (result) {
       $scope.statistic.user.total = result.count
     })
     Bike.count({where: {created: {gte: startOfDay}}}, function (result) {
