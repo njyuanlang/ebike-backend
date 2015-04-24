@@ -191,4 +191,18 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
 .config(function(LoopBackResourceProvider) {
     LoopBackResourceProvider.setAuthHeader('X-Access-Token');
 })
+.config(function ($httpProvider) {
+  $httpProvider.interceptors.push(function($q, $location, LoopBackAuth) {
+    return {
+      responseError: function(rejection) {
+        if (rejection.status == 401) {
+          LoopBackAuth.clearUser();
+          LoopBackAuth.clearStorage();
+          $location.path('/page/login')
+        }
+        return $q.reject(rejection);
+      }
+    };
+  });
+})
 ;

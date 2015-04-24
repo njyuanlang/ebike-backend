@@ -263,8 +263,21 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
 .config(["LoopBackResourceProvider", function(LoopBackResourceProvider) {
     LoopBackResourceProvider.setAuthHeader('X-Access-Token');
 }])
+.config(["$httpProvider", function ($httpProvider) {
+  $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
+    return {
+      responseError: function(rejection) {
+        if (rejection.status == 401) {
+          LoopBackAuth.clearUser();
+          LoopBackAuth.clearStorage();
+          $location.path('/page/login')
+        }
+        return $q.reject(rejection);
+      }
+    };
+  }]);
+}])
 ;
-
 /**=========================================================
  * Module: constants.js
  * Define constants to inject across the application
