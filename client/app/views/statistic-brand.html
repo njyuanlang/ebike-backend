@@ -47,7 +47,7 @@
          <table ng-table="tableParams" class="table table-bordered table-striped">
             <tbody>
                <tr ng-repeat="entity in $data">
-                  <td data-title="'品牌'">{{entity._id}}</td>
+                  <td data-title="'品牌'">{{entity._id || '其他'}}</td>
                   <td data-title="'新增'">{{entity.count}}</td>
                   <td data-title="'新增占比'">{{ entity.count/total| percentage: 1 }}</td>
                   <td data-title="'累计'">{{entity.aggregate}}</td>
