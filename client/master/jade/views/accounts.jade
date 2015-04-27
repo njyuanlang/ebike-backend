@@ -16,7 +16,7 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
-          tr(ng-repeat='entity in $data')
+          tr(ng-repeat='entity in $data' ui-sref='app.account({accountId: entity.id})')
             td(data-title="'用户名'") {{entity.username}}
             td(data-title="'用户真名'") {{entity.name}}
             td(data-title="'联系电话'") {{entity.phone}}

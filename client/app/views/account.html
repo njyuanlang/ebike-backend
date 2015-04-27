@@ -1,5 +1,5 @@
-<h3>新增管理账户</h3>
-<div ng-controller="AccountsAddController" class="container-fluid">
+<h3>编辑管理账户</h3>
+<div ng-controller="AccountController" class="container-fluid">
    <!-- START row-->
    <div class="row">
       <div class="col-md-12">
@@ -27,11 +27,10 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label">注册邮箱</label>
                         <div class="col-sm-6">
-                           <input type="text" name="email" required="" ng-model="entity.email" class="form-control" />
-                           <span ng-show="validateInput('email', 'required')" class="text-danger">注册邮箱不能为空</span>
+                           <p class="form-control-static">{{entity.email}}</p>
                         </div>
                         <div class="col-sm-4">
-                           <small class="text-muted">必填</small>
+                           <small class="text-muted">不可修改</small>
                         </div>
                      </div>
                   </fieldset>

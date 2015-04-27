@@ -122,6 +122,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Accounts Add',
         templateUrl: helper.basepath('accounts-add.html')
     })
+    .state('app.account', {
+        url: '/accounts/:accountId',
+        title: 'Account',
+        templateUrl: helper.basepath('account.html')
+    })
     // 
     // Single Page Routes
     // ----------------------------------- 

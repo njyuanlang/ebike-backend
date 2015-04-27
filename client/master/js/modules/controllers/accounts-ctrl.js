@@ -55,3 +55,32 @@ App.controller('AccountsAddController', function ($scope, User, $state, toaster)
   };
   
 })
+
+App.controller('AccountController', function ($scope, User, $state, toaster) {
+
+  $scope.entity = User.findById({id: $state.params.accountId})
+  
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      User.upsert($scope.entity, function (entity) {
+        toaster.pop('success', '更新成功', '已经更新帐号 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.accounts')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '更新错误', res.data.error.message)
+      })
+    } else {
+      return false;
+    }
+  };
+  
+})

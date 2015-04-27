@@ -194,6 +194,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Accounts Add',
         templateUrl: helper.basepath('accounts-add.html')
     })
+    .state('app.account', {
+        url: '/accounts/:accountId',
+        title: 'Account',
+        templateUrl: helper.basepath('account.html')
+    })
     // 
     // Single Page Routes
     // ----------------------------------- 
@@ -435,6 +440,35 @@ App.controller('AccountsAddController', ["$scope", "User", "$state", "toaster", 
   };
   
 }])
+
+App.controller('AccountController', ["$scope", "User", "$state", "toaster", function ($scope, User, $state, toaster) {
+
+  $scope.entity = User.findById({id: $state.params.accountId})
+  
+  $scope.submitted = false;
+  $scope.validateInput = function(name, type) {
+    var input = $scope.formValidate[name];
+    return (input.$dirty || $scope.submitted) && input.$error[type];
+  };
+
+  // Submit form
+  $scope.submitForm = function() {
+    $scope.submitted = true;
+    if ($scope.formValidate.$valid) {
+      User.upsert($scope.entity, function (entity) {
+        toaster.pop('success', '更新成功', '已经更新帐号 '+entity.name)
+        setTimeout(function () {
+          $state.go('app.accounts')
+        }, 2000)
+      }, function (res) {
+        toaster.pop('error', '更新错误', res.data.error.message)
+      })
+    } else {
+      return false;
+    }
+  };
+  
+}])
 /**=========================================================
  * Module: bikes-ctrl.js
  * Bikes Controller
@@ -551,7 +585,6 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
     if($scope.model === '') return
     if(!$scope.entity.models) $scope.entity.models = []
     if($scope.entity.models.indexOf($scope.model) >= 0) return
-    console.log($scope.entity.models.indexOf($scope.model))
     $scope.entity.models.push($scope.model)
   }
     
