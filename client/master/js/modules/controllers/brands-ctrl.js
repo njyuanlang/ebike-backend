@@ -11,7 +11,7 @@ App.controller('BrandsController', function ($scope, Brand, ngTableParams) {
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = { include:"manufacturer"}
+      var opt = {order: 'created DESC', include:"manufacturer"}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {

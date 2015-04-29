@@ -396,7 +396,7 @@ App.controller('AccountsController', ["$scope", "User", "ngTableParams", functio
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       opt.where = {realm: "administrator"}
@@ -482,7 +482,7 @@ App.controller('BikesController', ["$scope", "Bike", "ngTableParams", function (
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
@@ -508,7 +508,7 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = { include:"manufacturer"}
+      var opt = {order: 'created DESC', include:"manufacturer"}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
@@ -603,7 +603,7 @@ App.controller('ClientsController', ["$scope", "User", "ngTableParams", function
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       opt.where = {realm: "client"}
@@ -630,7 +630,7 @@ App.controller('CruisesController', ["$scope", "Cruise", "ngTableParams", functi
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {include:'bike'}
+      var opt = {order: 'created DESC', include:'bike'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
@@ -781,7 +781,7 @@ App.controller('DevicesController', ["$scope", "Device", "ngTableParams", functi
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
@@ -793,97 +793,6 @@ App.controller('DevicesController', ["$scope", "Device", "ngTableParams", functi
       })
     }
   })   
-}])
-/**
- * List Controller
- */
-App.controller('ListCtrl', ["$scope", "$modal", function ListCtrl($scope, $modal) {
-  $scope.entities = []
-  $scope.resource = undefined
-  $scope.orderOptions = ['createdAt DESC']
-  $scope.search = {
-    text: '',
-    orFields: ['name', 'phone'],
-  }
-  $scope.includes = []
-  $scope.createModalOption = undefined
-  $scope.detailModalOption = undefined
-
-  $scope.fetch = function () {
-    var filter = { 
-      order: $scope.orderOptions,
-      limit: 20
-    }
-    if($scope.search.text !== '' && $scope.search.orFields.length > 0) {
-      var ors = []
-      $scope.search.orFields.forEach(function (field) {
-        var sk = {}
-        sk[field] = {like: $scope.search.text}
-        ors.push(sk)
-      })
-      filter.where = {'or': ors}
-    }
-    
-    if ($scope.includes.length > 0) {
-      filter.include = $scope.includes
-    }
-    // console.log('Filter:', filter, $scope)
-    $scope.resource.query({filter: filter}, function (results) {
-      $scope.entities = results
-    }, function (error) {
-      console.log('Query ', $scope.resource, error)
-    })
-  }
-  
-  var modal = function (modalOption, entity) {
-    if(!modalOption) return
-    if(entity) {
-      modalOption.resolve = {
-        entity: function () {
-          return entity
-        }
-      }
-    }
-    modalOption.size = modal.size || 'lg'
-    var modalInstance = $modal.open(modalOption)
-
-    modalInstance.result.then(function (entity) {
-      $scope.fetch()
-    }, function () {
-      console.info('Modal dismissed at: ' + new Date())
-    })
-  }
-  
-  $scope.showCreate = function () {
-    modal($scope.createModalOption)
-  }
-
-  $scope.showDetail = function (entity) {
-    modal($scope.detailModalOption, entity)
-  }
-  
-  $scope.init = function() {
-    $scope.fetch()
-  }
-}])
-
-App.controller('CreateModalInstanceCtrl', ["$scope", "$modalInstance", function ($scope, $modalInstance) {
-
-  $scope.entity = {}
-  $scope.resource = undefined
-  	
-  $scope.tryCreate = function () {
-    $scope.alerts = []
-    $scope.resource.create($scope.entity, function (entity) {
-      $modalInstance.close(entity)
-    }, function (res) {
-      $scope.alerts.push({type: 'danger', msg: '创建失败'})
-    })
-  }
-  
-  $scope.cancel = function () {
-    $modalInstance.dismiss()
-  }
 }])
 /**=========================================================
  * Module: main.js
@@ -1027,7 +936,7 @@ App.controller('ManufacturersController', ["$scope", "Manufacturer", "ngTablePar
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
@@ -1399,7 +1308,7 @@ App.controller('TestsController', ["$scope", "Test", "ngTableParams", function (
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {

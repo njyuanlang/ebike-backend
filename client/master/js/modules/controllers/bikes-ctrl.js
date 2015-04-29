@@ -11,7 +11,7 @@ App.controller('BikesController', function ($scope, Bike, ngTableParams) {
     filter: $scope.filter.text
   }, {
     getData: function($defer, params) {
-      var opt = {}
+      var opt = {order: 'created DESC'}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
       if($scope.filter.text != '') {
