@@ -13,7 +13,8 @@ module.exports = function(Bike) {
     }
   })
   
-  Bike.validatesUniquenessOf('serialNumber', {message: "序列号已经存在"})
+  // Because of serial number has not been ready, so comment follow validate
+  // Bike.validatesUniquenessOf('serialNumber', {message: "序列号已经存在"})
   
   Bike.observe('before save', function timeStamp(ctx, next) {
     var now = new Date()
