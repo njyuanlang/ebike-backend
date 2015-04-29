@@ -16,6 +16,9 @@ h3
             td(data-title="'车辆编号'") {{entity.serialNumber}}
             td(data-title="'品牌'") {{entity.brand.name}}
             td(data-title="'型号'") {{entity.model}}
+            td(data-title="'车轮直径'") {{entity.wheeldiameter || "未知尺"}}寸
+            td(data-title="'电池电压'") {{entity.voltage || 0}} V
+            td(data-title="'电池容量'") {{entity.current}} AH
             td(data-title="'车主'") {{entity.owner.username}}
             td(data-title="'注册地'") {{entity.owner.region.province}} {{entity.owner.region.city}}
             td(data-title="'注册日期'") {{entity.created}}
