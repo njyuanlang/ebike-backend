@@ -1,0 +1,9 @@
+{
+  "name": "avatar",
+  "base": "Model",
+  "properties": {},
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

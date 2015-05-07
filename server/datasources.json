@@ -7,5 +7,11 @@
     "database": "ebike",
     "name": "mongodb",
     "connector": "mongodb"
+  },
+  "storageDataSource": {
+    "name": "storageDataSource",
+    "connector": "storage",
+    "provider": "filesystem",
+    "root": "/mnt/storage"
   }
 }
