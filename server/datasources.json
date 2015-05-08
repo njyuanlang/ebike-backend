@@ -8,9 +8,9 @@
     "name": "mongodb",
     "connector": "mongodb"
   },
-  "storageDataSource": {
-    "name": "storageDataSource",
-    "connector": "storage",
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
     "provider": "filesystem",
     "root": "/mnt/storage"
   }

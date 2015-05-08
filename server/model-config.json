@@ -60,7 +60,7 @@
     "public": true
   },
   "avatar": {
-    "dataSource": "storageDataSource",
+    "dataSource": "storage",
     "public": true
   }
 }
