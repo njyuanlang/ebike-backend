@@ -59,7 +59,7 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "avatar": {
+  "upload": {
     "dataSource": "storage",
     "public": true
   }
