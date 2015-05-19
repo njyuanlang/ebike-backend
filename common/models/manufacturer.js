@@ -7,7 +7,8 @@ module.exports = function(Manufacturer) {
     var now = new Date()
     var manufacturerUser = {
       manufacturerId: manufacturer.id,
-      "name": manufacturer.name,
+      "name": manufacturer.name+'管理员',
+      username: manufacturer.email, 
       email: manufacturer.email, 
       phone: manufacturer.phone,
       password: "123456", 
