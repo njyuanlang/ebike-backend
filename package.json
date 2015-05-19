@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "server/server.js",
   "scripts": {
+    "syncdb": "sh server/test/fixtures/syncdata.sh",
+    "restoredb": "sh server/test/fixtures/restoredata.sh",
     "start": "node server/server.js",
     "pretest": "jshint ."
   },

@@ -15,8 +15,21 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label">制造商名称</label>
                         <div class="col-sm-6">
-                           <input type="text" name="name" required="" ng-model="entity.name" class="form-control" />
-                           <span ng-show="validateInput('name', 'required')" class="text-danger">品牌名称不能为空</span>
+                           <input type="text" name="manufacturer_name" required="" ng-model="entity.name" class="form-control" />
+                           <span ng-show="validateInput('manufacturer_name', 'required')" class="text-danger">制造商名称不能为空</span>
+                        </div>
+                        <div class="col-sm-4">
+                           <small class="text-muted">必填</small>
+                        </div>
+                     </div>
+                  </fieldset>
+                  <fieldset>
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">电子邮件</label>
+                        <div class="col-sm-6">
+                           <input type="email" name="account_email" required="" ng-model="entity.email" class="form-control" />
+                           <span ng-show="validateInput('account_email', 'required')" class="text-danger">电子邮件作为厂商登录帐号，不能为空</span>
+                           <span ng-show="validateInput('account_email', 'email')" class="text-danger">电子邮件地址不正确</span>
                         </div>
                         <div class="col-sm-4">
                            <small class="text-muted">必填</small>
@@ -27,21 +40,11 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label">联系电话</label>
                         <div class="col-sm-6">
-                           <input type="text" name="name" ng-model="entity.phone" class="form-control" />
+                           <input type="text" name="phone" required="" ng-model="entity.phone" class="form-control" />
+                           <span ng-show="validateInput('phone', 'required')" class="text-danger">联系电话不能为空</span>
                         </div>
                         <div class="col-sm-4">
-                           <small class="text-muted">可选</small>
-                        </div>
-                     </div>
-                  </fieldset>
-                  <fieldset>
-                     <div class="form-group">
-                        <label class="col-sm-2 control-label">电子邮件</label>
-                        <div class="col-sm-6">
-                           <input type="text" name="name" ng-model="entity.email" class="form-control" />
-                        </div>
-                        <div class="col-sm-4">
-                           <small class="text-muted">可选</small>
+                           <small class="text-muted">必填</small>
                         </div>
                      </div>
                   </fieldset>
@@ -49,7 +52,7 @@
                      <div class="form-group">
                         <label class="col-sm-2 control-label">联系地址</label>
                         <div class="col-sm-6">
-                           <input type="text" name="name" ng-model="entity.address" class="form-control" />
+                           <input type="text" name="address" ng-model="entity.address" class="form-control" />
                         </div>
                         <div class="col-sm-4">
                            <small class="text-muted">可选</small>

@@ -15,29 +15,32 @@ h3 新增车辆制造商
               .form-group
                 label.col-sm-2.control-label 制造商名称
                 .col-sm-6
-                  input.form-control(type='text', name='name', required='', ng-model="entity.name")
-                  span.text-danger(ng-show="validateInput('name', 'required')") 品牌名称不能为空
+                  input.form-control(type='text', name='manufacturer_name', required='', ng-model="entity.name")
+                  span.text-danger(ng-show="validateInput('manufacturer_name', 'required')") 制造商名称不能为空
+                .col-sm-4
+                  small.text-muted 必填
+            fieldset
+              .form-group
+                label.col-sm-2.control-label 电子邮件
+                .col-sm-6
+                  input.form-control(type='email', name='account_email', required='' ng-model="entity.email")
+                  span.text-danger(ng-show="validateInput('account_email', 'required')") 电子邮件作为厂商登录帐号，不能为空
+                  span.text-danger(ng-show="validateInput('account_email', 'email')") 电子邮件地址不正确
                 .col-sm-4
                   small.text-muted 必填
             fieldset
               .form-group
                 label.col-sm-2.control-label 联系电话
                 .col-sm-6
-                  input.form-control(type='text', name='name', ng-model="entity.phone")
+                  input.form-control(type='text', name='phone', required='' ng-model="entity.phone")
+                  span.text-danger(ng-show="validateInput('phone', 'required')") 联系电话不能为空
                 .col-sm-4
-                  small.text-muted 可选
-            fieldset
-              .form-group
-                label.col-sm-2.control-label 电子邮件
-                .col-sm-6
-                  input.form-control(type='text', name='name', ng-model="entity.email")
-                .col-sm-4
-                  small.text-muted 可选
+                  small.text-muted 必填
             fieldset
               .form-group
                 label.col-sm-2.control-label 联系地址
                 .col-sm-6
-                  input.form-control(type='text', name='name', ng-model="entity.address")
+                  input.form-control(type='text', name='address', ng-model="entity.address")
                 .col-sm-4
                   small.text-muted 可选
           .panel-footer.text-center
