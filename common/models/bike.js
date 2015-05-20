@@ -34,20 +34,14 @@ module.exports = function(Bike) {
     filter.where = connector.buildWhere(Model.modelName, filter.where)
     var collection = connector.collection(Model.modelName)
     collection.aggregate([
-      {
-        $match: filter.where
-      },
+      { $match: filter.where },
       {
         $group: {
           _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
           count: {$sum: 1}
         }
       },
-      {
-        $sort: {
-          _id: 1
-        }
-      }
+      { $sort: { _id: 1 } }
     ],function (err, results) {
       if(err) {
         next(err)
@@ -164,4 +158,40 @@ module.exports = function(Bike) {
       http: {verb: 'get'}
     }
   )
+  
+  Bike.findUsersByManufacturer = function (filter, next) {
+    filter = filter || {}
+    var Model = Bike
+    filter.where = Model._coerce(filter.where)
+    var connector = Model.getDataSource().connector
+    filter.where = connector.buildWhere(Model.modelName, filter.where)
+    var collection = connector.collection(Model.modelName)
+    console.log(filter)
+    collection.aggregate([
+      { $match: filter.where },
+      { $project: { _id: 0, owner: 1 } },
+    	{
+    		$group: {_id: "$owner.id", user: { $first: "$owner"} }
+    	},
+      { $sort: { _id: 1 } }
+    ],function (err, results) {
+      if(err) {
+        next(err)
+      } else {
+        next(null, results)
+      }
+    })    
+  }
+  
+  Bike.remoteMethod(
+    'findUsersByManufacturer',
+    {
+      accepts: [
+        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true}
+      ],
+      returns: {arg:'data', type: 'Array', root: true},
+      http: {verb: 'get'}
+    }
+  )
+  
 };

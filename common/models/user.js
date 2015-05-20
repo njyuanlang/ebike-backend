@@ -1,3 +1,4 @@
+var loopback = require('loopback');
 var Promise = require("promise");
 
 module.exports = function(User) {
@@ -48,7 +49,7 @@ module.exports = function(User) {
           var now = Date.now()
           user.created = user.created||now
           user.lastUpdated = user.lastUpdated||now
-          user.status = 'active'         
+          user.status = 'active'
           user.name = user.name || user.username
           user.phone = user.phone || user.username
           next()
@@ -118,4 +119,14 @@ module.exports = function(User) {
       http: {verb: 'get'}
     }
   )
+  
+  User.observe('access', function limtiToManufacturer(ctx, next) {
+    // var context = loopback.getCurrentContext()
+    // var currentUser = ctx && ctx.get('currentUser');
+    // if(currentUser && currentUser.realm === 'manufacturer') {
+    //   console.log(currentUser)
+    // }
+    next()
+  })
+  
 };
