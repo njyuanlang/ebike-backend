@@ -29,6 +29,14 @@ module.exports = function(Bike) {
   })
   
   Bike.stat = function (filter, next) {
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(currentUser || currentUser.realm === 'manufacturer') {
+      filter = filter || {}
+      filter.where = filter.where || {}
+      filter.where['brand.manufacturerId'] = currentUser.manufacturerId
+    }
+
     var Model = Bike
     filter.where = Model._coerce(filter.where)
     var connector = Model.getDataSource().connector

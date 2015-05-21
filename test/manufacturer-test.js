@@ -15,7 +15,7 @@ describe('# Manufacturer', function() {
   }
   var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
 
-  describe.skip('## Clients', function () {
+  describe('## Clients', function () {
     lt.describe.whenCalledRemotely('GET', '/api/bikes/findUsersByManufacturer'+qs, function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
@@ -29,7 +29,7 @@ describe('# Manufacturer', function() {
     });
   });
 
-  describe.skip('## Bikes', function () {
+  describe('## Bikes', function () {
 
     lt.describe.whenCalledRemotely('GET', '/api/bikes', function () {
       lt.it.shouldBeAllowed();
@@ -71,6 +71,14 @@ describe('# Manufacturer', function() {
       manufacturerId: '555af68dd5dcc0bdbcbfb8c5'
     }, function () {
       lt.it.shouldBeDenied();
+    })
+  })
+  
+  describe.only('## Dashboard', function () {
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/stat', function () {
+      it('should have successCode', function() {
+        console.log(this.res.body.length)
+      });
     })
   })
 });
