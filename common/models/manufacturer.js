@@ -34,8 +34,4 @@ module.exports = function(Manufacturer) {
     next()
   })
   
-  Manufacturer.findUsersOfManufacturer = function (ctx, next) {
-    // body...
-  }
-   
 };

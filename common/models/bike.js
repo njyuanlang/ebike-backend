@@ -1,3 +1,4 @@
+var loopback = require('loopback');
 var Promise = require("promise");
 
 module.exports = function(Bike) {
@@ -160,20 +161,31 @@ module.exports = function(Bike) {
   )
   
   Bike.findUsersByManufacturer = function (filter, next) {
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(!currentUser || currentUser.realm !== 'manufacturer') {
+      return next(new Error('Not Manufacturer'))
+    }
+
     filter = filter || {}
+    filter.where = filter.where || {}
+    filter.where['brand.manufacturerId'] = currentUser.manufacturerId
+    filter.limit = filter.limit || 10
+    filter.skip = filter.skip || 0
     var Model = Bike
     filter.where = Model._coerce(filter.where)
     var connector = Model.getDataSource().connector
     filter.where = connector.buildWhere(Model.modelName, filter.where)
     var collection = connector.collection(Model.modelName)
-    console.log(filter)
     collection.aggregate([
+      { $sort: { created: -1 } },
       { $match: filter.where },
-      { $project: { _id: 0, owner: 1 } },
+      { $project: { _id: 1, owner: 1 } },
     	{
-    		$group: {_id: "$owner.id", user: { $first: "$owner"} }
+    		$group: {_id: "$owner.username", user: { $first: "$owner"}, bikeId: {$first: "$_id"}}
     	},
-      { $sort: { _id: 1 } }
+      { $skip: filter.skip },
+      { $limit: filter.limit }
     ],function (err, results) {
       if(err) {
         next(err)
@@ -194,4 +206,14 @@ module.exports = function(Bike) {
     }
   )
   
+  Bike.observe('access', function limitToManufacturer(ctx, next) {
+    var context = loopback.getCurrentContext();
+    var currentUser = context && context.get('currentUser');
+    if(currentUser || currentUser.realm === 'manufacturer') {
+      ctx.query.where = ctx.query.where || {};
+      ctx.query.where['brand.manufacturerId'] = currentUser.manufacturerId;
+    }
+    ctx.query.limit = ctx.query.limit || 10 ;
+    next();
+  })
 };

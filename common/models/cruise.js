@@ -1,3 +1,5 @@
+var loopback = require('loopback');
+
 module.exports = function(Cruise) {
 
   Cruise.beforeRemote('create', function (ctx, unused, next) {
@@ -22,6 +24,6 @@ module.exports = function(Cruise) {
       ctx.data.updated = now
     }
     next()
-  })  
-
+  })
+  
 };
