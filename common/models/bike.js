@@ -47,9 +47,11 @@ module.exports = function(Bike) {
       {
         $group: {
           _id: {year: {$year: "$created"}, month: {$month: "$created"}, dayOfMonth: {$dayOfMonth: "$created"}},
+          // users: { $addToSet: "$owner.username"},
           count: {$sum: 1}
         }
       },
+      // { $project: {count: 1, userCount: { $size: "$users"}} },
       { $sort: { _id: 1 } }
     ],function (err, results) {
       if(err) {
@@ -72,36 +74,40 @@ module.exports = function(Bike) {
   )
 
   Bike.statRegion = function (beginDate, endDate, next) {
+    console.log(beginDate, endDate)
+    var where = { created: {$gt: new Date(beginDate), $lte: new Date(endDate)} }
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(currentUser || currentUser.realm === 'manufacturer') {
+      where['brand.manufacturerId'] = currentUser.manufacturerId;
+    }
+
     var collection = Bike.getDataSource().connector.collection('bike')
     var p1 = new Promise(function (resolve, reject) {
       collection.aggregate([
-        {
-          $match: {
-            created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
-          }
-        },
+        { $match: where },
         {
           $group: {
             _id: "$owner.region.province",
             count: {$sum: 1}
           }
         },
-        {
-          $sort: {count: -1}
-        }
+        { $sort: {count: -1} }
       ],function (err, results) {
         if(err) {
           reject(err)
         } else {
+          var aggregateWhere = {
+            created: {$lte: new Date(endDate)},
+            "owner.region.province": {$in: results.map(function (item) {
+              return item._id
+            })}
+          }
+          if(where['brand.manufacturerId']) {
+            aggregateWhere['brand.manufacturerId'] = where['brand.manufacturerId']
+          }
           collection.aggregate([
-            {
-              $match: {
-                created: {$lte: new Date(endDate)},
-                "owner.region.province": {$in: results.map(function (item) {
-                  return item._id
-                })}
-              }
-            },
+            { $match: aggregateWhere },
             {
               $group: {
                 _id: "$owner.region.province",
@@ -127,7 +133,7 @@ module.exports = function(Bike) {
     })
     
     var p2 = new Promise(function (resolve, reject) {
-      collection.count({created:{$gt: new Date(beginDate), $lte: new Date(endDate)}}, function (err, count) {
+      collection.count(where, function (err, count) {
         if(err) {
           reject(err)
         } else {
@@ -137,7 +143,11 @@ module.exports = function(Bike) {
     })
     
     var p3 = new Promise(function (resolve, reject) {
-      collection.count({}, function (err, count) {
+      var aggregateTotalWhere = {}
+      if(where['brand.manufacturerId']) {
+        aggregateTotalWhere['brand.manufacturerId'] = where['brand.manufacturerId']
+      }
+      collection.count(aggregateTotalWhere, function (err, count) {
         if(err) {
           reject(err)
         } else {

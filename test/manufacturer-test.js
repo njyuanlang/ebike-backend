@@ -3,19 +3,19 @@ var assert = require('assert');
 var app = require('../server/server.js'); 
 var querystring = require('querystring')
 
-var loggedInUser = {email:"yx@example.com", password: "123456", realm: "manufacturer"}
+var loggedInUser = {email:"yd@example.com", password: "123456", realm: "manufacturer"}
 
 describe('# Manufacturer', function() {
   lt.beforeEach.withApp(app);
   lt.beforeEach.givenLoggedInUser(loggedInUser);
   
-  var filter = {
-    limit: 5,
-    skip: 5
-  }
-  var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
 
   describe('## Clients', function () {
+    var filter = {
+      limit: 5,
+      skip: 5
+    }
+    var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
     lt.describe.whenCalledRemotely('GET', '/api/bikes/findUsersByManufacturer'+qs, function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
@@ -61,7 +61,6 @@ describe('# Manufacturer', function() {
       "name": "updatedName"+Date.now()
     }, function () {
       it('should ok', function() {
-        // console.log(this.res.body)
         assert.equal(this.res.statusCode, 200);
       });
     });
@@ -74,10 +73,23 @@ describe('# Manufacturer', function() {
     })
   })
   
-  describe.only('## Dashboard', function () {
+  describe('## Dashboard', function () {
     lt.describe.whenCalledRemotely('GET', '/api/bikes/stat', function () {
       it('should have successCode', function() {
-        console.log(this.res.body.length)
+        assert.equal(this.res.statusCode, 200);
+      });
+    })
+  })
+  
+  describe.only('## Statistic', function () {
+    var filter = {
+      beginDate: '"2015-04-01"',
+      endDate: '"2015-05-01"'
+    }
+    var qs = '?'+querystring.stringify(filter)
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/statRegion'+qs, function () {
+      it('should have successCode', function() {
+        console.log(this.res.body)
       });
     })
   })
