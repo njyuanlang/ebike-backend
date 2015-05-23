@@ -3,7 +3,8 @@ var assert = require('assert');
 var app = require('../server/server.js'); 
 var querystring = require('querystring')
 
-var loggedInUser = {email:"yd@example.com", password: "123456", realm: "manufacturer"}
+var loggedInUser = {email:"yx@example.com", password: "123456", realm: "manufacturer"}
+// var loggedInUser = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"}
 
 describe('# Manufacturer', function() {
   lt.beforeEach.withApp(app);
@@ -20,7 +21,7 @@ describe('# Manufacturer', function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
-        console.log(this.res.body, this.res.body.length);
+        // console.log(this.res.body, this.res.body.length);
       });
 
       it('should respond with an array of user', function() {
@@ -81,7 +82,7 @@ describe('# Manufacturer', function() {
     })
   })
   
-  describe.only('## Statistic', function () {
+  describe('## Statistic', function () {
     var filter = {
       beginDate: '"2015-04-01"',
       endDate: '"2015-05-01"'
@@ -89,7 +90,14 @@ describe('# Manufacturer', function() {
     var qs = '?'+querystring.stringify(filter)
     lt.describe.whenCalledRemotely('GET', '/api/bikes/statRegion'+qs, function () {
       it('should have successCode', function() {
-        console.log(this.res.body)
+        assert.equal(this.res.statusCode, 200);
+      });
+    })
+    
+    lt.describe.whenCalledRemotely('GET', '/api/tests/stat', function () {
+      it('should have successCode', function() {
+        assert.equal(this.res.statusCode, 200);
+        // console.log(this.res.body)
       });
     })
   })

@@ -116,7 +116,7 @@ module.exports = function(Brand) {
     var ObjectID = Brand.getDataSource().ObjectID
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');
-    if(currentUser || currentUser.realm === 'manufacturer') {
+    if(currentUser && currentUser.realm === 'manufacturer') {
       ctx.query.where = ctx.query.where || {};
       ctx.query.where['manufacturerId'] = ObjectID(currentUser.manufacturerId);
     }
@@ -128,7 +128,7 @@ module.exports = function(Brand) {
     var ObjectID = Brand.getDataSource().ObjectID
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');
-    if(currentUser || currentUser.realm === 'manufacturer') {
+    if(currentUser && currentUser.realm === 'manufacturer') {
       if(ctx.instance) {
         if(!ctx.instance.manufacturerId) {
           ctx.instance.manufacturerId = ObjectID(currentUser.manufacturerId);

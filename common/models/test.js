@@ -1,3 +1,5 @@
+var loopback = require('loopback');
+
 module.exports = function(Test) {
 
   Test.beforeRemote('create', function (ctx, unused, next) {
@@ -25,8 +27,15 @@ module.exports = function(Test) {
   })  
 
   Test.stat = function (filter, next) {
-    var Model = Test
     filter = filter || {}
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(currentUser && currentUser.realm === 'manufacturer') {
+      filter.where = filter.where || {}
+      filter.where['bike.brand.manufacturerId'] = currentUser.manufacturerId
+    }
+
+    var Model = Test
     filter.where = Model._coerce(filter.where)
     var connector = Model.getDataSource().connector
     filter.where = connector.buildWhere(Model.modelName, filter.where)

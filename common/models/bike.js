@@ -29,10 +29,10 @@ module.exports = function(Bike) {
   })
   
   Bike.stat = function (filter, next) {
+    filter = filter || {}
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
-    if(currentUser || currentUser.realm === 'manufacturer') {
-      filter = filter || {}
+    if(currentUser && currentUser.realm === 'manufacturer') {
       filter.where = filter.where || {}
       filter.where['brand.manufacturerId'] = currentUser.manufacturerId
     }
@@ -74,11 +74,10 @@ module.exports = function(Bike) {
   )
 
   Bike.statRegion = function (beginDate, endDate, next) {
-    console.log(beginDate, endDate)
     var where = { created: {$gt: new Date(beginDate), $lte: new Date(endDate)} }
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
-    if(currentUser || currentUser.realm === 'manufacturer') {
+    if(currentUser && currentUser.realm === 'manufacturer') {
       where['brand.manufacturerId'] = currentUser.manufacturerId;
     }
 
@@ -227,7 +226,7 @@ module.exports = function(Bike) {
   Bike.observe('access', function limitToManufacturer(ctx, next) {
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');
-    if(currentUser || currentUser.realm === 'manufacturer') {
+    if(currentUser && currentUser.realm === 'manufacturer') {
       ctx.query.where = ctx.query.where || {};
       ctx.query.where['brand.manufacturerId'] = currentUser.manufacturerId;
     }
