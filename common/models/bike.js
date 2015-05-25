@@ -223,6 +223,45 @@ module.exports = function(Bike) {
     }
   )
   
+  Bike.countUserByManufacturer = function (filter, next) {
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(!currentUser || currentUser.realm !== 'manufacturer') {
+      return next(new Error('Not Manufacturer'))
+    }
+
+    filter = filter || {}
+    filter.where = filter.where || {}
+    filter.where['brand.manufacturerId'] = currentUser.manufacturerId.toString()
+    var Model = Bike
+    filter.where = Model._coerce(filter.where)
+    var connector = Model.getDataSource().connector
+    filter.where = connector.buildWhere(Model.modelName, filter.where)
+    var collection = connector.collection(Model.modelName)
+    collection.aggregate([
+      { $match: filter.where },
+      { $project: { _id: 1, owner: 1 } },
+    	{ $group: {_id: "$owner.username"} }
+    ],function (err, results) {
+      if(err) {
+        next(err)
+      } else {
+        next(null, {count: results.length})
+      }
+    })    
+  }
+  
+  Bike.remoteMethod(
+    'countUserByManufacturer',
+    {
+      accepts: [
+        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true}
+      ],
+      returns: {arg:'data', type: 'Object', root: true},
+      http: {verb: 'get'}
+    }
+  )
+  
   Bike.observe('access', function limitToManufacturer(ctx, next) {
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');

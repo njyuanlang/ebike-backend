@@ -30,6 +30,13 @@ describe('# Manufacturer', function() {
         assert(Array.isArray(this.res.body));
       });
     });
+    
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/countUserByManufacturer', function () {
+      it('should have statusCode 200', function() {
+        assert.equal(this.res.statusCode, 200);
+        // console.log(this.res.body)
+      });
+    })
   });
 
   describe('## Bikes', function () {
