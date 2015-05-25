@@ -73,11 +73,7 @@ module.exports = function(Test) {
           steering: {$sum: {$cond: [{$and: [{$eq: ["$items.id", "steering"]}, {$ne: ["$items.state", "pass"]}]}, 1, 0]}}
         }
       },
-      {
-        $sort: {
-          _id: 1
-        }
-      }
+      { $sort: {_id: 1} }
     ],function (err, results) {
       if(err) {
         next(err)

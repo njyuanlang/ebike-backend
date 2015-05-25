@@ -3,18 +3,20 @@ var assert = require('assert');
 var app = require('../server/server.js'); 
 var querystring = require('querystring')
 
-var loggedInUser = {email:"yx@example.com", password: "123456", realm: "manufacturer"}
+var loggedInUser = {email:"sp@example.com", password: "123456", realm: "manufacturer"}
 // var loggedInUser = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"}
 
 describe('# Manufacturer', function() {
   lt.beforeEach.withApp(app);
   lt.beforeEach.givenLoggedInUser(loggedInUser);
+  // beforeEach(function () {
+  //   console.log(this.loggedInAccessToken)
+  // })
   
-
   describe('## Clients', function () {
     var filter = {
       limit: 5,
-      skip: 5
+      skip: 0
     }
     var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
     lt.describe.whenCalledRemotely('GET', '/api/bikes/findUsersByManufacturer'+qs, function() {
@@ -41,7 +43,7 @@ describe('# Manufacturer', function() {
     });
   });
   
-  describe('## Brands', function () {
+  describe.skip('## Brands', function () {
     
     lt.describe.whenCalledRemotely('GET', '/api/brands', function () {
       it('should have statusCode', function() {
@@ -57,7 +59,7 @@ describe('# Manufacturer', function() {
         assert.equal(this.res.statusCode, 200);
       });
     });
-    
+
     lt.describe.whenCalledRemotely('POST', '/api/brands', {
       "name": "updatedName"+Date.now()
     }, function () {
@@ -65,7 +67,7 @@ describe('# Manufacturer', function() {
         assert.equal(this.res.statusCode, 200);
       });
     });
-    
+
     lt.describe.whenCalledRemotely('POST', '/api/brands', {
       "name": "test brand"+Date.now(),
       manufacturerId: '555af68dd5dcc0bdbcbfb8c5'

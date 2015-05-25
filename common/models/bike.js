@@ -186,7 +186,7 @@ module.exports = function(Bike) {
 
     filter = filter || {}
     filter.where = filter.where || {}
-    filter.where['brand.manufacturerId'] = currentUser.manufacturerId
+    filter.where['brand.manufacturerId'] = currentUser.manufacturerId.toString()
     filter.limit = filter.limit || 10
     filter.skip = filter.skip || 0
     var Model = Bike
