@@ -132,7 +132,7 @@ module.exports = function(Brand) {
       if(ctx.instance) {
         if(!ctx.instance.manufacturerId) {
           ctx.instance.manufacturerId = ObjectID(currentUser.manufacturerId);
-        } else if (ctx.instance.manufacturerId.toString() !== currentUser.manufacturerId) {
+        } else if (ctx.instance.manufacturerId.toString() !== currentUser.manufacturerId.toString()) {
           var err = new Error('Forbidden')
           err.status = 401
           return next(err)

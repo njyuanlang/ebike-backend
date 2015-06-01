@@ -93,4 +93,17 @@ module.exports = function(Test) {
       http: {verb: 'get'}
     }
   )
+  
+  Test.observe('access', function limitToManufacturer(ctx, next) {
+    // var ObjectID = Brand.getDataSource().ObjectID
+    var context = loopback.getCurrentContext();
+    var currentUser = context && context.get('currentUser');
+    if(currentUser && currentUser.realm === 'manufacturer') {
+      ctx.query.where = ctx.query.where || {};
+      ctx.query.where['bike.brand.manufacturerId'] = currentUser.manufacturerId.toString();
+    }
+    ctx.query.limit = ctx.query.limit || 10 ;
+    next();
+  })
+  
 };

@@ -34,7 +34,7 @@ module.exports = function(Bike) {
     var currentUser = context && context.get('currentUser');
     if(currentUser && currentUser.realm === 'manufacturer') {
       filter.where = filter.where || {}
-      filter.where['brand.manufacturerId'] = currentUser.manufacturerId
+      filter.where['brand.manufacturerId'] = currentUser.manufacturerId.toString()
     }
 
     var Model = Bike
@@ -78,7 +78,7 @@ module.exports = function(Bike) {
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
     if(currentUser && currentUser.realm === 'manufacturer') {
-      where['brand.manufacturerId'] = currentUser.manufacturerId;
+      where['brand.manufacturerId'] = currentUser.manufacturerId.toString();
     }
 
     var collection = Bike.getDataSource().connector.collection('bike')
@@ -267,7 +267,7 @@ module.exports = function(Bike) {
     var currentUser = context && context.get('currentUser');
     if(currentUser && currentUser.realm === 'manufacturer') {
       ctx.query.where = ctx.query.where || {};
-      ctx.query.where['brand.manufacturerId'] = currentUser.manufacturerId;
+      ctx.query.where['brand.manufacturerId'] = currentUser.manufacturerId.toString();
     }
     ctx.query.limit = ctx.query.limit || 10 ;
     next();
