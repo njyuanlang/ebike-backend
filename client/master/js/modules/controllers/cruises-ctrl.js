@@ -17,9 +17,9 @@ App.controller('CruisesController', function ($scope, Cruise, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Cruise.find({filter:opt}, $defer.resolve)
       Cruise.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Cruise.find({filter:opt}, $defer.resolve)
       })
     }
   })   

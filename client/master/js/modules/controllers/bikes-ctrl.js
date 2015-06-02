@@ -17,9 +17,9 @@ App.controller('BikesController', function ($scope, Bike, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Bike.find({filter:opt}, $defer.resolve)
       Bike.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Bike.find({filter:opt}, $defer.resolve)
       })
     }
   })   

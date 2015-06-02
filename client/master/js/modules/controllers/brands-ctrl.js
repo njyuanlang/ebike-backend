@@ -17,9 +17,9 @@ App.controller('BrandsController', function ($scope, Brand, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where = {"name": {like: $scope.filter.text}}
       }
-      Brand.find({filter:opt}, $defer.resolve)
       Brand.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Brand.find({filter:opt}, $defer.resolve)
       })
     }
   })   

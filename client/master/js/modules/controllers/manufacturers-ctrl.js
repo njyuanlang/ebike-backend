@@ -17,9 +17,9 @@ App.controller('ManufacturersController', function ($scope, Manufacturer, ngTabl
       if($scope.filter.text != '') {
         opt.where = {"name": {like: $scope.filter.text}}
       }
-      Manufacturer.find({filter:opt}, $defer.resolve)
       Manufacturer.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Manufacturer.find({filter:opt}, $defer.resolve)
       })
     }
   })   

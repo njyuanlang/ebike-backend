@@ -403,9 +403,9 @@ App.controller('AccountsController', ["$scope", "User", "ngTableParams", functio
       if($scope.filter.text != '') {
         opt.where.name = {like: $scope.filter.text}
       }
-      User.find({filter:opt}, $defer.resolve)
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        User.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -488,9 +488,9 @@ App.controller('BikesController', ["$scope", "Bike", "ngTableParams", function (
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Bike.find({filter:opt}, $defer.resolve)
       Bike.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Bike.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -514,9 +514,9 @@ App.controller('BrandsController', ["$scope", "Brand", "ngTableParams", function
       if($scope.filter.text != '') {
         opt.where = {"name": {like: $scope.filter.text}}
       }
-      Brand.find({filter:opt}, $defer.resolve)
       Brand.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Brand.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -610,9 +610,9 @@ App.controller('ClientsController', ["$scope", "User", "ngTableParams", function
       if($scope.filter.text != '') {
         opt.where.username = {like: $scope.filter.text}
       }
-      User.find({filter:opt}, $defer.resolve)
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        User.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -636,9 +636,9 @@ App.controller('CruisesController', ["$scope", "Cruise", "ngTableParams", functi
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Cruise.find({filter:opt}, $defer.resolve)
       Cruise.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Cruise.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -787,9 +787,9 @@ App.controller('DevicesController', ["$scope", "Device", "ngTableParams", functi
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Device.find({filter:opt}, $defer.resolve)
       Device.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Device.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -942,9 +942,9 @@ App.controller('ManufacturersController', ["$scope", "Manufacturer", "ngTablePar
       if($scope.filter.text != '') {
         opt.where = {"name": {like: $scope.filter.text}}
       }
-      Manufacturer.find({filter:opt}, $defer.resolve)
       Manufacturer.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Manufacturer.find({filter:opt}, $defer.resolve)
       })
     }
   })   
@@ -1314,9 +1314,9 @@ App.controller('TestsController', ["$scope", "Test", "ngTableParams", function (
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Test.find({filter:opt}, $defer.resolve)
       Test.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Test.find({filter:opt}, $defer.resolve)
       })
     }
   })   

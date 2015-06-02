@@ -18,9 +18,9 @@ App.controller('ClientsController', function ($scope, User, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where.username = {like: $scope.filter.text}
       }
-      User.find({filter:opt}, $defer.resolve)
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        User.find({filter:opt}, $defer.resolve)
       })
     }
   })   

@@ -17,9 +17,9 @@ App.controller('DevicesController', function ($scope, Device, ngTableParams) {
       if($scope.filter.text != '') {
         opt.where = {"serialNumber": {like: $scope.filter.text}}
       }
-      Device.find({filter:opt}, $defer.resolve)
       Device.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
+        Device.find({filter:opt}, $defer.resolve)
       })
     }
   })   

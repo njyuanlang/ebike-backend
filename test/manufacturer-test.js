@@ -16,7 +16,11 @@ describe('# Manufacturer', function() {
   
   describe('## Clients', function () {
     var filter = {
-      limit: 5,
+      where: {
+        "owner.created": {gte:"2015-05-31T16:00:00.000Z"},
+        "owner.realm":'client'
+      },
+      limit: 10,
       skip: 0
     }
     var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
@@ -24,7 +28,6 @@ describe('# Manufacturer', function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
-        // console.log(this.res.body, this.res.body.length);
       });
 
       it('should respond with an array of user', function() {
@@ -32,9 +35,10 @@ describe('# Manufacturer', function() {
       });
     });
     
-    lt.describe.whenCalledRemotely('GET', '/api/bikes/countUserByManufacturer', function () {
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/countUserByManufacturer'+qs, function () {
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
+        console.log(this.res.body);
       });
     })
   });
