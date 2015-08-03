@@ -116,8 +116,9 @@ module.exports = function(Brand) {
     var ObjectID = Brand.getDataSource().ObjectID
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');
+    ctx.query.where = ctx.query.where || {};
+    ctx.query.where.status = ctx.query.where.status || {neq: 'removed'};
     if(currentUser && currentUser.realm === 'manufacturer') {
-      ctx.query.where = ctx.query.where || {};
       ctx.query.where['manufacturerId'] = ObjectID(currentUser.manufacturerId);
     }
     ctx.query.limit = ctx.query.limit || 10 ;

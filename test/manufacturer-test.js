@@ -5,10 +5,11 @@ var querystring = require('querystring')
 
 var loggedInUser = {email:"sp@example.com", password: "123456", realm: "manufacturer"}
 var manufacturerId = '555f0674c0daf6350e2cb213'
-// var loggedInUser = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"}
+var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"}
 
 describe('# Manufacturer', function() {
   lt.beforeEach.withApp(app);
+  lt.beforeEach.withUserModel('user');
   lt.beforeEach.givenLoggedInUser(loggedInUser);
   // beforeEach(function () {
   //   console.log(this.loggedInAccessToken)
@@ -56,12 +57,20 @@ describe('# Manufacturer', function() {
   
   describe('## Brands', function () {
     
-    lt.describe.whenCalledRemotely('GET', '/api/brands', function () {
-      it('should have statusCode', function() {
-        assert.equal(this.res.statusCode, 200);
-        // console.log(this.res.body)
+    describe('### GET ', function() {
+      lt.describe.whenCalledRemotely('GET', '/api/brands', function () {
+        it('should have statusCode', function() {
+          assert.equal(this.res.statusCode, 200);
+        });
       });
-    })
+      
+      lt.describe.whenCalledByUser(loggedInAdmin, 'GET', '/api/brands', function () {
+        it('should have statusCode', function() {
+          // assert.equal(this.res.statusCode, 200);
+          console.log(this.res.body)
+        });
+      });
+    });
     
     lt.describe.whenCalledRemotely('POST', '/api/brands', {
       "name": "test brand"+Date.now(),
