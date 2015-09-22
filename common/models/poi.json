@@ -1,0 +1,25 @@
+{
+  "name": "poi",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "_name": {
+      "type": "string",
+      "required": true
+    },
+    "_location": {
+      "type": "string",
+      "required": true
+    },
+    "_address": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": []
+}

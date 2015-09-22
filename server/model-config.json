@@ -62,5 +62,9 @@
   "upload": {
     "dataSource": "storage",
     "public": true
+  },
+  "poi": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
