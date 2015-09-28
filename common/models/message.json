@@ -1,0 +1,48 @@
+{
+  "name": "message",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "ToUserName": {
+      "type": "string",
+      "required": true
+    },
+    "FromUserName": {
+      "type": "string",
+      "required": false
+    },
+    "MsgType": {
+      "type": "string",
+      "required": true
+    },
+    "CreateTime": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "ToUser": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "ToUserName"
+    },
+    "FromUser": {
+      "type": "belongsTo",
+      "model": "user",
+      "foreignKey": "FromUserName"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$unauthenticated",
+      "permission": "DENY"
+    }
+  ],
+  "methods": []
+}

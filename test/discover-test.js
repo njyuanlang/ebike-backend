@@ -12,12 +12,20 @@ describe('# Discover', function() {
   
   lt.beforeEach.givenLoggedInUser(clientUser);
 
-  describe.only('## Create new one', function() {
+  describe('## Create new one', function() {
     lt.describe.whenCalledRemotely('POST', '/api/pois', {
-      "_name": "南京元朗",
-      "_location": "118.58883,31.837322",
-      // "coordtype": "autonavi",
-      "_address": "南京市江宁区飞鹰路8号"
+      "_name": "测试地址",
+      "_location": "118.786331,31.936223",
+      "_address": "将军大道2919^-210",
+      "anybrand": 1,
+      "charge": 1,
+      "onsite": 0,
+      "wheel2": 1,
+      "wheel3": 1,
+      "province": "江苏省",
+      "city": "南京市",
+      "district": "江宁区",
+      "telephone": "12345678936"
     }, function () {
       // lt.it.shouldBeAllowed();
       it('should have statusCode 200', function () {

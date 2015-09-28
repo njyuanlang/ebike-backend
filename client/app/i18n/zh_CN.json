@@ -15,6 +15,7 @@
     },
     "nav": {
       "DASHBOARD": "控制面板",
+      "MESSAGE": "消息管理",
       "CLIENT": "客户管理",
       "BIKE": "车辆管理",
       "CRUISE": "巡航纪录",

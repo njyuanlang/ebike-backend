@@ -11,6 +11,12 @@
     "translate": "sidebar.nav.DASHBOARD"
   },
   {
+    "text": "Messages",
+    "sref": "app.messages",
+    "icon": "icon-bubble",
+    "translate": "sidebar.nav.MESSAGE"
+  },
+  {
     "text": "Clients",
     "sref": "app.clients",
     "icon": "icon-users",

@@ -1,0 +1,25 @@
+h3
+  | 消息管理
+  from.pull-right.col-sm-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="消息内容", ng-model="filter.text", ui-keypress="{13:'tableParams.reload()'}")
+  
+.container-fluid
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr.text-center(ng-repeat='message in $data')
+            td(data-title="'头像'") 
+              img.img-thumbnail(ng-src="{{message.avatar}}", alt="", width="44", height="44")
+            td(data-title="'用户名'") {{message.FromUser.name}}
+            td.text-left(data-title="'内容'") {{message.Content}}
+            td(data-title="'时间'") {{message.CreateTime | moment_unix }}
+            td(data-title="'操作'")
+              a.btn.btn-clear
+                i.fa.fa-lg.fa-reply
+              a.btn.btn-clear
+                i.fa.fa-lg.fa-trash

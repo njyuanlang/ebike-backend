@@ -1,1 +1,1 @@
-!function(e,r){"use strict";var i=r.module("ebike-services",["lbServices"]);i.service("CurrentUser",function(){return{}})}(window,window.angular);
+!function(e,n,r){"use strict";var t="http://121.40.108.30:3000/api",o=n.module("ebike-services",["lbServices"]);o.service("RemoteStorage",function(){return{getUploadURL:function(e,n){return t+"/"+e+"/"+n+"/upload"},getDownloadURL:function(e,n,r){return t+"/"+e+"/"+n+"/download/"+r}}}).service("CurrentUser",function(e){})}(window,window.angular);

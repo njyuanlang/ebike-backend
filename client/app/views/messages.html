@@ -1,0 +1,30 @@
+<h3>消息管理
+   <from class="pull-right col-sm-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="消息内容" ng-model="filter.text" ui-keypress="{13:'tableParams.reload()'}" class="form-control" />
+      </div>
+   </from>
+</h3>
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="message in $data" class="text-center">
+                  <td data-title="'头像'">
+                     <img ng-src="{{message.avatar}}" alt="" width="44" height="44" class="img-thumbnail" />
+                  </td>
+                  <td data-title="'用户名'">{{message.FromUser.name}}</td>
+                  <td data-title="'内容'" class="text-left">{{message.Content}}</td>
+                  <td data-title="'时间'">{{message.CreateTime | moment_unix }}</td>
+                  <td data-title="'操作'"><a class="btn btn-clear"><i class="fa fa-lg fa-reply"></i></a><a class="btn btn-clear"><i class="fa fa-lg fa-trash"></i></a>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
