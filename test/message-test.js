@@ -27,15 +27,7 @@ describe('Message', function() {
       });
     });
     
-    lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages/chats', function () {
-      it('should success get messages from User', function(done) {
-        console.log(this.res.body);
-        assert.equal(this.res.statusCode, 200);
-        done();
-      });
-    });
-        
-    describe.only('## GET', function() {
+    describe('## GET', function() {
       var filter = {
         include: ['FromUser'],
         // where: {
@@ -51,6 +43,19 @@ describe('Message', function() {
           console.log(this.res.body);
           done();
         });
+      });
+    });
+    
+  });
+  
+  describe.only('# User', function() {
+    
+    lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages/chats', function () {
+      it('should success get messages from User', function(done) {
+        console.log(this.res.body);
+        console.log(this.res.body[0].messages);
+        assert.equal(this.res.statusCode, 200);
+        done();
       });
     });
     

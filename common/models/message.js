@@ -1,4 +1,5 @@
 var loopback = require('loopback');
+var async = require('async');
 
 module.exports = function(Message) {
   
@@ -17,20 +18,27 @@ module.exports = function(Message) {
     var collection = connector.collection(Model.modelName)
     collection.aggregate([
       { $match: filter.where },
+      { $sort: { CreateTime: -1} },
       {
         $group: {
           _id: { $cond: [{$eq: ["$ToUserName", currentUserId]}, "$FromUserName", "$ToUserName"]},
-          updatetime: { $last: "$CreateTime"},
           messages: { $push: "$$ROOT"}
         }
-      },
-      // { $project: {count: 1, userCount: { $size: "$users"}} },
-      { $sort: { updatetime: 1 } }
+      }
+      // { $project: {_id: 0, userCount: { $size: "$users"}} }
+      // { $sort: { updatetime: -1 } }
     ],function (err, results) {
       if(err) {
         next(err)
       } else {
-        next(null, results)
+        async.each(results, function (item, cb) {
+          Message.app.models.user.findById(item._id, function (err, user) {
+            item.user = user;
+            cb(err);
+          });
+        }, function (err) {
+          next(err, results);
+        });
       }
     })
   };
