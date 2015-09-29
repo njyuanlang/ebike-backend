@@ -12,8 +12,9 @@ var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "a
 
 describe('Message', function() {
   
+  lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
+  
   describe('# Manufacturer', function() {
-    lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
 
     lt.describe.whenCalledRemotely('POST', '/api/messages', {
       "ToUserName": loggedInUser.id,
@@ -49,7 +50,7 @@ describe('Message', function() {
   });
   
   describe.only('# User', function() {
-    
+
     lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages/chats', function () {
       it('should success get messages from User', function(done) {
         console.log(this.res.body);

@@ -8,8 +8,7 @@ module.exports = function(Message) {
     filter.where = filter.where || {}
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
-    var currentUserId = currentUser.id.toString();
-    filter.where.or = [{ToUserName: currentUserId}, {FromUserName: currentUserId}];
+    filter.where.or = [{ToUserName: currentUser.id}, {FromUserName: currentUser.id}];
 
     var Model = Message;
     filter.where = Model._coerce(filter.where)
@@ -21,7 +20,7 @@ module.exports = function(Message) {
       { $sort: { CreateTime: -1} },
       {
         $group: {
-          _id: { $cond: [{$eq: ["$ToUserName", currentUserId]}, "$FromUserName", "$ToUserName"]},
+          _id: { $cond: [{$eq: ["$ToUserName", currentUser.id]}, "$FromUserName", "$ToUserName"]},
           messages: { $push: "$$ROOT"}
         }
       }
@@ -64,7 +63,6 @@ module.exports = function(Message) {
   Message.observe('access', function limitScope(ctx, next) {
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
-    var currentUserId = currentUser.id.toString();
     
     ctx.query.order = ctx.query.order || 'CreateTime DESC';
     ctx.query.limit = ctx.query.limit || 10;
