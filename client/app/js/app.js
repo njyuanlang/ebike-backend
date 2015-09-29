@@ -29,7 +29,7 @@ var App = angular.module('angle', [
     'ui.utils'
   ]);
 
-App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', function ($rootScope, $state, $stateParams, $window, $templateCache) {
+App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "User", "RemoteStorage", function ($rootScope, $state, $stateParams, $window, $templateCache, User, RemoteStorage) {
     // Set reference to access them from any scope
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
@@ -65,7 +65,15 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', f
     $rootScope.user = {
       name:     'John',
       job:      'ng-developer',
-      picture:  'app/img/user/02.jpg'
+      picture:  'app/img/dummy.png'
+    };
+    if(User.isAuthenticated()) {
+      $rootScope.user = User.getCurrent();
+      $rootScope.user.$promise.then(function () {
+        RemoteStorage.getAvatar($rootScope.user.id).success(function (buffer) {
+          $rootScope.user.picture = buffer;
+        });
+      });
     };
 
 }]);
@@ -109,6 +117,12 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         title: 'Messages',
         controller: 'MessagesController',
         templateUrl: helper.basepath('messages.html')
+    })
+    .state('app.message-compose', {
+        url: '/messages/compose?touser',
+        title: 'Message Compose',
+        controller: 'MessageComposeController',
+        templateUrl: helper.basepath('message-compose.html')
     })
     .state('app.clients', {
         url: '/clients',
@@ -601,7 +615,7 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', ["$scope", "User", "ngTableParams", function ($scope, User, ngTableParams) {
+App.controller('ClientsController', ["$scope", "$state", "User", "ngTableParams", "$rootScope", "RemoteStorage", function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -618,10 +632,25 @@ App.controller('ClientsController', ["$scope", "User", "ngTableParams", function
       }
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
-        User.find({filter:opt}, $defer.resolve)
+        User.find({filter:opt}, function (results) {
+          results.forEach(function (user) {
+            user.avatar = 'app/img/dummy.png';
+            RemoteStorage.getAvatar(user.id).success(function (buffer) {
+              user.avatar = buffer;
+            });
+          })
+          $defer.resolve(results);
+        })
       })
     }
-  })   
+  });
+  
+  $scope.reply = function (user) {
+    $rootScope.messageDraft = {
+      touser: user
+    }
+    $state.go('app.message-compose');
+  }
 }])
 /**=========================================================
  * Module: cruises-ctrl.js
@@ -991,7 +1020,7 @@ App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer"
  * Messages Controller
  =========================================================*/
 
-App.controller('MessagesController', ["$scope", "Message", "ngTableParams", "RemoteStorage", "$http", function ($scope, Message, ngTableParams, RemoteStorage, $http) {
+App.controller('MessagesController', ["$scope", "$rootScope", "$state", "Message", "ngTableParams", "RemoteStorage", function ($scope, $rootScope, $state, Message, ngTableParams, RemoteStorage) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -1002,7 +1031,7 @@ App.controller('MessagesController', ["$scope", "Message", "ngTableParams", "Rem
       var opt = {include: ['FromUser']}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
-      opt.where = {}
+      opt.where = {FromUserName: $scope.user.id}
       if($scope.filter.text != '') {
         opt.where.Content = {regex: $scope.filter.text}
       }
@@ -1010,9 +1039,8 @@ App.controller('MessagesController', ["$scope", "Message", "ngTableParams", "Rem
         $scope.tableParams.total(result.count)
         Message.find({filter:opt}, function (results) {
           results.forEach(function (msg) {
-            var url = RemoteStorage.getDownloadURL('uploads', msg.FromUserName, 'avatar.png');
             msg.avatar = 'app/img/dummy.png';
-            $http.get(url).success(function (buffer) {
+            RemoteStorage.getAvatar(msg.ToUserName).success(function (buffer) {
               msg.avatar = buffer;
             });
           });
@@ -1021,6 +1049,31 @@ App.controller('MessagesController', ["$scope", "Message", "ngTableParams", "Rem
       })
     }
   });
+  
+  $scope.reply = function (user) {
+    $rootScope.messageDraft = {
+      touser: user
+    }
+    $state.go('app.message-compose');
+  }
+}])
+
+App.controller('MessageComposeController', ["$scope", "$state", "Message", "ngTableParams", "toaster", function ($scope, $state, Message, ngTableParams, toaster) {
+  
+  $scope.submitForm = function (isValid) {
+    
+    Message.create({
+      ToUserName: $scope.messageDraft.touser.id,
+      Content: $scope.content
+    }, function (result) {
+      toaster.pop('success', '发送成功', '已经向'+messageDraft.touse.name+"发送了消息！");
+      setTimeout(function () {
+        $state.go('app.messages');
+      }, 2000);
+    }, function (reaseon) {
+      toaster.pop('error', '发送错误', res.data.error.message);
+    })
+  }
 }])
 /**=========================================================
  * Module: sidebar-menu.js

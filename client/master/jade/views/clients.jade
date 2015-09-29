@@ -13,7 +13,9 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams', export-csv='csv')
         tbody
-          tr(ng-repeat='user in $data')
+          tr.text-center(ng-repeat='user in $data' ng-click='reply(user)')
+            td(data-title="'头像'") 
+              img.img-thumbnail(ng-src="{{user.avatar}}", alt="", width="55", height="55")
             td(data-title="'用户名'") {{user.username}}
             td(data-title="'真名'") {{user.name}}
             td(data-title="'联系电话'") {{user.phone}}

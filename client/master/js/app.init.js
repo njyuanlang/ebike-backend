@@ -29,7 +29,7 @@ var App = angular.module('angle', [
     'ui.utils'
   ]);
 
-App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', function ($rootScope, $state, $stateParams, $window, $templateCache) {
+App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "User", "RemoteStorage", function ($rootScope, $state, $stateParams, $window, $templateCache, User, RemoteStorage) {
     // Set reference to access them from any scope
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
@@ -65,7 +65,15 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', f
     $rootScope.user = {
       name:     'John',
       job:      'ng-developer',
-      picture:  'app/img/user/02.jpg'
+      picture:  'app/img/dummy.png'
+    };
+    if(User.isAuthenticated()) {
+      $rootScope.user = User.getCurrent();
+      $rootScope.user.$promise.then(function () {
+        RemoteStorage.getAvatar($rootScope.user.id).success(function (buffer) {
+          $rootScope.user.picture = buffer;
+        });
+      });
     };
 
 }]);

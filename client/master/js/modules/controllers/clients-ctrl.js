@@ -3,7 +3,7 @@
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', function ($scope, User, ngTableParams) {
+App.controller('ClientsController', function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -20,8 +20,23 @@ App.controller('ClientsController', function ($scope, User, ngTableParams) {
       }
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
-        User.find({filter:opt}, $defer.resolve)
+        User.find({filter:opt}, function (results) {
+          results.forEach(function (user) {
+            user.avatar = 'app/img/dummy.png';
+            RemoteStorage.getAvatar(user.id).success(function (buffer) {
+              user.avatar = buffer;
+            });
+          })
+          $defer.resolve(results);
+        })
       })
     }
-  })   
+  });
+  
+  $scope.reply = function (user) {
+    $rootScope.messageDraft = {
+      touser: user
+    }
+    $state.go('app.message-compose');
+  }
 })

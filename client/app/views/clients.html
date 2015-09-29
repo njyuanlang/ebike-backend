@@ -13,7 +13,10 @@
       <div class="table-responsive">
          <table ng-table="tableParams" export-csv="csv" class="table table-bordered table-striped">
             <tbody>
-               <tr ng-repeat="user in $data">
+               <tr ng-repeat="user in $data" ng-click="reply(user)" class="text-center">
+                  <td data-title="'头像'">
+                     <img ng-src="{{user.avatar}}" alt="" width="55" height="55" class="img-thumbnail" />
+                  </td>
                   <td data-title="'用户名'">{{user.username}}</td>
                   <td data-title="'真名'">{{user.name}}</td>
                   <td data-title="'联系电话'">{{user.phone}}</td>

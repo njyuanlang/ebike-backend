@@ -2,11 +2,6 @@ var loopback = require('loopback');
 
 module.exports = function(Message) {
   
-  Message.beforeRemote('create', function (ctx, modelInstance, next) {
-    ctx.req.body.FromUserName = ctx.req.accessToken.userId;
-    next();
-  });
-
   Message.chats = function (filter, next) {
     filter = filter || {}
     filter.where = filter.where || {}
@@ -51,6 +46,13 @@ module.exports = function(Message) {
     }
   );
   
+  Message.beforeRemote('create', function (ctx, modelInstance, next) {
+    ctx.req.body.FromUserName = ctx.req.accessToken.userId;
+    ctx.req.body.CreateTime = Math.round(Date.now()/1000);
+    ctx.req.body.MsgType = ctx.req.body.MsgType || 'text';
+    next();
+  });
+
   Message.observe('access', function limitScope(ctx, next) {
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
@@ -60,7 +62,7 @@ module.exports = function(Message) {
     ctx.query.limit = ctx.query.limit || 10;
     ctx.query.skip = ctx.query.skip || 0;
     ctx.query.where = ctx.query.where || {};
-    ctx.query.where.or = [{ToUserName: currentUserId}, {FromUserName: currentUserId}];
+    ctx.query.where.or = [{ToUserName: currentUser.id}, {FromUserName: currentUser.id}];
     next();
   })
 };

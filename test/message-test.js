@@ -17,8 +17,7 @@ describe('Message', function() {
 
     lt.describe.whenCalledRemotely('POST', '/api/messages', {
       "ToUserName": loggedInUser.id,
-      "MsgType": "text",
-      "CreateTime": Math.round(Date.now()/1000),
+      // "MsgType": "text",
       "Content": "整车厂的公告消息"
     }, function () {
       it('should success publish message', function (done) {
@@ -56,4 +55,5 @@ describe('Message', function() {
     });
     
   });
+  
 });

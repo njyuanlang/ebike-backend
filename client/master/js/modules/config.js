@@ -38,6 +38,12 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         controller: 'MessagesController',
         templateUrl: helper.basepath('messages.html')
     })
+    .state('app.message-compose', {
+        url: '/messages/compose?touser',
+        title: 'Message Compose',
+        controller: 'MessageComposeController',
+        templateUrl: helper.basepath('message-compose.html')
+    })
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',
