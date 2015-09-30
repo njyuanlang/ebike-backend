@@ -21,7 +21,7 @@ module.exports = function(Message) {
       {
         $group: {
           _id: { $cond: [{$eq: ["$ToUserName", currentUser.id]}, "$FromUserName", "$ToUserName"]},
-          messages: { $push: "$$ROOT"}
+          message: { $first: "$$ROOT"}
         }
       }
       // { $project: {_id: 0, userCount: { $size: "$users"}} }
