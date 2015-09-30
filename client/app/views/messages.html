@@ -15,7 +15,7 @@
             <tbody>
                <tr ng-repeat="message in $data" class="text-center">
                   <td data-title="'头像'">
-                     <img ng-src="{{message.avatar}}" alt="" width="55" height="55" class="img-thumbnail" />
+                     <img ng-src="{{message.FromUser.avatar}}" alt="" width="55" height="55" class="img-thumbnail" />
                   </td>
                   <td data-title="'用户名'">{{message.FromUser.name}}</td>
                   <td data-title="'内容'" class="text-left">{{message.Content}}</td>

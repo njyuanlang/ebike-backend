@@ -70,6 +70,7 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "
     if(User.isAuthenticated()) {
       $rootScope.user = User.getCurrent();
       $rootScope.user.$promise.then(function () {
+        $rootScope.user.picture = 'app/img/dummy.png';
         RemoteStorage.getAvatar($rootScope.user.id).success(function (buffer) {
           $rootScope.user.picture = buffer;
         });

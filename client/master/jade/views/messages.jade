@@ -14,7 +14,7 @@ h3
         tbody
           tr.text-center(ng-repeat='message in $data')
             td(data-title="'头像'") 
-              img.img-thumbnail(ng-src="{{message.avatar}}", alt="", width="55", height="55")
+              img.img-thumbnail(ng-src="{{message.FromUser.avatar}}", alt="", width="55", height="55")
             td(data-title="'用户名'") {{message.FromUser.name}}
             td.text-left(data-title="'内容'") {{message.Content}}
             td(data-title="'时间'") {{message.CreateTime | moment_unix }}

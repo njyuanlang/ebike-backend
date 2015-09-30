@@ -9,14 +9,24 @@ h3 发送消息
         .panel.panel-default
           toaster-container(toaster-options="{'position-class': 'toast-top-right', 'close-button':true}")
           .panel-body
-            fieldset.b0
-              legend 与 {{messageDraft.touser.name}} 聊天
-              .form-group
-                .col-sm-12
-                  textarea(cols="160", rows="10" name='content', required='', ng-model="content", ng-maxlength="600", ng-minlength="5")
+            legend 与 {{messageDraft.touser.name}} 聊天
+            .form-group
+              .col-sm-12
+                textarea(cols="160", rows="10" name='content', required='', ng-model="content", ng-maxlength="600")
+                p 还能输入{{600-content.length}}字  
           .panel-footer
             button.mb-sm.btn.btn-lg.btn-info(type='submit', ng-disabled="composeFrom.$invalid") 提交   
             //- button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.messages()") 取消
         // END panel
   // END row
-                
+  
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr.text-center(ng-repeat='message in $data')
+            td(data-title="'头像'") 
+              img.img-thumbnail(ng-src="{{message.avatar}}", alt="", width="55", height="55")
+            td(data-title="'用户名'") {{message.FromUser.name}}
+            td.text-left(data-title="'内容'") {{message.Content}}
+            td(data-title="'时间'") {{message.CreateTime | moment_unix }}                

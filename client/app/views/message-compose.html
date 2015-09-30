@@ -8,14 +8,13 @@
             <div class="panel panel-default">
                <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
                <div class="panel-body">
-                  <fieldset class="b0">
-                     <legend>与 {{messageDraft.touser.name}} 聊天</legend>
-                     <div class="form-group">
-                        <div class="col-sm-12">
-                           <textarea cols="160" rows="10" name="content" required="" ng-model="content" ng-maxlength="600" ng-minlength="5"></textarea>
-                        </div>
+                  <legend>与 {{messageDraft.touser.name}} 聊天</legend>
+                  <div class="form-group">
+                     <div class="col-sm-12">
+                        <textarea cols="160" rows="10" name="content" required="" ng-model="content" ng-maxlength="600"></textarea>
+                        <p>还能输入{{600-content.length}}字</p>
                      </div>
-                  </fieldset>
+                  </div>
                </div>
                <div class="panel-footer">
                   <button type="submit" ng-disabled="composeFrom.$invalid" class="mb-sm btn btn-lg btn-info">提交</button>
@@ -26,4 +25,20 @@
       </div>
    </div>
    <!-- END row-->
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="message in $data" class="text-center">
+                  <td data-title="'头像'">
+                     <img ng-src="{{message.avatar}}" alt="" width="55" height="55" class="img-thumbnail" />
+                  </td>
+                  <td data-title="'用户名'">{{message.FromUser.name}}</td>
+                  <td data-title="'内容'" class="text-left">{{message.Content}}</td>
+                  <td data-title="'时间'">{{message.CreateTime | moment_unix }}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
 </div>
