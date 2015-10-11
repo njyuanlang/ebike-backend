@@ -12,9 +12,9 @@ var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "a
 
 describe('Message', function() {
   
-  lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
-  
   describe('# Manufacturer', function() {
+
+    lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
 
     lt.describe.whenCalledRemotely('POST', '/api/messages', {
       "ToUserName": loggedInUser.id,
@@ -51,10 +51,39 @@ describe('Message', function() {
   
   describe.only('# User', function() {
 
-    lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages/chats', function () {
+    lt.beforeEach.givenLoggedInUser(loggedInUser);
+
+    describe('## Create Bike', function() {
+      lt.describe.whenCalledRemotely('POST', '/api/bikes', {
+        "serialNumber": "010101010101011",
+        "brand": {
+          "name": "雅迪",
+          "id": "552f87315febd5395a773c96",
+          "manufacturerId": "552f87145febd5395a773c94",
+          "updated": "2015-04-16T09:56:51.672Z",
+          "created": "2015-04-16T09:56:01.276Z",
+          "models": [
+            "yadi"
+          ]
+        },
+        "model": "yadi",
+        "workmode": 0,
+        "voltage": 60,
+        "current": 20,
+        "localId": "00:03:EE:EE:FF:FF",
+        "name": "YL-TEST"
+      }, function () {
+        it('should ok', function(done) {
+          console.log(this.res.body);
+          done();
+        });
+      })
+    });
+  
+    lt.describe.whenCalledRemotely('GET', '/api/messages/chats', function () {
       it('should success get messages from User', function(done) {
         console.log(this.res.body);
-        console.log(this.res.body[0].messages);
+        console.log(this.res.body[0].message);
         assert.equal(this.res.statusCode, 200);
         done();
       });

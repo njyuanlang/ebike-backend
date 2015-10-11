@@ -12,7 +12,21 @@ module.exports = function(Bike) {
     } else {
       next()
     }
-  })
+  });
+  
+  Bike.afterRemote('create', function (ctx, modelInstance, next) {
+    Bike.app.models.User.findOne({
+      where:{manufacturerId: modelInstance.brand.manufacturerId}
+    }, function (err, result) {
+      Bike.app.models.Message.create({
+        ToUserName: modelInstance.owner.id,
+        FromUserName: result.id,
+        CreateTime: Math.round(Date.now()/1000),
+        MsgType: 'text',
+        Content: '欢迎您使用'+modelInstance.brand.name
+      }, next);
+    });
+  });
   
   // Because of serial number has not been ready, so comment follow validate
   // Bike.validatesUniquenessOf('serialNumber', {message: "序列号已经存在"})
