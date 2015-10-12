@@ -68,7 +68,9 @@ module.exports = function(Message) {
     ctx.query.limit = ctx.query.limit || 10;
     ctx.query.skip = ctx.query.skip || 0;
     ctx.query.where = ctx.query.where || {};
-    ctx.query.where.or = [{ToUserName: currentUser.id}, {FromUserName: currentUser.id}];
+    ctx.query.where.and = ctx.query.where.and || [];
+    ctx.query.where.and.push({or:[{ToUserName: currentUser.id}, {FromUserName: currentUser.id}]});
+    console.log(JSON.stringify(ctx.query.where.and));
     next();
   })
 };

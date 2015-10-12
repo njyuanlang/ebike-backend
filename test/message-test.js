@@ -7,8 +7,8 @@ lt.beforeEach.withApp(app);
 lt.beforeEach.withUserModel('user');
 
 var loggedInUser = {email:"abc@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb210"};
-var loggedInManufacturer = {email:"sp@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211"}
-var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator", id: "555f0674c0daf6350e2cb212"}
+var loggedInManufacturer = {email:"spxxx@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211"}
+var loggedInAdmin = {email:"gbo2@extensivepro.com", password: "123456", realm: "administrator", id: "555f0674c0daf6350e2cb212"}
 
 describe('Message', function() {
   
@@ -49,7 +49,7 @@ describe('Message', function() {
     
   });
   
-  describe.only('# User', function() {
+  describe('# User', function() {
 
     lt.beforeEach.givenLoggedInUser(loggedInUser);
 
@@ -80,12 +80,31 @@ describe('Message', function() {
       })
     });
   
-    lt.describe.whenCalledRemotely('GET', '/api/messages/chats', function () {
-      it('should success get messages from User', function(done) {
-        console.log(this.res.body);
-        console.log(this.res.body[0].message);
-        assert.equal(this.res.statusCode, 200);
-        done();
+    lt.describe.whenCalledByUser(loggedInAdmin, 'POST', '/api/messages', {
+      "ToUserName": loggedInUser.id,
+      "Content": "平台的公告消息"
+    }, function () {
+      lt.it.shouldBeAllowed();
+    });
+    
+    describe.only('### Fetch Message', function() {
+      var filter = {
+        // include: ['FromUser'],
+        where: {
+          // and:[{or:[{ToUserName:loggedInAdmin.id}, {FromUserName: loggedInAdmin.id}]}]
+        },
+        limit: 10,
+        skip: 0
+      }
+      var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
+      
+      lt.describe.whenCalledRemotely('GET', '/api/messages'+qs, function () {
+        it('should success', function(done) {
+          console.log(this.res.body);
+          // console.log(this.res.body[0].message);
+          assert.equal(this.res.statusCode, 200);
+          done();
+        });
       });
     });
     
