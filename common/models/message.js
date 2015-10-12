@@ -70,7 +70,7 @@ module.exports = function(Message) {
     ctx.query.where = ctx.query.where || {};
     ctx.query.where.and = ctx.query.where.and || [];
     ctx.query.where.and.push({or:[{ToUserName: currentUser.id}, {FromUserName: currentUser.id}]});
-    console.log(JSON.stringify(ctx.query.where.and));
+    // console.log(JSON.stringify(ctx.query.where.and));
     next();
   })
 };
