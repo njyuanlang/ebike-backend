@@ -14,16 +14,24 @@ module.exports = function(Bike) {
     }
   });
   
-  Bike.afterRemote('create', function (ctx, modelInstance, next) {
+  Bike.afterRemote('create', function welcomeMessage(ctx, modelInstance, next) {
+    var ObjectID = Bike.getDataSource().ObjectID;
+    var manufacturerId = modelInstance.brand.manufacturerId;
     Bike.app.models.User.findOne({
-      where:{manufacturerId: modelInstance.brand.manufacturerId}
+      where:{manufacturerId: {inq: [manufacturerId, ObjectID(manufacturerId)]}}
     }, function (err, result) {
+      if(err) return next(err);
+      if(!result) {
+        err = new Error('Not Found manufactureId user');
+        err.status = 400;
+        return next(err);
+      }
       Bike.app.models.Message.create({
         ToUserName: modelInstance.owner.id,
         FromUserName: result.id,
         CreateTime: Math.round(Date.now()/1000),
         MsgType: 'text',
-        Content: '欢迎您使用'+modelInstance.brand.name
+        Content: '欢迎您使用'+modelInstance.brand.name+'牌电动车，祝您使用愉快！'
       }, next);
     });
   });

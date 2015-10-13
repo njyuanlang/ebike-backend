@@ -10,7 +10,7 @@ var loggedInUser = {email:"abc@example.com", password:"123456", realm:"client", 
 var loggedInManufacturer = {email:"spxxx@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211"}
 var loggedInAdmin = {email:"gbo2@extensivepro.com", password: "123456", realm: "administrator", id: "555f0674c0daf6350e2cb212"}
 
-describe('Message', function() {
+describe.skip('Message', function() {
   
   describe('# Manufacturer', function() {
 
@@ -59,12 +59,7 @@ describe('Message', function() {
         "brand": {
           "name": "雅迪",
           "id": "552f87315febd5395a773c96",
-          "manufacturerId": "552f87145febd5395a773c94",
-          "updated": "2015-04-16T09:56:51.672Z",
-          "created": "2015-04-16T09:56:01.276Z",
-          "models": [
-            "yadi"
-          ]
+          "manufacturerId": "552f87145febd5395a773c94"
         },
         "model": "yadi",
         "workmode": 0,
@@ -87,7 +82,7 @@ describe('Message', function() {
       lt.it.shouldBeAllowed();
     });
     
-    describe.only('### Fetch Message', function() {
+    describe('### Fetch Message', function() {
       var filter = {
         // include: ['FromUser'],
         where: {
