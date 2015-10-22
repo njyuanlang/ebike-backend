@@ -16,6 +16,8 @@ App.controller('LoginFormController', function($scope, $state, User) {
     if($scope.loginForm.$valid) {
 
       User.login($scope.account, function (user) {
+        $scope.user = user;
+        $scope.user.avatar = $scope.user.avatar || 'app/img/dummy.png';
         $state.go('app.dashboard');
       }, function (error) {
         $scope.authMsg = error.data.error.message

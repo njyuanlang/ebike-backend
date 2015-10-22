@@ -22,7 +22,7 @@ App.controller('MessagesController', function ($scope, $rootScope, $state, Messa
         $scope.tableParams.total(result.count)
         Message.find({filter:opt}, function (results) {
           results.forEach(function (msg) {
-            msg.avatar = 'app/img/dummy.png';
+            msg.FromUser.avatar = 'app/img/dummy.png';
             RemoteStorage.getAvatar(msg.FromUserName).success(function (buffer) {
               msg.FromUser.avatar = buffer;
             });
@@ -67,10 +67,11 @@ App.controller('MessageComposeController', function ($scope, $state, Message, ng
       var opt = {include: ['FromUser']}
       opt.limit = 10
       opt.skip = 0
-      opt.where = {or:[
-        {ToUserName: $scope.messageDraft.touser.id}, 
-        {FromUsername: $scope.messageDraft.touser.id}
-      ]};
+      opt.where = {
+        and: [{
+          or:[{ToUserName: $scope.messageDraft.touser.id},{FromUserName: $scope.messageDraft.touser.id}]
+        }]
+      };
       Message.find({filter:opt}, function (results) {
         results.forEach(function (msg) {
           msg.avatar = msg.FromUserName == $scope.user.id ? $scope.user.picture: $scope.messageDraft.touser.avatar;
