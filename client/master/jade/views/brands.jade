@@ -16,8 +16,8 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
-          tr(ng-repeat='entity in $data' ui-sref='app.brand({brandId: entity.id})')
-            td(data-title="'品牌名称'") {{entity.name}}
+          tr.text-center(ng-repeat='entity in $data' ui-sref='app.brand({brandId: entity.id})')
+            td.text-left(data-title="'品牌名称'") {{entity.name}}
             td(data-title="'所属制造商'") {{entity.manufacturer.name}}
             td(data-title="'下属型号'") {{entity.models.length}}
-            td(data-title="'登记日期'") {{entity.created}}
+            td.text-right(data-title="'登记日期'") {{entity.created}}

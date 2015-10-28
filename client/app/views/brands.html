@@ -16,11 +16,11 @@
       <div class="table-responsive">
          <table ng-table="tableParams" class="table table-bordered table-striped">
             <tbody>
-               <tr ng-repeat="entity in $data" ui-sref="app.brand({brandId: entity.id})">
-                  <td data-title="'品牌名称'">{{entity.name}}</td>
+               <tr ng-repeat="entity in $data" ui-sref="app.brand({brandId: entity.id})" class="text-center">
+                  <td data-title="'品牌名称'" class="text-left">{{entity.name}}</td>
                   <td data-title="'所属制造商'">{{entity.manufacturer.name}}</td>
                   <td data-title="'下属型号'">{{entity.models.length}}</td>
-                  <td data-title="'登记日期'">{{entity.created}}</td>
+                  <td data-title="'登记日期'" class="text-right">{{entity.created}}</td>
                </tr>
             </tbody>
          </table>

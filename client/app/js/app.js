@@ -587,15 +587,18 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
     return (input.$dirty || $scope.submitted) && input.$error[type];
   };
 
+  var goBack = function (delay) {
+    setTimeout(function () {
+      $state.go('app.brands')
+    }, delay || 2000);
+  };
   // Submit form
   $scope.submitForm = function() {
     $scope.submitted = true;
     if ($scope.formValidate.$valid) {
       Brand.upsert($scope.entity, function (entity) {
-        toaster.pop('success', '更新成功', '已经更新品牌 '+entity.name)
-        setTimeout(function () {
-          $state.go('app.brands')
-        }, 2000)
+        toaster.pop('success', '更新成功', '已经更新品牌 '+entity.name);
+        goBack();
       }, function (res) {
         toaster.pop('error', '更新错误', res.data.error.message)
       })
@@ -609,6 +612,16 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
     if(!$scope.entity.models) $scope.entity.models = []
     if($scope.entity.models.indexOf($scope.model) >= 0) return
     $scope.entity.models.push($scope.model)
+  }
+  
+  $scope.remove = function () {
+    Brand.prototype$updateAttributes({id: $scope.entity.id}, {"status": 'removed'}).$promise
+    .then(function (entity) {
+      toaster.pop('success', '删除成功', '已经删除品牌 '+entity.name);
+      goBack();
+    }, function (err) {
+      toaster.pop('error', '删除失败', '未成功删除品牌');
+    });
   }
     
 }])
