@@ -1,11 +1,12 @@
 var lt = require('loopback-testing');
 var assert = require('assert');
 var app = require('../server/server.js'); 
-var querystring = require('querystring')
+var querystring = require('querystring');
+var fs = require('fs');
 
-var loggedInUser = {email:"sp@example.com", password: "123456", realm: "manufacturer"}
-var manufacturerId = '555f0674c0daf6350e2cb213'
-var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"}
+var loggedInUser = {email:"sp@example.com", password: "123456", realm: "manufacturer", manufacturerId: "555f0674c0daf6350e2cb213"};
+var manufacturerId = '555f0674c0daf6350e2cb213';
+var loggedInAdmin = {email:"gbo@extensivepro.com", password: "123456", realm: "administrator"};
 
 describe('# Manufacturer', function() {
   lt.beforeEach.withApp(app);
@@ -15,7 +16,7 @@ describe('# Manufacturer', function() {
   //   console.log(this.loggedInAccessToken)
   // })
   
-  describe('## Clients', function () {
+  describe.only('## Clients', function () {
     var filter = {
       where: {
         "owner.created": {gte:"2015-05-31T16:00:00.000Z"},
@@ -29,6 +30,7 @@ describe('# Manufacturer', function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
+        console.log(this.res.body);
       });
 
       it('should respond with an array of user', function() {
@@ -39,6 +41,15 @@ describe('# Manufacturer', function() {
     lt.describe.whenCalledRemotely('GET', '/api/bikes/countUserByManufacturer'+qs, function () {
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
+        console.log(this.res.body);
+      });
+    })
+    
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/exportUsers', function () {
+      it('should be ok', function() {
+        assert.equal(this.res.statusCode, 200);
+        // fs.writeFile('users.csv', this.res.body);
+        console.log(this.res.headers);
         console.log(this.res.body);
       });
     })

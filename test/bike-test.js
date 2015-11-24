@@ -14,7 +14,7 @@ describe('Bike', function() {
   
   lt.beforeEach.givenLoggedInUser(loggedInUser);
   
-  describe.only('#Create', function() {
+  describe('#Create', function() {
     lt.describe.whenCalledRemotely('POST', '/api/bikes', {
       "serialNumber": "010101010101011",
       "brand": {

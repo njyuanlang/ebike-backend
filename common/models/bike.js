@@ -1,5 +1,6 @@
 var loopback = require('loopback');
 var Promise = require("promise");
+var encoding = require('encoding');
 
 module.exports = function(Bike) {
 
@@ -284,6 +285,59 @@ module.exports = function(Bike) {
     }
   )
   
+  function stringify(str) {
+    return '"' +
+    str.replace(/^\s\s*/, '').replace(/\s*\s$/, '') // trim spaces
+        .replace(/"/g,'""') + // replace quotes with double quotes
+    '"';
+  }
+  Bike.exportUsers = function (filter, res, next) {
+    
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(!currentUser || currentUser.realm !== 'manufacturer') {
+      return next(new Error('Not Manufacturer'))
+    }
+    
+    var csv = '"用户名";"姓名";"电话";"email";"省";"城市";"注册时间"\n'
+    Bike.findUsersByManufacturer(filter, function (err, results) {
+      results.forEach(function (result) {
+        var u = result.user;
+        csv += '"'+u.username+'";"'+u.name+'";"'+u.phone+'";"'+u.email+'";"';
+        if(u.region) {
+          csv += u.region.province+'";"'+u.region.city+'";"'
+        } else {
+          csv += '";"";"';
+        }
+        csv += u.created+'"\n';
+      });
+      var chineseCsv = encoding.convert(csv, 'GBK');
+      var filename=currentUser.email+"_"+Date.now()+".csv";
+      res.setHeader('Pragma', 'public');
+      res.setHeader('Expires', '0');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      res.set('Content-Type','application/octet-stream');
+      // res.setHeader('Content-Type', 'text/csv; charset=GBK');
+      res.setHeader('Content-Disposition', 'attachment;filename="'+ filename +'"');
+      res.setHeader('Content-Length', chineseCsv.length);
+      res.set('Content-Transfer-Encoding','binary');
+      res.end(chineseCsv); 
+      // console.log(chineseCsv);
+    });
+  }
+  
+  Bike.remoteMethod(
+    'exportUsers',
+    {
+      accepts: [
+        {arg:'filter', type: 'Object', http: {source: 'query'}},
+        {arg: 'res', type: 'object', http: {source: 'res'}}
+      ],
+      returns: {},
+      http: {verb: 'get'}
+    }
+  )
+
   Bike.observe('access', function limitToManufacturer(ctx, next) {
     var context = loopback.getCurrentContext();
     var currentUser = context && context.get('currentUser');
