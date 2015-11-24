@@ -226,7 +226,8 @@ module.exports = function(Bike) {
     		$group: {_id: "$owner.username", user: { $first: "$owner"}, bikeId: {$first: "$_id"}}
     	},
       { $skip: filter.skip },
-      { $limit: filter.limit }
+      { $limit: filter.limit },
+      { $sort: { "user.created": -1}}
     ],function (err, results) {
       if(err) {
         next(err)
@@ -319,7 +320,8 @@ module.exports = function(Bike) {
           csv += moment(u.created).format('YYYY-MM-DD HH:mm:ss')+'"\n';
         }
       });
-      var chineseCsv = encoding.convert(csv, 'GBK');
+      console.log(csv);
+      var chineseCsv = encoding.convert(csv, 'GB18030');
       var filename=currentUser.email+"_"+Date.now()+".csv";
       res.setHeader('Pragma', 'public');
       res.setHeader('Expires', '0');

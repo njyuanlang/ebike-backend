@@ -47,7 +47,7 @@ describe('# Manufacturer', function() {
     
     lt.describe.whenCalledRemotely('GET', '/api/bikes/exportUsers?'+querystring.stringify({
       filter: JSON.stringify({
-        limit:100,
+        // limit:100,
         skip:0
       })
     }), function () {
