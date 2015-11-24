@@ -16,7 +16,7 @@ describe('# Manufacturer', function() {
   //   console.log(this.loggedInAccessToken)
   // })
   
-  describe.only('## Clients', function () {
+  describe('## Clients', function () {
     var filter = {
       // where: {
       //   "owner.created": {gte:"2015-05-31T16:00:00.000Z"},

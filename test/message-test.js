@@ -7,10 +7,11 @@ lt.beforeEach.withApp(app);
 lt.beforeEach.withUserModel('user');
 
 var loggedInUser = {email:"abc@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb210"};
+var loggedInUser2 = {email:"def@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb213"};
 var loggedInManufacturer = {email:"spxxx@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211"}
 var loggedInAdmin = {email:"gbo2@extensivepro.com", password: "123456", realm: "administrator", id: "555f0674c0daf6350e2cb212"}
 
-describe.skip('Message', function() {
+describe('Message', function() {
   
   describe('# Manufacturer', function() {
 
@@ -105,4 +106,35 @@ describe.skip('Message', function() {
     
   });
   
+  describe.only('# Mass', function() {
+
+    lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
+    
+    lt.describe.whenCalledRemotely('POST', '/api/messages/mass', {
+      tousers: [loggedInUser.id, loggedInUser2.id],
+      Content: "这里是群发消息!"+Date.now()
+    }, function () {
+      it('should success send Mass messages', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+    
+    lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages', function () {
+      it('should success receive Mass message for loggedInUser', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+
+    lt.describe.whenCalledByUser(loggedInUser2, 'GET', '/api/messages', function () {
+      it('should success receive Mass message for loggedInUser2', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+  });
 });
