@@ -18,6 +18,7 @@
     "loopback-component-storage": "^1.4.0",
     "loopback-connector-mongodb": "^1.8.0",
     "loopback-datasource-juggler": "^2.7.0",
+    "moment": "^2.10.6",
     "promise": "^7.0.0",
     "request": "^2.63.0",
     "serve-favicon": "^2.0.1",

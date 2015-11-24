@@ -1,6 +1,7 @@
 var loopback = require('loopback');
 var Promise = require("promise");
 var encoding = require('encoding');
+var moment = require('moment');
 
 module.exports = function(Bike) {
 
@@ -299,17 +300,24 @@ module.exports = function(Bike) {
       return next(new Error('Not Manufacturer'))
     }
     
+    filter = filter || {};
+    filter.limit = filter.limit || 5000;
+    if(filter.limit > 5000) filter.limit = 5000;
     var csv = '"用户名";"姓名";"电话";"email";"省";"城市";"注册时间"\n'
     Bike.findUsersByManufacturer(filter, function (err, results) {
       results.forEach(function (result) {
         var u = result.user;
-        csv += '"'+u.username+'";"'+u.name+'";"'+u.phone+'";"'+u.email+'";"';
-        if(u.region) {
-          csv += u.region.province+'";"'+u.region.city+'";"'
+        if(!u) {
+          csv +='"未知用户";"";"";"";"";"";""\n';
         } else {
-          csv += '";"";"';
+          csv += '"'+u.username+'";"'+u.name+'";"'+u.phone+'";"'+u.email+'";"';
+          if(u.region) {
+            csv += u.region.province+'";"'+u.region.city+'";"'
+          } else {
+            csv += '";"";"';
+          }
+          csv += moment(u.created).format('YYYY-MM-DD HH:mm:ss')+'"\n';
         }
-        csv += u.created+'"\n';
       });
       var chineseCsv = encoding.convert(csv, 'GBK');
       var filename=currentUser.email+"_"+Date.now()+".csv";

@@ -30,7 +30,7 @@ describe('# Manufacturer', function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
-        console.log(this.res.body);
+        console.log(this.res.body.length);
       });
 
       it('should respond with an array of user', function() {
@@ -45,12 +45,15 @@ describe('# Manufacturer', function() {
       });
     })
     
-    lt.describe.whenCalledRemotely('GET', '/api/bikes/exportUsers', function () {
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/exportUsers?'+querystring.stringify({
+      filter: JSON.stringify({
+        limit:100,
+        skip:0
+      })
+    }), function () {
       it('should be ok', function() {
         assert.equal(this.res.statusCode, 200);
-        // fs.writeFile('users.csv', this.res.body);
         console.log(this.res.headers);
-        console.log(this.res.body);
       });
     })
   });
