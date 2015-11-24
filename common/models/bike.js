@@ -219,15 +219,15 @@ module.exports = function(Bike) {
     filter.where = connector.buildWhere(Model.modelName, filter.where)
     var collection = connector.collection(Model.modelName)
     collection.aggregate([
-      { $sort: { created: -1 } },
+      { $sort: { "owner.created": -1 } },
       { $match: filter.where },
       { $project: { _id: 1, owner: 1 } },
     	{
     		$group: {_id: "$owner.username", user: { $first: "$owner"}, bikeId: {$first: "$_id"}}
     	},
+      { $sort: { "user.created": -1}},
       { $skip: filter.skip },
-      { $limit: filter.limit },
-      { $sort: { "user.created": -1}}
+      { $limit: filter.limit }
     ],function (err, results) {
       if(err) {
         next(err)
@@ -320,7 +320,6 @@ module.exports = function(Bike) {
           csv += moment(u.created).format('YYYY-MM-DD HH:mm:ss')+'"\n';
         }
       });
-      console.log(csv);
       var chineseCsv = encoding.convert(csv, 'GB18030');
       var filename=currentUser.email+"_"+Date.now()+".csv";
       res.setHeader('Pragma', 'public');

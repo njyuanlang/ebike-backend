@@ -18,10 +18,10 @@ describe('# Manufacturer', function() {
   
   describe.only('## Clients', function () {
     var filter = {
-      where: {
-        "owner.created": {gte:"2015-05-31T16:00:00.000Z"},
-        "owner.realm":'client'
-      },
+      // where: {
+      //   "owner.created": {gte:"2015-05-31T16:00:00.000Z"},
+      //   "owner.realm":'client'
+      // },
       limit: 10,
       skip: 0
     }
@@ -30,7 +30,7 @@ describe('# Manufacturer', function() {
       lt.it.shouldBeAllowed();
       it('should have statusCode 200', function() {
         assert.equal(this.res.statusCode, 200);
-        console.log(this.res.body.length);
+        console.log(this.res.body);
       });
 
       it('should respond with an array of user', function() {
