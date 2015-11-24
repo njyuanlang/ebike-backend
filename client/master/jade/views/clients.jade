@@ -1,6 +1,6 @@
 h3
   | 客户
-  a.pull-right.btn.btn-sm.btn-info(ng-mousedown='csv.generate()', ng-href='{{ csv.link() }}', download='test.csv') 导出用户
+  a.pull-right.btn.btn-sm.btn-info(ng-click='generate()', download) 导出用户
   from.pull-right.col-sm-3
     .input-group
       span.input-group-addon

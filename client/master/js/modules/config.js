@@ -205,8 +205,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(function(LoopBackResourceProvider) {
-    LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+    // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+    LoopBackResourceProvider.setUrlBase(urlBase);
 })
 .config(function ($httpProvider) {
   $httpProvider.interceptors.push(function($q, $location, LoopBackAuth) {
