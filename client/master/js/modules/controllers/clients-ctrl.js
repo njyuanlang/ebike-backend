@@ -3,7 +3,7 @@
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage) {
+App.controller('ClientsController', function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage, $http, LoopBackAuth, $document, $timeout, urlBase) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({

@@ -286,8 +286,11 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-.config(["LoopBackResourceProvider", function(LoopBackResourceProvider) {
-    LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
+.config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
+    // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
+    LoopBackResourceProvider.setUrlBase(urlBase);
 }])
 .config(["$httpProvider", function ($httpProvider) {
   $httpProvider.interceptors.push(["$q", "$location", "LoopBackAuth", function($q, $location, LoopBackAuth) {
@@ -368,7 +371,7 @@ App
  * Demo for login api
  =========================================================*/
 
-App.controller('LoginFormController', ["$scope", "$state", "User", function($scope, $state, User) {
+App.controller('LoginFormController', ["$scope", "$state", "User", "$rootScope", function($scope, $state, User, $rootScope) {
 
   // bind here all data from the form
   $scope.account = {realm: 'administrator', rememberMe: true};
@@ -380,9 +383,9 @@ App.controller('LoginFormController', ["$scope", "$state", "User", function($sco
 
     if($scope.loginForm.$valid) {
 
-      User.login($scope.account, function (user) {
-        $scope.user = user;
-        $scope.user.avatar = $scope.user.avatar || 'app/img/dummy.png';
+      User.login($scope.account, function (accessToken) {
+        $rootScope.user = accessToken.user;
+        $rootScope.user.avatar = accessToken.user.avatar || 'app/img/dummy.png';
         $state.go('app.dashboard');
       }, function (error) {
         $scope.authMsg = error.data.error.message
@@ -631,7 +634,7 @@ App.controller('BrandController', ["$scope", "Brand", "$state", "toaster", "Manu
  * Clients Controller
  =========================================================*/
 
-App.controller('ClientsController', ["$scope", "$state", "User", "ngTableParams", "$rootScope", "RemoteStorage", function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage) {
+App.controller('ClientsController', ["$scope", "$state", "User", "ngTableParams", "$rootScope", "RemoteStorage", "$http", "LoopBackAuth", "$document", "$timeout", "urlBase", function ($scope, $state, User, ngTableParams, $rootScope, RemoteStorage, $http, LoopBackAuth, $document, $timeout, urlBase) {
   
   $scope.filter = {text: ''}
   $scope.tableParams = new ngTableParams({
@@ -644,7 +647,7 @@ App.controller('ClientsController', ["$scope", "$state", "User", "ngTableParams"
       opt.skip = (params.page()-1)*opt.limit
       opt.where = {realm: "client"}
       if($scope.filter.text != '') {
-        opt.where.username = {like: $scope.filter.text}
+        opt.where['username'] = {regex: $scope.filter.text}
       }
       User.count({where: opt.where}, function (result) {
         $scope.tableParams.total(result.count)
@@ -666,6 +669,28 @@ App.controller('ClientsController', ["$scope", "$state", "User", "ngTableParams"
       touser: user
     }
     $state.go('app.message-compose');
+  }
+  
+  $scope.generate = function () {
+    $http.get(urlBase+'/users/export?access_token='+LoopBackAuth.accessTokenId, {
+      responseType: 'arraybuffer'
+    })
+      .success(function (data, status, headers, config) {
+        var blob = new Blob([data], {
+          type: 'text/csv;charset=GBK;'
+        });
+        var downloadContainer = angular.element('<div data-tap-disabled="true"><a></a></div>');
+        var downloadLink = angular.element(downloadContainer.children()[0]);
+        downloadLink.attr('href', window.URL.createObjectURL(blob));
+        downloadLink.attr('download', $scope.user.email+Date.now()+'.csv');
+        downloadLink.attr('target', '_blank');
+
+        $document.find('body').append(downloadContainer);
+        $timeout(function () {
+          downloadLink[0].click();
+          downloadLink.remove();
+        }, null);
+      });
   }
 }])
 /**=========================================================

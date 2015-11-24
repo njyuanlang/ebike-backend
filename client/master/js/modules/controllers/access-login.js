@@ -3,7 +3,7 @@
  * Demo for login api
  =========================================================*/
 
-App.controller('LoginFormController', function($scope, $state, User) {
+App.controller('LoginFormController', function($scope, $state, User, $rootScope) {
 
   // bind here all data from the form
   $scope.account = {realm: 'administrator', rememberMe: true};
@@ -15,9 +15,9 @@ App.controller('LoginFormController', function($scope, $state, User) {
 
     if($scope.loginForm.$valid) {
 
-      User.login($scope.account, function (user) {
-        $scope.user = user;
-        $scope.user.avatar = $scope.user.avatar || 'app/img/dummy.png';
+      User.login($scope.account, function (accessToken) {
+        $rootScope.user = accessToken.user;
+        $rootScope.user.avatar = accessToken.user.avatar || 'app/img/dummy.png';
         $state.go('app.dashboard');
       }, function (error) {
         $scope.authMsg = error.data.error.message

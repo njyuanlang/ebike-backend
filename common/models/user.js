@@ -1,5 +1,7 @@
 var loopback = require('loopback');
 var Promise = require("promise");
+var encoding = require('encoding');
+var moment = require('moment');
 
 module.exports = function(User) {
   
@@ -118,6 +120,56 @@ module.exports = function(User) {
       returns: {arg:'data', type: 'Array', root: true},
       http: {verb: 'get'}
     }
-  )
+  );
   
+  User.export = function (filter, res, next) {
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(!currentUser || currentUser.realm !== 'manufacturer' && currentUser.realm !== 'administrator') {
+      return next(new Error('Not Manufacturer'))
+    }
+    
+    filter = filter || {};
+    filter.limit = filter.limit || 5000;
+    if(filter.limit > 5000) filter.limit = 5000;
+    var csv = '"用户名";"姓名";"电话";"email";"省";"城市";"注册时间"\n'
+    User.find(filter, function (err, results) {
+      results.forEach(function (u) {
+        if(!u) {
+          csv +='"未知用户";"";"";"";"";"";""\n';
+        } else {
+          csv += '"'+u.username+'";"'+u.name+'";"'+u.phone+'";"'+u.email+'";"';
+          if(u.region) {
+            csv += u.region.province+'";"'+u.region.city+'";"'
+          } else {
+            csv += '";"";"';
+          }
+          csv += moment(u.created).format('YYYY-MM-DD HH:mm:ss')+'"\n';
+        }
+      });
+      var chineseCsv = encoding.convert(csv, 'GB18030');
+      var filename=currentUser.email+"_"+Date.now()+".csv";
+      res.setHeader('Pragma', 'public');
+      res.setHeader('Expires', '0');
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+      res.set('Content-Type','application/octet-stream');
+      // res.setHeader('Content-Type', 'text/csv; charset=GBK');
+      res.setHeader('Content-Disposition', 'attachment;filename="'+ filename +'"');
+      res.setHeader('Content-Length', chineseCsv.length);
+      res.set('Content-Transfer-Encoding','binary');
+      res.end(chineseCsv); 
+      // console.log(chineseCsv);
+    });
+  };
+  
+  User.remoteMethod(
+    'export',
+    {
+      accepts: [
+        {arg:'filter', type: 'Object', http: {source: 'query'}},
+        {arg: 'res', type: 'object', http: {source: 'res'}}
+      ],
+      http: {verb: 'get'}
+    }
+  );  
 };
