@@ -1,15 +1,12 @@
 {
-  "name": "message",
+  "name": "mass",
+  "plural":"mass",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "ToUserName": {
-      "type": "string",
-      "required": true
-    },
     "FromUserName": {
       "type": "string",
       "required": false
@@ -21,15 +18,19 @@
     "CreateTime": {
       "type": "number",
       "required": true
+    },
+    "tousers": {
+      "type": [
+        "string"
+      ],
+      "required": true
+    },
+    "Content": {
+      "type": "string"
     }
   },
   "validations": [],
   "relations": {
-    "ToUser": {
-      "type": "belongsTo",
-      "model": "user",
-      "foreignKey": "ToUserName"
-    },
     "FromUser": {
       "type": "belongsTo",
       "model": "user",

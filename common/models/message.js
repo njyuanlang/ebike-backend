@@ -73,30 +73,4 @@ module.exports = function(Message) {
     // console.log(JSON.stringify(ctx.query.where.and));
     next();
   });
-  
-  Message.mass = function sendMassMessage(options, next) {
-    var context = loopback.getCurrentContext()
-    var currentUser = context && context.get('currentUser');
-    var CreateTime = Math.round(Date.now()/1000);
-    options.tousers.forEach(function (userId) {
-      Message.create({
-        ToUserName: userId,
-        FromUserName: currentUser.id,
-        MsgType: 'text',
-        Content: options.Content,
-        CreateTime: CreateTime
-      });
-    });
-    next(null, 'OK');
-  }
-
-  Message.remoteMethod(
-    'mass',
-    {
-      accepts: [
-        {arg:'options', type: 'Object', http: {source: 'body'}, root:true}
-      ],
-      returns: {arg:'data', type: 'string', root: true}
-    }
-  );
 };

@@ -70,5 +70,9 @@
   "message": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "mass": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

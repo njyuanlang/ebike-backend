@@ -110,11 +110,19 @@ describe('Message', function() {
 
     lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
     
-    lt.describe.whenCalledRemotely('POST', '/api/messages/mass', {
+    lt.describe.whenCalledRemotely('POST', '/api/mass', {
       tousers: [loggedInUser.id, loggedInUser2.id],
       Content: "这里是群发消息!"+Date.now()
     }, function () {
       it('should success send Mass messages', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+    
+    lt.describe.whenCalledRemotely('GET', '/api/mass', function () {
+      it('should should success fetch Mass message by self', function(done) {
         console.log(this.res.body);
         assert.equal(this.res.statusCode, 200);
         done();
