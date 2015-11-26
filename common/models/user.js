@@ -48,18 +48,25 @@ module.exports = function(User) {
           err.status = 400
           next(err)
         } else {
-          var now = Date.now()
-          user.created = user.created||now
-          user.lastUpdated = user.lastUpdated||now
-          user.status = 'active'
-          user.name = user.name || user.username
-          user.phone = user.phone || user.username
           next()
         }
       })  
     })
-    
-  })
+  });
+  
+  User.observe('before save', function autocomplete(ctx, next) {
+    if(ctx.isNewInstance) {
+      var user = ctx.instance;
+      var now = Date.now();
+      user.created = user.created||now;
+      user.lastUpdated = user.lastUpdated||now;
+      user.status = 'active';
+      user.username = user.username || user.email;
+      user.name = user.name || user.username;
+      user.phone = user.phone || user.username;
+    }
+    next();
+  });
   
   User.beforeRemote('resetPassword', function (ctx, unused, next) {
     

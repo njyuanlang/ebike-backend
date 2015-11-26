@@ -6,7 +6,30 @@ module.exports = function(Mass) {
     ctx.req.body.FromUserName = ctx.req.accessToken.userId;
     ctx.req.body.CreateTime = Math.round(Date.now()/1000);
     ctx.req.body.MsgType = ctx.req.body.MsgType || 'text';
-    next();
+    var filter = ctx.req.body.filter || {};
+    filter.limit = filter.limit || 99999999;
+
+    var context = loopback.getCurrentContext()
+    var currentUser = context && context.get('currentUser');
+    if(currentUser.realm === 'administrator') {
+      Mass.app.models.User.find(filter, function (err, results) {
+        if(err) return next(err);
+        ctx.req.body.tousers = results.map(function (item) {
+          return item.id;
+        });
+        next();
+      });
+    } else if(currentUser.realm === 'manufacturer') {
+      Mass.app.models.Bike.findUsersByManufacturer(filter, function (err, results) {
+        if(err) return next(err);
+        ctx.req.body.tousers = results.map(function (item) {
+          return item.user.id;
+        });
+        next();
+      });
+    } else {
+      return next(new Error('realm forbidden'))
+    }
   });
   
   Mass.afterRemote('create', function doMass(ctx, modelInstance, next) {
@@ -32,7 +55,7 @@ module.exports = function(Mass) {
     ctx.query.skip = ctx.query.skip || 0;
     ctx.query.where = ctx.query.where || {};
     ctx.query.where.FromUserName = currentUser.id;
-    console.log(JSON.stringify(ctx.query.where));
+    // console.log("Mass where:",JSON.stringify(ctx.query.where));
     next();
   });
 };

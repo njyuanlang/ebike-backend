@@ -14,7 +14,7 @@ App.controller('MassController', function ($scope, $rootScope, $state, Mass, ngT
       var opt = {include: ['FromUser']}
       opt.limit = params.count()
       opt.skip = (params.page()-1)*opt.limit
-      opt.where = {ToUserName: $scope.user.id}
+      opt.where = {}
       if($scope.filter.text != '') {
         opt.where.Content = {regex: $scope.filter.text}
       }
@@ -27,11 +27,10 @@ App.controller('MassController', function ($scope, $rootScope, $state, Mass, ngT
     }
   });
   
-  $scope.reply = function (user) {
-    $rootScope.massDraft = {
-      touser: user
-    }
-    $state.go('app.mass-compose');
+  $scope.delete = function (mass) {
+    Mass.deleteById({id:mass.id}, function () {
+      $scope.tableParams.reload();
+    });
   }
 })
 
@@ -45,14 +44,13 @@ App.controller('MassComposeController', function ($scope, $state, Mass, toaster,
   $scope.submitForm = function () {
     
     Mass.create({
-      ToUserName: $scope.massDraft.touser.id,
       Content: $scope.content
     }, function (result) {
-      toaster.pop('success', '发送成功', '已经向'+$scope.massDraft.touser.name+"发送了消息！");
+      toaster.pop('success', '提交成功', "已经向服务器提交了发送请求！");
       setTimeout(function () {
         $state.go('app.mass');
       }, 2000);
-      }, function (reaseon) {
+    }, function (reaseon) {
       toaster.pop('error', '发送错误', res.data.error.mass);
     })
   }

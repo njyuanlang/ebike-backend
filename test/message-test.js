@@ -6,10 +6,14 @@ var querystring = require('querystring')
 lt.beforeEach.withApp(app);
 lt.beforeEach.withUserModel('user');
 
-var loggedInUser = {email:"abc@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb210"};
-var loggedInUser2 = {email:"def@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb213"};
-var loggedInManufacturer = {email:"spxxx@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211"}
+var loggedInUser = {email:"abc@example.com", username:"abc@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb210"};
+var loggedInUser2 = {email:"def@example.com", username:"def@example.com", password:"123456", realm:"client", id: "555f0674c0daf6350e2cb213"};
+var loggedInManufacturer = {email:"spxxx@example.com", password: "123456", realm: "manufacturer", id: "555f0674c0daf6350e2cb211", manufacturerId: "555f0674c0daf6350e2cb219"}
 var loggedInAdmin = {email:"gbo2@extensivepro.com", password: "123456", realm: "administrator", id: "555f0674c0daf6350e2cb212"}
+
+var brand = {manufacturerId: loggedInManufacturer.manufacturerId}
+var bike1 = {brand:brand, owner: loggedInUser}
+var bike2 = {brand:brand, owner: loggedInUser2}
 
 describe('Message', function() {
   
@@ -106,12 +110,57 @@ describe('Message', function() {
     
   });
   
-  describe.only('# Mass', function() {
+  describe.only('# Mass from Administrator', function() {
+    describe('## Send & Fetch', function() {
+      lt.beforeEach.givenLoggedInUser(loggedInAdmin);
+      // lt.beforeEach.givenUser(loggedInUser);
+      // lt.beforeEach.givenUser(loggedInUser2);
+      lt.describe.whenCalledRemotely('POST', '/api/mass', {
+        Content: "来自管理员的群发消息!"+Date.now()
+      }, function () {
+        it('should success send Mass messages', function(done) {
+          console.log(this.res.body);
+          assert.equal(this.res.statusCode, 200);
+          done();
+        });
+      });
+    
+      lt.describe.whenCalledRemotely('GET', '/api/mass', function () {
+        it('should should success fetch Mass message by self', function(done) {
+          console.log(this.res.body);
+          assert.equal(this.res.statusCode, 200);
+          done();
+        });
+      });
+    });
+  });
+  
+  describe('# Client Fetch', function() {
+    lt.describe.whenCalledByUser(loggedInUser, 'GET', '/api/messages', function () {
+      it('should success receive Mass message for loggedInUser', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+
+    lt.describe.whenCalledByUser(loggedInUser2, 'GET', '/api/messages', function () {
+      it('should success receive Mass message for loggedInUser2', function(done) {
+        console.log(this.res.body);
+        assert.equal(this.res.statusCode, 200);
+        done();
+      });
+    });
+  });
+  
+
+  describe('# Mass from Manufacturer', function() {
 
     lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
+    lt.beforeEach.givenModel("bike", bike1);
+    lt.beforeEach.givenModel("bike", bike2);
     
     lt.describe.whenCalledRemotely('POST', '/api/mass', {
-      tousers: [loggedInUser.id, loggedInUser2.id],
       Content: "这里是群发消息!"+Date.now()
     }, function () {
       it('should success send Mass messages', function(done) {

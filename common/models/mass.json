@@ -19,12 +19,6 @@
       "type": "number",
       "required": true
     },
-    "tousers": {
-      "type": [
-        "string"
-      ],
-      "required": true
-    },
     "Content": {
       "type": "string"
     }
