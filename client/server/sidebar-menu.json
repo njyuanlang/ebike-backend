@@ -11,6 +11,12 @@
     "translate": "sidebar.nav.DASHBOARD"
   },
   {
+    "text": "Mass",
+    "sref": "app.mass",
+    "icon": "fa fa-comments-o",
+    "translate": "sidebar.nav.MASS"
+  },
+  {
     "text": "Messages",
     "sref": "app.messages",
     "icon": "icon-bubble",

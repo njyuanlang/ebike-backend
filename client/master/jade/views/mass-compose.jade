@@ -1,0 +1,30 @@
+h3 新建群发消息
+  
+.container-fluid
+  // START row
+  .row
+    .col-md-12
+      form.form-validate.form-horizontal(name="composeFrom", ng-submit="submitForm(composeFrom.$valid)", novalidate="")
+        // START panel
+        .panel.panel-default
+          toaster-container(toaster-options="{'position-class': 'toast-top-right', 'close-button':true}")
+          .panel-body
+            .col-sm-12
+              .form-group
+                label 群发地区
+                .row
+                  .col-sm-4
+                    select.form-control(ng-options="p as p.name for p in provinces", name="province", ng-model="region.province")
+                      option(value="") 全国
+                  .col-sm-4
+                    select.form-control(ng-options="c as c.name for c in region.province.sub", name="city", ng-model="region.city", ng-show="region.province !=''")
+                      option(value="" ng-if="region.city == ''") 城市 
+            .col-sm-12
+              .form-group
+                textarea(cols="160", rows="10" name='content', required='', ng-model="content", ng-maxlength="600")
+                p 还能输入{{600-content.length}}字  
+          .panel-footer
+            button.mb-sm.btn.btn-lg.btn-info(type='submit', ng-disabled="composeFrom.$invalid") 提交   
+            button.mb-sm.btn.btn-lg.btn-default(ui-sref="app.mass()") 取消
+        // END panel
+  // END row

@@ -1,0 +1,19 @@
+h3 
+  | 群发功能
+  a.btn.btn-sm.btn-info.pull-right(ui-sref="app.mass-compose()") 新建群发消息
+
+//
+
+.container-fluid()
+  .panel.panel-default
+    .table-responsive
+      table.table.table-bordered.table-striped(ng-table='tableParams')
+        tbody
+          tr.text-center(ng-repeat='message in $data')
+            td.text-left(data-title="'内容'") {{message.Content}}
+            td(data-title="'时间'") {{message.CreateTime | moment_unix }}
+            td(data-title="'状态'")
+              a.btn.btn-clear
+                i.fa.fa-lg.fa-trash
+                | 删除
+  

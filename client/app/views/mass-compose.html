@@ -1,0 +1,45 @@
+<h3>新建群发消息</h3>
+<div class="container-fluid">
+   <!-- START row-->
+   <div class="row">
+      <div class="col-md-12">
+         <form name="composeFrom" ng-submit="submitForm(composeFrom.$valid)" novalidate="" class="form-validate form-horizontal">
+            <!-- START panel-->
+            <div class="panel panel-default">
+               <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+               <div class="panel-body">
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        <label>群发地区</label>
+                        <div class="row">
+                           <div class="col-sm-4">
+                              <select ng-options="p as p.name for p in provinces" name="province" ng-model="region.province" class="form-control">
+                                 <option value="">全国</option>
+                              </select>
+                           </div>
+                           <div class="col-sm-4">
+                              <select ng-options="c as c.name for c in region.province.sub" name="city" ng-model="region.city" ng-show="region.province !=''" class="form-control">
+                                 <option value="" ng-if="region.city == ''">城市</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-sm-12">
+                     <div class="form-group">
+                        <textarea cols="160" rows="10" name="content" required="" ng-model="content" ng-maxlength="600"></textarea>
+                        <p>还能输入{{600-content.length}}字</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="panel-footer">
+                  <button type="submit" ng-disabled="composeFrom.$invalid" class="mb-sm btn btn-lg btn-info">提交</button>
+                  <button ui-sref="app.mass()" class="mb-sm btn btn-lg btn-default">取消</button>
+               </div>
+            </div>
+            <!-- END panel-->
+         </form>
+      </div>
+   </div>
+   <!-- END row-->
+</div>

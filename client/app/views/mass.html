@@ -1,0 +1,20 @@
+<h3>
+   群发功能<a ui-sref="app.mass-compose()" class="btn btn-sm btn-info pull-right">新建群发消息</a>
+</h3>
+<!---->
+<div class="container-fluid">
+   <div class="panel panel-default">
+      <div class="table-responsive">
+         <table ng-table="tableParams" class="table table-bordered table-striped">
+            <tbody>
+               <tr ng-repeat="message in $data" class="text-center">
+                  <td data-title="'内容'" class="text-left">{{message.Content}}</td>
+                  <td data-title="'时间'">{{message.CreateTime | moment_unix }}</td>
+                  <td data-title="'状态'"><a class="btn btn-clear"><i class="fa fa-lg fa-trash"></i>删除</a>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>

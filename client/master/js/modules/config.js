@@ -32,6 +32,19 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         templateUrl: helper.basepath('dashboard.html'),
         resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
+    .state('app.mass', {
+        url: '/mass',
+        title: 'Mass',
+        controller: 'MassController',
+        templateUrl: helper.basepath('mass.html')
+    })
+    .state('app.mass-compose', {
+        url: '/mass/compose?touser',
+        title: 'Mass Compose',
+        controller: 'MassComposeController',
+        templateUrl: helper.basepath('mass-compose.html'),
+        resolve: helper.resolveFor('angularjs-region')
+    })
     .state('app.messages', {
         url: '/messages',
         title: 'Messages',
@@ -205,8 +218,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-// .constant('urlBase', "http://0.0.0.0:3000/api")
-.constant('urlBase', "http://121.40.108.30:3000/api")
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(function(LoopBackResourceProvider, urlBase) {
     // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
     LoopBackResourceProvider.setUrlBase(urlBase);

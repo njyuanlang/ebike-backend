@@ -113,6 +113,19 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         templateUrl: helper.basepath('dashboard.html'),
         resolve: helper.resolveFor('flot-chart','flot-chart-plugins')
     })
+    .state('app.mass', {
+        url: '/mass',
+        title: 'Mass',
+        controller: 'MassController',
+        templateUrl: helper.basepath('mass.html')
+    })
+    .state('app.mass-compose', {
+        url: '/mass/compose?touser',
+        title: 'Mass Compose',
+        controller: 'MassComposeController',
+        templateUrl: helper.basepath('mass-compose.html'),
+        resolve: helper.resolveFor('angularjs-region')
+    })
     .state('app.messages', {
         url: '/messages',
         title: 'Messages',
@@ -286,8 +299,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-// .constant('urlBase', "http://0.0.0.0:3000/api")
-.constant('urlBase', "http://121.40.108.30:3000/api")
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
     // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
     LoopBackResourceProvider.setUrlBase(urlBase);
@@ -1055,6 +1068,65 @@ App.controller('ManufacturersAddController', ["$scope", "$state", "Manufacturer"
     }
   };
   
+}])
+/**=========================================================
+ * Module: mass-ctrl.js
+ * Mass Controller
+ =========================================================*/
+
+App.controller('MassController', ["$scope", "$rootScope", "$state", "Mass", "ngTableParams", function ($scope, $rootScope, $state, Mass, ngTableParams) {
+  
+  $scope.filter = {text: ''}
+  $scope.tableParams = new ngTableParams({
+    count: 10,
+    filter: $scope.filter.text
+  }, {
+    getData: function($defer, params) {
+      var opt = {include: ['FromUser']}
+      opt.limit = params.count()
+      opt.skip = (params.page()-1)*opt.limit
+      opt.where = {ToUserName: $scope.user.id}
+      if($scope.filter.text != '') {
+        opt.where.Content = {regex: $scope.filter.text}
+      }
+      Mass.count({where: opt.where}, function (result) {
+        $scope.tableParams.total(result.count)
+        Mass.find({filter:opt}, function (results) {
+          $defer.resolve(results);
+        })
+      })
+    }
+  });
+  
+  $scope.reply = function (user) {
+    $rootScope.massDraft = {
+      touser: user
+    }
+    $state.go('app.mass-compose');
+  }
+}])
+
+App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", "ChinaRegion", function ($scope, $state, Mass, toaster, ChinaRegion) {
+  
+  $scope.provinces = ChinaRegion.provinces;
+  $scope.region = {
+    province: "",
+    city: ""
+  }
+  $scope.submitForm = function () {
+    
+    Mass.create({
+      ToUserName: $scope.massDraft.touser.id,
+      Content: $scope.content
+    }, function (result) {
+      toaster.pop('success', '发送成功', '已经向'+$scope.massDraft.touser.name+"发送了消息！");
+      setTimeout(function () {
+        $state.go('app.mass');
+      }, 2000);
+      }, function (reaseon) {
+      toaster.pop('error', '发送错误', res.data.error.mass);
+    })
+  }
 }])
 /**=========================================================
  * Module: messages-ctrl.js
