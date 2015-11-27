@@ -10,7 +10,7 @@ h3
           tr.text-center(ng-repeat='mass in $data')
             td.text-left(data-title="'内容'") {{mass.Content}}
             td(data-title="'时间'") {{mass.CreateTime | moment_unix }}
-            td(data-title="'设置'") {{mass.filter || "全部用户" }}
+            td(data-title="'接收范围'") {{mass.where | mass_filter}}
             td(data-title="'状态'")
               a.btn.btn-clear(ng-click="delete(mass)")
                 i.fa.fa-lg.fa-trash.mr-sm

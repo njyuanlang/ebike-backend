@@ -42,10 +42,21 @@ App.controller('MassComposeController', function ($scope, $state, Mass, toaster,
     city: ""
   }
   $scope.submitForm = function () {
-    
-    Mass.create({
+    var massBody = {
+      where: {},
       Content: $scope.content
-    }, function (result) {
+    };
+    if($scope.region){
+      if($scope.region.province && $scope.region.province !== "") {
+        massBody.where.region = {
+          province: $scope.region.province.name
+        };
+      }
+      if($scope.region.city && $scope.region.city !== "") {
+        massBody.where.region.city = $scope.region.city.name;
+      } 
+    }
+    Mass.create(massBody, function (result) {
       toaster.pop('success', '提交成功', "已经向服务器提交了发送请求！");
       setTimeout(function () {
         $state.go('app.mass');

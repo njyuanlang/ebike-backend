@@ -9,7 +9,7 @@
                <tr ng-repeat="mass in $data" class="text-center">
                   <td data-title="'内容'" class="text-left">{{mass.Content}}</td>
                   <td data-title="'时间'">{{mass.CreateTime | moment_unix }}</td>
-                  <td data-title="'设置'">{{mass.filter || "全部用户" }}</td>
+                  <td data-title="'接收范围'">{{mass.where | mass_filter}}</td>
                   <td data-title="'状态'"><a ng-click="delete(mass)" class="btn btn-clear"><i class="fa fa-lg fa-trash mr-sm"></i>删除</a>
                   </td>
                </tr>

@@ -1113,10 +1113,21 @@ App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", 
     city: ""
   }
   $scope.submitForm = function () {
-    
-    Mass.create({
+    var massBody = {
+      where: {},
       Content: $scope.content
-    }, function (result) {
+    };
+    if($scope.region){
+      if($scope.region.province && $scope.region.province !== "") {
+        massBody.where.region = {
+          province: $scope.region.province.name
+        };
+      }
+      if($scope.region.city && $scope.region.city !== "") {
+        massBody.where.region.city = $scope.region.city.name;
+      } 
+    }
+    Mass.create(massBody, function (result) {
       toaster.pop('success', '提交成功', "已经向服务器提交了发送请求！");
       setTimeout(function () {
         $state.go('app.mass');
@@ -2303,6 +2314,23 @@ App.filter("loginError", function () {
     return dictionary[state]
   }
 })
+
+/**=========================================================
+ * Module: Mass filters.js
+ * Mass filter
+ =========================================================*/
+
+App.filter("mass_filter", ["$filter", function ($filter) {
+  return function (input) {
+    if(input && input.region){ 
+      var desc = input.region.province;
+      desc += input.region.city||'';
+      return desc+"用户";
+    };
+    return "全部用户";
+  }
+}]);
+
 
 /**=========================================================
  * Module: test-filter.js

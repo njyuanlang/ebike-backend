@@ -1,17 +1,26 @@
 var loopback = require('loopback');
 
-module.exports = function(Mass) {
 
+module.exports = function(Mass) {
+  
   Mass.beforeRemote('create', function (ctx, unused, next) {
     ctx.req.body.FromUserName = ctx.req.accessToken.userId;
     ctx.req.body.CreateTime = Math.round(Date.now()/1000);
     ctx.req.body.MsgType = ctx.req.body.MsgType || 'text';
-    var filter = ctx.req.body.filter || {};
-    filter.limit = filter.limit || 99999999;
+    var where = ctx.req.body.where;
+    var filter = {limit: 99999999};
 
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
     if(currentUser.realm === 'administrator') {
+      filter.where = {realm: 'client'};
+      if(where.region) {
+        if(where.region.city) {
+          filter.where.region = {eq: where.region};
+        } else if(where.region.province) {
+          filter.where['region.province'] = where.region.province;
+        }
+      }
       Mass.app.models.User.find(filter, function (err, results) {
         if(err) return next(err);
         ctx.req.body.tousers = results.map(function (item) {
@@ -20,6 +29,14 @@ module.exports = function(Mass) {
         next();
       });
     } else if(currentUser.realm === 'manufacturer') {
+      filter.where = {"owner.realm": 'client'};
+      if(where.region) {
+        if(where.region.city) {
+          filter.where["owner.region"] = {eq: where.region};
+        } else if(where.region.province) {
+          filter.where['owner.region.province'] = where.region.province;
+        }
+      }
       Mass.app.models.Bike.findUsersByManufacturer(filter, function (err, results) {
         if(err) return next(err);
         ctx.req.body.tousers = results.map(function (item) {
