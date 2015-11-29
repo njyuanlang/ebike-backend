@@ -13,12 +13,12 @@
                         <label>群发地区</label>
                         <div class="row">
                            <div class="col-sm-4">
-                              <select ng-options="p as p.name for p in provinces" name="province" ng-model="region.province" class="form-control">
+                              <select ng-options="p as p.name for p in provinces" name="province" ng-model="region.province" ng-change="region.city=region.province.districtList[0]" class="form-control">
                                  <option value="">全国</option>
                               </select>
                            </div>
                            <div class="col-sm-4">
-                              <select ng-options="c as c.name for c in region.province.sub" name="city" ng-model="region.city" ng-show="region.province !=''" class="form-control">
+                              <select ng-options="c as c.name for c in region.province.districtList" name="city" ng-model="region.city" ng-show="region.province !=''" class="form-control">
                                  <option value="" ng-if="region.city == ''">城市</option>
                               </select>
                            </div>

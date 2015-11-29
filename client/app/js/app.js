@@ -1105,9 +1105,19 @@ App.controller('MassController', ["$scope", "$rootScope", "$state", "Mass", "ngT
   }
 }])
 
-App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", "ChinaRegion", function ($scope, $state, Mass, toaster, ChinaRegion) {
+App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", function ($scope, $state, Mass, toaster) {
   
-  $scope.provinces = ChinaRegion.provinces;
+  AMap.service('AMap.DistrictSearch', function () {
+    var districtSearch = new AMap.DistrictSearch({
+      level : 'country',
+      subdistrict : 2    
+    });
+    
+    districtSearch.search('中国', function (status, result) {
+      $scope.provinces = result.districtList[0].districtList;
+      $scope.$apply();
+    });
+  });
   $scope.region = {
     province: "",
     city: ""
@@ -1124,7 +1134,12 @@ App.controller('MassComposeController', ["$scope", "$state", "Mass", "toaster", 
         };
       }
       if($scope.region.city && $scope.region.city !== "") {
-        massBody.where.region.city = $scope.region.city.name;
+        var city = $scope.region.city.name;
+        if(city.match(/市辖区$/m)){
+          massBody.where.region.city = city.substr(0, city.length-3);          
+        } else {
+          massBody.where.region.city = city;
+        }
       } 
     }
     Mass.create(massBody, function (result) {

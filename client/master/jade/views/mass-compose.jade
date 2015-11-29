@@ -14,10 +14,10 @@ h3 新建群发消息
                 label 群发地区
                 .row
                   .col-sm-4
-                    select.form-control(ng-options="p as p.name for p in provinces", name="province", ng-model="region.province")
+                    select.form-control(ng-options="p as p.name for p in provinces", name="province", ng-model="region.province" ng-change="region.city=region.province.districtList[0]")
                       option(value="") 全国
                   .col-sm-4
-                    select.form-control(ng-options="c as c.name for c in region.province.sub", name="city", ng-model="region.city", ng-show="region.province !=''")
+                    select.form-control(ng-options="c as c.name for c in region.province.districtList", name="city", ng-model="region.city", ng-show="region.province !=''")
                       option(value="" ng-if="region.city == ''") 城市 
             .col-sm-12
               .form-group
