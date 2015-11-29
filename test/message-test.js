@@ -110,7 +110,7 @@ describe('Message', function() {
     
   });
   
-  describe.only('# Mass from Administrator', function() {
+  describe('# Mass from Administrator', function() {
     describe('## Send & Fetch', function() {
       lt.beforeEach.givenLoggedInUser(loggedInAdmin);
       lt.describe.whenCalledRemotely('POST', '/api/mass', {

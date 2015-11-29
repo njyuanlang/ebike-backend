@@ -54,6 +54,30 @@ module.exports = function(User) {
     })
   });
   
+  function formatChinaRegion(region) {
+    if(/['北京','上海', '天津', '重庆']/.test(region.province)){
+      region.province += '市';
+      region.city = region.province;
+    } else if(/['香港', '澳门']/.test(region.province)) {
+      region.province += '特别行政区';
+      region.city = region.province;
+    } else if(region.province === '广西') {
+      region.province += "壮族自治区"
+    } else if(region.province === '宁夏') {
+      region.province += "回族自治区"
+    } else if(region.province === '新疆') {
+      region.province += "维吾尔自治区"
+    } else if(region.province === '西藏') {
+      region.province += "自治区"
+    } else if(region.province === '内蒙古') {
+      region.province += "自治区"
+    } else if(region.province.match(/[^省]$/m)) {
+      region.province += '省';
+      region.city += '市';
+    }
+    return region;
+  }
+  
   User.observe('before save', function autocomplete(ctx, next) {
     if(ctx.isNewInstance) {
       var user = ctx.instance;
@@ -65,6 +89,13 @@ module.exports = function(User) {
       user.name = user.name || user.username;
       user.phone = user.phone || user.username;
     }
+    console.log(Object.keys(ctx));
+    if(ctx.instance && ctx.instance.region) {
+      formatChinaRegion(ctx.instance.region);
+    } else if(ctx.data && ctx.data.region) {
+      formatChinaRegion(ctx.data.region);
+    }
+    console.log(ctx.instance);
     next();
   });
   
