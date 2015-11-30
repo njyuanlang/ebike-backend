@@ -19,7 +19,7 @@ describe('User', function() {
       password: "123456",
       realm:'client',
       region: {
-        province: "江苏",
+        province: "香港特别行政区",
         city: "南京"
       }
     });
