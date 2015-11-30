@@ -94,7 +94,7 @@ module.exports = function(User) {
     } else if(ctx.data && ctx.data.region) {
       User.formatChinaRegion(ctx.data.region);
     }
-    console.log(ctx.instance.region);
+    // console.log(ctx.instance.region);
     next();
   });
   
