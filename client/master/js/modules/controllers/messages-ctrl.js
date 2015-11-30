@@ -49,7 +49,6 @@ App.controller('MessageComposeController', function ($scope, $state, Message, ng
       ToUserName: $scope.messageDraft.touser.id,
       Content: $scope.content
     }, function (result) {
-      console.log($scope.messageDraft);
       toaster.pop('success', '发送成功', '已经向'+$scope.messageDraft.touser.name+"发送了消息！");
       setTimeout(function () {
         $state.go('app.messages');
@@ -80,4 +79,10 @@ App.controller('MessageComposeController', function ($scope, $state, Message, ng
       });
     }
   });
+
+  $scope.delete = function (msg) {
+    Message.deleteById({id: msg.id}, function () {
+      $scope.tableParams.reload();
+    });
+  }
 })

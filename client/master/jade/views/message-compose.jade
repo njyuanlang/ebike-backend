@@ -30,3 +30,6 @@ h3 发送消息
             td(data-title="'用户名'") {{message.FromUser.name}}
             td.text-left(data-title="'内容'") {{message.Content}}
             td(data-title="'时间'") {{message.CreateTime | moment_unix }}                
+            td(data-title="'操作'")
+              a.btn.btn-clear(ng-click="delete(message)")
+                i.fa.fa-lg.fa-trash
