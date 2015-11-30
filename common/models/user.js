@@ -89,13 +89,11 @@ module.exports = function(User) {
       user.name = user.name || user.username;
       user.phone = user.phone || user.username;
     }
-    console.log(Object.keys(ctx));
     if(ctx.instance && ctx.instance.region) {
       formatChinaRegion(ctx.instance.region);
     } else if(ctx.data && ctx.data.region) {
       formatChinaRegion(ctx.data.region);
     }
-    console.log(ctx.instance);
     next();
   });
   
