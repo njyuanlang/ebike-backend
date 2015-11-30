@@ -6,7 +6,7 @@ db.user.find({"region.province": {$regex:/[北京, 上海, 天津,重庆]$/m}})
 })
 
 //省
-db.user.find({"region.province": {$regex:/[^省市]$/m}})
+db.user.find({"region.province": {$regex:/[^省,市,自治区,特别行政区]$/m}})
 .forEach(function (doc) {
   var province = doc.region.province+"省";
   var city = doc.region.city+"市";
@@ -22,7 +22,7 @@ db.bike.find({"owner.region.province": {$regex:/[北京, 上海, 天津,重庆]$
 })
 
 //省 for manufacture
-db.bike.find({"owner.region.province": {$regex:/[^省市]$/m}})
+db.bike.find({"owner.region.province": {$regex:/[^省,市,自治区,特别行政区]$/m}})
 .forEach(function (doc) {
   var province = doc.owner.region.province+"省";
   var city = doc.owner.region.city+"市";
