@@ -20,7 +20,7 @@
                   <td data-title="'用户名'">{{message.FromUser.name}}</td>
                   <td data-title="'内容'" class="text-left">{{message.Content}}</td>
                   <td data-title="'时间'">{{message.CreateTime | moment_unix }}</td>
-                  <td data-title="'操作'"><a ng-click="reply(message.FromUser)" class="btn btn-clear"><i class="fa fa-lg fa-reply"></i></a><a class="btn btn-clear"><i class="fa fa-lg fa-trash"></i></a>
+                  <td data-title="'操作'"><a ng-click="reply(message.FromUser)" class="btn btn-clear"><i class="fa fa-lg fa-reply"></i></a>
                   </td>
                </tr>
             </tbody>
