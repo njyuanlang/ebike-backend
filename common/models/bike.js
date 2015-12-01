@@ -97,65 +97,48 @@ module.exports = function(Bike) {
     }
   )
 
-  Bike.statRegion = function (beginDate, endDate, next) {
-    var where = { created: {$gt: new Date(beginDate), $lte: new Date(endDate)} }
+  Bike.statistic = function (filter, next) {
+    var now = Date.now();
+    filter = filter || {};
+    filter.where = filter.where || {};
+    filter.beginDate = filter.beginDate || now-86400000*30;
+    filter.endDate = filter.endDate || now;
+    filter.groupBy = filter.groupBy || "owner.region.province";
+
     var context = loopback.getCurrentContext()
     var currentUser = context && context.get('currentUser');
     if(currentUser && currentUser.realm === 'manufacturer') {
-      where['brand.manufacturerId'] = currentUser.manufacturerId.toString();
+      filter.where['brand.manufacturerId'] = currentUser.manufacturerId.toString();
     }
 
     var collection = Bike.getDataSource().connector.collection('bike')
     var p1 = new Promise(function (resolve, reject) {
       collection.aggregate([
-        { $match: where },
-        {
-          $group: {
-            _id: "$owner.region.province",
-            count: {$sum: 1}
-          }
+        {$project: {owner:1, brand:1, model:1, hit: {$cond: [
+          {$and: [
+            {$gt: ["$created", new Date(filter.beginDate)]}, 
+            {$lte: ["$created", new Date(filter.endDate)]}
+          ]}, 1, 0]}}
         },
-        { $sort: {count: -1} }
+        {$match: filter.where },
+        {$group: {_id: "$"+filter.groupBy, aggregate: {$sum: 1}, count: {$sum: "$hit"}}},
+        {$sort: {count: -1, _id: -1} },
+        {$skip: filter.skip || 0},
+        {$limit: filter.limit || 10}
       ],function (err, results) {
         if(err) {
           reject(err)
         } else {
-          var aggregateWhere = {
-            created: {$lte: new Date(endDate)},
-            "owner.region.province": {$in: results.map(function (item) {
-              return item._id
-            })}
-          }
-          if(where['brand.manufacturerId']) {
-            aggregateWhere['brand.manufacturerId'] = where['brand.manufacturerId']
-          }
-          collection.aggregate([
-            { $match: aggregateWhere },
-            {
-              $group: {
-                _id: "$owner.region.province",
-                aggregate: {$sum: 1}
-              }
-            },
-            {
-              $sort: {_id: -1}
-            }
-          ], function (err, arr) {
-            if(err) return reject(err)
-            var res = {}
-            arr.forEach(function (item) {
-              res[item._id] = item.aggregate
-            })
-            results.forEach(function (item, index) {
-              item.aggregate = res[item._id]
-            })
-            resolve(results)
-          })      
+          resolve(results);    
         }
       })
     })
     
     var p2 = new Promise(function (resolve, reject) {
+      var where = {"created": {$gt: new Date(filter.beginDate), $lte: new Date(filter.endDate)}};
+      for(var k in filter.where) {
+        where[k] = filter.where[k];
+      }
       collection.count(where, function (err, count) {
         if(err) {
           reject(err)
@@ -166,11 +149,7 @@ module.exports = function(Bike) {
     })
     
     var p3 = new Promise(function (resolve, reject) {
-      var aggregateTotalWhere = {}
-      if(where['brand.manufacturerId']) {
-        aggregateTotalWhere['brand.manufacturerId'] = where['brand.manufacturerId']
-      }
-      collection.count(aggregateTotalWhere, function (err, count) {
+      collection.count(filter.where, function (err, count) {
         if(err) {
           reject(err)
         } else {
@@ -190,12 +169,9 @@ module.exports = function(Bike) {
   }
   
   Bike.remoteMethod(
-    'statRegion',
+    'statistic',
     {
-      accepts: [
-        {arg:'beginDate', type: 'Date'},
-        {arg:'endDate', type: 'Date'}
-      ],
+      accepts: {arg:'filter', type: 'Object', root:true},
       returns: {arg:'data', type: 'Object', root: true},
       http: {verb: 'get'}
     }

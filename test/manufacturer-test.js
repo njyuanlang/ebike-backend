@@ -120,26 +120,6 @@ describe('# Manufacturer', function() {
     })
   })
   
-  describe('## Statistic', function () {
-    var filter = {
-      beginDate: '"2015-04-01"',
-      endDate: '"2015-06-01"'
-    }
-    var qs = '?'+querystring.stringify(filter)
-    lt.describe.whenCalledRemotely('GET', '/api/bikes/statRegion'+qs, function () {
-      it('should have successCode', function() {
-        // console.log(this.res.body)
-        assert.equal(this.res.statusCode, 200);
-      });
-    })
-    
-    lt.describe.whenCalledRemotely('GET', '/api/tests/stat', function () {
-      it('should have successCode', function() {
-        assert.equal(this.res.statusCode, 200);
-      });
-    })
-  })
-  
   describe('## Test', function() {
     lt.describe.whenCalledRemotely('GET', '/api/tests', function () {
       it('should have successCode', function() {

@@ -15,26 +15,35 @@ var brandId = "555f06dec0daf6350e2cb216";
 
 
 describe('Statistic', function() {
-  
-  describe.only('# Brand', function() {
+    
+  describe.only('# Bike', function() {
     // lt.beforeEach.givenLoggedInUser(loggedInAdmin);
     lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
     var filter = {
+      groupBy: "owner.region.city",
       where: {
-        "brand.id": brandId
+        // "brand.id": brandId
       },
-      limit: 100,
+      limit: 10,
       skip: 0
     }
     var qs = '?'+querystring.stringify({filter: JSON.stringify(filter)})
     
-    lt.describe.whenCalledRemotely('GET', '/api/brands/stat'+qs, function () {
+    lt.describe.whenCalledRemotely('GET', '/api/bikes/statistic'+qs, function () {
       it('should success stat brand & model', function(done) {
         console.log(this.res.body);
-        // console.log(this.res.body.data.length);
+        console.log(this.res.body.data.length);
         assert.equal(this.res.statusCode, 200);
         done();
       });
     });
+  });
+  
+  describe('# Test', function() {
+    lt.describe.whenCalledRemotely('GET', '/api/tests/stat', function () {
+      it('should have successCode', function() {
+        assert.equal(this.res.statusCode, 200);
+      });
+    })
   });
 });
