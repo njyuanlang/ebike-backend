@@ -13,7 +13,7 @@ var loggedInAdmin = {email:"gbo2@extensivepro.com", password: "123456", realm: "
 
 describe('User', function() {
 
-  describe.only('# Create', function() {
+  describe('# Create', function() {
     lt.beforeEach.givenLoggedInUser({
       email: "region@example.com",
       password: "123456",

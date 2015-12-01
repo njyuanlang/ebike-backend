@@ -15,63 +15,54 @@ module.exports = function(Brand) {
     next()
   })
   
-  Brand.stat = function (beginDate, endDate, next) {
+  Brand.stat = function (filter, next) {
+    console.log(filter);
     var collection = Brand.getDataSource().connector.collection('bike')
+    var now = Date.now();
+    filter = filter || {};
+    filter.where = filter.where || {};
+    filter.beginDate = filter.beginDate || now-86400000*30;
+    filter.endDate = filter.endDate || now;
+    
+    var context = loopback.getCurrentContext();
+    var currentUser = context && context.get('currentUser');
+    if(currentUser && currentUser.realm === 'manufacturer') {
+      filter.where['brand.manufacturerId'] = currentUser.manufacturerId;
+    }
+    
     var p1 = new Promise(function (resolve, reject) {
+      var group = {
+        aggregate: {$sum: 1}, 
+        count: {$sum: "$hit"}
+      };
+      group._id = filter.where["brand.id"]?"$model":"$brand.name";
       collection.aggregate([
-        {
-          $match: {
-            created: {$gt: new Date(beginDate), $lte: new Date(endDate)}
-          }
+        {$project: {brand:1, model:1, hit: {$cond: [
+          {$and: [
+            {$gt: ["$created", new Date(filter.beginDate)]}, 
+            {$lte: ["$created", new Date(filter.endDate)]}
+          ]}, 1, 0]}}
         },
-        {
-          $group: {
-            _id: "$brand.name",
-            count: {$sum: 1}
-          }
-        },
-        {
-          $sort: {count: -1}
-        }
+        {$match: filter.where},
+        {$group: group},
+        {$sort: {count: -1, _id: -1}},
+        {$skip: filter.skip || 0},
+        {$limit: filter.limit || 10}
       ],function (err, results) {
         if(err) {
           reject(err)
         } else {
-          collection.aggregate([
-            {
-              $match: {
-                created: {$lte: new Date(endDate)},
-                "brand.name": {$in: results.map(function (item) {
-                  return item._id
-                })}
-              }
-            },
-            {
-              $group: {
-                _id: "$brand.name",
-                aggregate: {$sum: 1}
-              }
-            },
-            {
-              $sort: {_id: -1}
-            }
-          ], function (err, arr) {
-            if(err) return reject(err)
-            var res = {}
-            arr.forEach(function (item) {
-              res[item._id] = item.aggregate
-            })
-            results.forEach(function (item, index) {
-              item.aggregate = res[item._id]
-            })
-            resolve(results)
-          })      
+          resolve(results);
         }
       })
     })
     
     var p2 = new Promise(function (resolve, reject) {
-      collection.count({created:{$gt: new Date(beginDate), $lte: new Date(endDate)}}, function (err, count) {
+      var where = {"created": {$gt: new Date(filter.beginDate), $lte: new Date(filter.endDate)}};
+      for(var k in filter.where) {
+        where[k] = filter.where[k];
+      }
+      collection.count(where , function (err, count) {
         if(err) {
           reject(err)
         } else {
@@ -81,7 +72,7 @@ module.exports = function(Brand) {
     })
     
     var p3 = new Promise(function (resolve, reject) {
-      collection.count({}, function (err, count) {
+      collection.count(filter.where, function (err, count) {
         if(err) {
           reject(err)
         } else {
@@ -103,10 +94,7 @@ module.exports = function(Brand) {
   Brand.remoteMethod(
     'stat',
     {
-      accepts: [
-        {arg:'beginDate', type: 'Date'},
-        {arg:'endDate', type: 'Date'}
-      ],
+      accepts: [{arg:'filter', type: 'Object', root:true}],
       returns: {arg:'data', type: 'Object', root: true},
       http: {verb: 'get'}
     }
