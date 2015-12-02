@@ -3,7 +3,7 @@
  * Statistic Controllers
  =========================================================*/
 
-App.controller('StatisticBrandController', function ($scope, Brand, ngTableParams) {
+App.controller('StatisticBrandController', function ($scope, Bike, ngTableParams) {
   
   $scope.barOptions = {
     series: {
@@ -19,6 +19,7 @@ App.controller('StatisticBrandController', function ($scope, Brand, ngTableParam
         borderColor: '#eee',
         borderWidth: 1,
         hoverable: true,
+        clickable: true,
         backgroundColor: '#fcfcfc'
     },
     tooltip: true,
@@ -36,11 +37,27 @@ App.controller('StatisticBrandController', function ($scope, Brand, ngTableParam
     shadowSize: 0
   };
   
+  var filter = {
+    where: {},
+    groupBy: "brand.name"
+  }
   $scope.tableParams = new ngTableParams({
     count: 10,
   }, {
     getData: function($defer, params) {
-      Brand.stat({beginDate: '"'+$scope.beginDate+'"', endDate: '"'+$scope.endDate+'"'}, function (result) {
+      filter.beginDate = moment($scope.beginDate).valueOf();
+      filter.endDate = moment($scope.endDate).valueOf();
+      if($scope.region.city) {
+        filter.where["owner.region"] = {
+          province:$scope.region.province.name,
+          city: $scope.region.city.name
+        };
+      } else if($scope.region.province) {
+        filter.where = {"owner.region.province": $scope.region.province.name}
+      }
+      filter.limit = params.count();
+      filter.skip = (params.page()-1)*filter.limit;
+      Bike.statistic({filter:filter}, function (result) {
         $scope.total = result.total
         $scope.aggregateTotal = result.aggregateTotal
         $defer.resolve(result.data)
@@ -50,14 +67,22 @@ App.controller('StatisticBrandController', function ($scope, Brand, ngTableParam
           data: []
         }]
         result.data.forEach(function (item) {
-          $scope.barData[0].data.push([item._id, item.count])
+          $scope.barData[0].data.push([item._id||'其他', item.count])
         })
       })
     }
-  })   
+  });
   
-  $scope.endDate = moment().format('YYYY-MM-DD')
-  $scope.beginDate = moment().subtract(30, 'days').format('YYYY-MM-DD')
+  $scope.goSubCatagory = function (event, pos, item) {
+    if(item) {
+      filter.where = {"brand.name": $scope.tableParams.data[item.dataIndex]._id};
+      filter.groupBy = "model";
+      $scope.tableParams.reload();
+    }
+  }
+  
+  $scope.endDate = moment().format('YYYY-MM-DD');
+  $scope.beginDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
   $scope.openeds = [false, false]
   $scope.open = function($event, index) {
     $event.preventDefault();
@@ -66,6 +91,7 @@ App.controller('StatisticBrandController', function ($scope, Brand, ngTableParam
     $scope.openeds[index] = true
     $scope.openeds[++index%2] = false
   };
+  $scope.region = {};
 })
 
 App.controller('StatisticRegionController', function ($scope, Bike, ngTableParams) {

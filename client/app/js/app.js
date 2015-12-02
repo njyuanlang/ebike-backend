@@ -77,6 +77,16 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "
       });
     };
 
+    AMap.service('AMap.DistrictSearch', function () {
+      var districtSearch = new AMap.DistrictSearch({
+        level : 'country',
+        subdistrict : 2    
+      });
+    
+      districtSearch.search('中国', function (status, result) {
+        $rootScope.provinces = result.districtList[0].districtList;
+      });
+    });
 }]);
 
 /**=========================================================
@@ -299,8 +309,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-// .constant('urlBase', "http://0.0.0.0:3000/api")
-.constant('urlBase', "http://121.40.108.30:3000/api")
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
     // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
     LoopBackResourceProvider.setUrlBase(urlBase);
@@ -1349,7 +1359,7 @@ App.controller('SidebarController', ['$rootScope', '$scope', '$state', '$http', 
  * Statistic Controllers
  =========================================================*/
 
-App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", function ($scope, Brand, ngTableParams) {
+App.controller('StatisticBrandController', ["$scope", "Bike", "ngTableParams", function ($scope, Bike, ngTableParams) {
   
   $scope.barOptions = {
     series: {
@@ -1365,6 +1375,7 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
         borderColor: '#eee',
         borderWidth: 1,
         hoverable: true,
+        clickable: true,
         backgroundColor: '#fcfcfc'
     },
     tooltip: true,
@@ -1382,11 +1393,27 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
     shadowSize: 0
   };
   
+  var filter = {
+    where: {},
+    groupBy: "brand.name"
+  }
   $scope.tableParams = new ngTableParams({
     count: 10,
   }, {
     getData: function($defer, params) {
-      Brand.stat({beginDate: '"'+$scope.beginDate+'"', endDate: '"'+$scope.endDate+'"'}, function (result) {
+      filter.beginDate = moment($scope.beginDate).valueOf();
+      filter.endDate = moment($scope.endDate).valueOf();
+      if($scope.region.city) {
+        filter.where["owner.region"] = {
+          province:$scope.region.province.name,
+          city: $scope.region.city.name
+        };
+      } else if($scope.region.province) {
+        filter.where = {"owner.region.province": $scope.region.province.name}
+      }
+      filter.limit = params.count();
+      filter.skip = (params.page()-1)*filter.limit;
+      Bike.statistic({filter:filter}, function (result) {
         $scope.total = result.total
         $scope.aggregateTotal = result.aggregateTotal
         $defer.resolve(result.data)
@@ -1396,14 +1423,22 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
           data: []
         }]
         result.data.forEach(function (item) {
-          $scope.barData[0].data.push([item._id, item.count])
+          $scope.barData[0].data.push([item._id||'其他', item.count])
         })
       })
     }
-  })   
+  });
   
-  $scope.endDate = moment().format('YYYY-MM-DD')
-  $scope.beginDate = moment().subtract(30, 'days').format('YYYY-MM-DD')
+  $scope.goSubCatagory = function (event, pos, item) {
+    if(item) {
+      filter.where = {"brand.name": $scope.tableParams.data[item.dataIndex]._id};
+      filter.groupBy = "model";
+      $scope.tableParams.reload();
+    }
+  }
+  
+  $scope.endDate = moment().format('YYYY-MM-DD');
+  $scope.beginDate = moment().subtract(30, 'days').format('YYYY-MM-DD');
   $scope.openeds = [false, false]
   $scope.open = function($event, index) {
     $event.preventDefault();
@@ -1412,6 +1447,7 @@ App.controller('StatisticBrandController', ["$scope", "Brand", "ngTableParams", 
     $scope.openeds[index] = true
     $scope.openeds[++index%2] = false
   };
+  $scope.region = {};
 }])
 
 App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", function ($scope, Bike, ngTableParams) {
@@ -1596,6 +1632,7 @@ App.directive('flot', ['$http', '$timeout', function($http, $timeout) {
       options: '=',
       series: '=',
       callback: '=',
+      onPlotClick: '&',
       src: '='
     },
     link: linkFunction
@@ -1627,6 +1664,19 @@ App.directive('flot', ['$http', '$timeout', function($http, $timeout) {
 
       return plotObj;
     }
+    
+    //
+    // Events
+    //
+    plotArea.on('plotclick', function onPlotClick (event, pos, item) {
+      $timeout(function onApplyPlotClick () {
+        scope.onPlotClick({
+          event: event,
+          pos: pos,
+          item: item
+        });
+      });
+    });
 
     function onDatasetChanged(dataset) {
       if (plot) {

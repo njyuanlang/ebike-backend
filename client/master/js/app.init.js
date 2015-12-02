@@ -77,4 +77,14 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "
       });
     };
 
+    AMap.service('AMap.DistrictSearch', function () {
+      var districtSearch = new AMap.DistrictSearch({
+        level : 'country',
+        subdistrict : 2    
+      });
+    
+      districtSearch.search('中国', function (status, result) {
+        $rootScope.provinces = result.districtList[0].districtList;
+      });
+    });
 }]);

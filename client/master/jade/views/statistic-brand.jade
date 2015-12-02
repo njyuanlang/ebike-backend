@@ -1,20 +1,26 @@
 h3 
   | 品牌统计
   a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
-  .pull-right.col-sm-6
-    .col-sm-6
+  .pull-right.col-sm-9
+    .col-sm-3
+      select.form-control(ng-options="p as p.name for p in provinces", name="province", ng-model="region.province")
+        option(value="") 全国
+    .col-sm-3
+      select.form-control(ng-options="c as c.name for c in region.province.districtList", name="city", ng-model="region.city")
+        option(value="") 城市 
+    .col-sm-3
       p.input-group
-        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="beginDate", is-open='openeds[1]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="beginDate", is-open='openeds[1]', max-date="endDate", ng-required='true', close-text='Close')
         span.input-group-btn
           button.btn.btn-default(type='button', ng-click='open($event, 1)')
             em.fa.fa-calendar  
-    .col-sm-6
+    .col-sm-3
       p.input-group
-        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="endDate", is-open='openeds[0]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="endDate", is-open='openeds[0]', ng-required='true', close-text='关闭')
         span.input-group-btn
           button.btn.btn-default(type='button', ng-click='open($event, 0)')
-            em.fa.fa-calendar
-        
+            em.fa.fa-calendar  
+          
 .container-fluid
   // START chart
   .row
@@ -22,10 +28,10 @@ h3
       #panelChart2.panel.panel-default
         .panel-heading
           paneltool(tool-collapse, tool-dismiss)
-          .panel-title 品牌排名
+          .panel-title 品牌型号排名
         .panel-wrapper
           .panel-body
-            flot(dataset='barData', options='barOptions', height="300px")
+            flot(dataset='barData', options='barOptions', height="300px", on-plot-click="goSubCatagory(event, pos, item)")
   // END chart
   
   // START table

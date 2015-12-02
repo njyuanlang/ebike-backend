@@ -1,9 +1,19 @@
 <h3>
    品牌统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
-   <div class="pull-right col-sm-6">
-      <div class="col-sm-6">
+   <div class="pull-right col-sm-9">
+      <div class="col-sm-3">
+         <select ng-options="p as p.name for p in provinces" name="province" ng-model="region.province" class="form-control">
+            <option value="">全国</option>
+         </select>
+      </div>
+      <div class="col-sm-3">
+         <select ng-options="c as c.name for c in region.province.districtList" name="city" ng-model="region.city" class="form-control">
+            <option value="">城市</option>
+         </select>
+      </div>
+      <div class="col-sm-3">
          <p class="input-group">
-            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="endDate" ng-required="true" close-text="Close" class="form-control" />
             <span class="input-group-btn">
                <button type="button" ng-click="open($event, 1)" class="btn btn-default">
                   <em class="fa fa-calendar"></em>
@@ -11,9 +21,9 @@
             </span>
          </p>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-3">
          <p class="input-group">
-            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" ng-required="true" close-text="关闭" class="form-control" />
             <span class="input-group-btn">
                <button type="button" ng-click="open($event, 0)" class="btn btn-default">
                   <em class="fa fa-calendar"></em>
@@ -30,11 +40,11 @@
          <div id="panelChart2" class="panel panel-default">
             <div class="panel-heading">
                <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
-               <div class="panel-title">品牌排名</div>
+               <div class="panel-title">品牌型号排名</div>
             </div>
             <div class="panel-wrapper">
                <div class="panel-body">
-                  <flot dataset="barData" options="barOptions" height="300px"></flot>
+                  <flot dataset="barData" options="barOptions" height="300px" on-plot-click="goSubCatagory(event, pos, item)"></flot>
                </div>
             </div>
          </div>

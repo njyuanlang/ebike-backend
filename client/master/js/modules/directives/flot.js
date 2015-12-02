@@ -13,6 +13,7 @@ App.directive('flot', ['$http', '$timeout', function($http, $timeout) {
       options: '=',
       series: '=',
       callback: '=',
+      onPlotClick: '&',
       src: '='
     },
     link: linkFunction
@@ -44,6 +45,19 @@ App.directive('flot', ['$http', '$timeout', function($http, $timeout) {
 
       return plotObj;
     }
+    
+    //
+    // Events
+    //
+    plotArea.on('plotclick', function onPlotClick (event, pos, item) {
+      $timeout(function onApplyPlotClick () {
+        scope.onPlotClick({
+          event: event,
+          pos: pos,
+          item: item
+        });
+      });
+    });
 
     function onDatasetChanged(dataset) {
       if (plot) {
