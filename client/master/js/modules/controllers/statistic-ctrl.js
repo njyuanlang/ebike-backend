@@ -101,7 +101,7 @@ App.controller('StatisticBrandController', function ($scope, Bike, ngTableParams
   $scope.region = {};
 })
 
-App.controller('StatisticRegionController', function ($scope, Bike, ngTableParams) {
+App.controller('StatisticRegionController', function ($scope, Bike, ngTableParams, Brand) {
     
   $scope.barOptions = {
     series: {
@@ -146,7 +146,7 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
       if($scope.model) {
         filter.where.model = $scope.model;
       } else if($scope.brand) {
-        filter.where = $scope.brand;
+        filter.where["brand.id"] = $scope.brand.id;
       }
       filter.limit = params.count();
       filter.skip = (params.page()-1)*filter.limit;
@@ -161,7 +161,8 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
         }]
         result.data.forEach(function (item) {
           $scope.barData[0].data.push([item._id||'其他', item.count])
-        })
+        });
+        console.log($scope.barData);
       });
     }
   });
@@ -193,6 +194,8 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
     $scope.openeds[index] = true
     $scope.openeds[++index%2] = false
   };
+  
+  $scope.brands = Brand.find({filter:{limit: 99999}});
 })
 
 App.controller('StatisticFaultController', function ($scope, Test, ngTableParams, Brand, ChinaRegion) {

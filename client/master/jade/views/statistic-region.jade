@@ -3,10 +3,10 @@ h3
   a.pull-right.btn.btn-info(ng-click='tableParams.reload()') 统计
   .pull-right.col-sm-9
     .col-sm-3
-      select.form-control(ng-options="b as b.name for p in brands", ng-model="brand")
+      select.form-control(ng-options="b as b.name for b in brands", ng-model="brand")
         option(value="") 品牌
     .col-sm-3
-      select.form-control(ng-options="c as c.name for c in region.province.districtList", ng-model="model")
+      select.form-control(ng-options="m for m in brand.models", ng-model="model")
         option(value="") 型号 
     .col-sm-3
       p.input-group

@@ -312,7 +312,6 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
 // .constant('urlBase', "http://0.0.0.0:3000/api")
 .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
-    // LoopBackResourceProvider.setAuthHeader('X-Access-Token');
     LoopBackResourceProvider.setUrlBase(urlBase);
 }])
 .config(["$httpProvider", function ($httpProvider) {
@@ -1457,7 +1456,7 @@ App.controller('StatisticBrandController', ["$scope", "Bike", "ngTableParams", f
   $scope.region = {};
 }])
 
-App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", function ($scope, Bike, ngTableParams) {
+App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", "Brand", function ($scope, Bike, ngTableParams, Brand) {
     
   $scope.barOptions = {
     series: {
@@ -1502,7 +1501,7 @@ App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", 
       if($scope.model) {
         filter.where.model = $scope.model;
       } else if($scope.brand) {
-        filter.where = $scope.brand;
+        filter.where["brand.id"] = $scope.brand.id;
       }
       filter.limit = params.count();
       filter.skip = (params.page()-1)*filter.limit;
@@ -1517,7 +1516,8 @@ App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", 
         }]
         result.data.forEach(function (item) {
           $scope.barData[0].data.push([item._id||'其他', item.count])
-        })
+        });
+        console.log($scope.barData);
       });
     }
   });
@@ -1549,6 +1549,8 @@ App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", 
     $scope.openeds[index] = true
     $scope.openeds[++index%2] = false
   };
+  
+  $scope.brands = Brand.find({filter:{limit: 99999}});
 }])
 
 App.controller('StatisticFaultController', ["$scope", "Test", "ngTableParams", "Brand", "ChinaRegion", function ($scope, Test, ngTableParams, Brand, ChinaRegion) {

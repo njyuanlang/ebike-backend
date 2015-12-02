@@ -2,12 +2,12 @@
    地区统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">统计</a>
    <div class="pull-right col-sm-9">
       <div class="col-sm-3">
-         <select ng-options="b as b.name for p in brands" ng-model="brand" class="form-control">
+         <select ng-options="b as b.name for b in brands" ng-model="brand" class="form-control">
             <option value="">品牌</option>
          </select>
       </div>
       <div class="col-sm-3">
-         <select ng-options="c as c.name for c in region.province.districtList" ng-model="model" class="form-control">
+         <select ng-options="m for m in brand.models" ng-model="model" class="form-control">
             <option value="">型号</option>
          </select>
       </div>
