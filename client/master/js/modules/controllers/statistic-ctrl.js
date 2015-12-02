@@ -162,7 +162,6 @@ App.controller('StatisticRegionController', function ($scope, Bike, ngTableParam
         result.data.forEach(function (item) {
           $scope.barData[0].data.push([item._id||'其他', item.count])
         });
-        console.log($scope.barData);
       });
     }
   });

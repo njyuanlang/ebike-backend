@@ -309,8 +309,8 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
     $tooltipProvider.options({appendToBody: true});
 
 }])
-// .constant('urlBase', "http://0.0.0.0:3000/api")
-.constant('urlBase', "http://121.40.108.30:3000/api")
+.constant('urlBase', "http://0.0.0.0:3000/api")
+// .constant('urlBase', "http://121.40.108.30:3000/api")
 .config(["LoopBackResourceProvider", "urlBase", function(LoopBackResourceProvider, urlBase) {
     LoopBackResourceProvider.setUrlBase(urlBase);
 }])
@@ -1517,7 +1517,6 @@ App.controller('StatisticRegionController', ["$scope", "Bike", "ngTableParams", 
         result.data.forEach(function (item) {
           $scope.barData[0].data.push([item._id||'其他', item.count])
         });
-        console.log($scope.barData);
       });
     }
   });
