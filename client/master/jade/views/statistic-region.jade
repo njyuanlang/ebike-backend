@@ -1,16 +1,22 @@
 h3 
   | 地区统计
-  a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
-  .pull-right.col-sm-6
-    .col-sm-6
+  a.pull-right.btn.btn-info(ng-click='tableParams.reload()') 统计
+  .pull-right.col-sm-9
+    .col-sm-3
+      select.form-control(ng-options="b as b.name for p in brands", ng-model="brand")
+        option(value="") 品牌
+    .col-sm-3
+      select.form-control(ng-options="c as c.name for c in region.province.districtList", ng-model="model")
+        option(value="") 型号 
+    .col-sm-3
       p.input-group
-        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="beginDate", is-open='openeds[1]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="beginDate", is-open='openeds[1]', max-date="endDate", ng-required='true', close-text='Close')
         span.input-group-btn
           button.btn.btn-default(type='button', ng-click='open($event, 1)')
             em.fa.fa-calendar  
-    .col-sm-6
+    .col-sm-3
       p.input-group
-        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="endDate", is-open='openeds[0]', max-date="'2015-06-22'", ng-required='true', close-text='Close')
+        input.form-control(type='text', datepicker-popup='yyyy-MM-dd', ng-model="endDate", is-open='openeds[0]', ng-required='true', close-text='Close')
         span.input-group-btn
           button.btn.btn-default(type='button', ng-click='open($event, 0)')
             em.fa.fa-calendar
@@ -21,11 +27,12 @@ h3
     .col-lg-12
       #panelChart2.panel.panel-default
         .panel-heading
+          a.pull-right.btn.btn-warning(ng-click="goRoot()") 查看全国
           paneltool(tool-collapse, tool-dismiss)
           .panel-title 地区排名
         .panel-wrapper
           .panel-body
-            flot(dataset='barData', options='barOptions', height="300px")
+            flot(dataset='barData', options='barOptions', height="300px", on-plot-click="goSubCatagory(event, pos, item)")
   // END chart
   
   // START table

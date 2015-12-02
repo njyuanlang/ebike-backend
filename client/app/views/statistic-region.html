@@ -1,9 +1,19 @@
 <h3>
-   地区统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
-   <div class="pull-right col-sm-6">
-      <div class="col-sm-6">
+   地区统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">统计</a>
+   <div class="pull-right col-sm-9">
+      <div class="col-sm-3">
+         <select ng-options="b as b.name for p in brands" ng-model="brand" class="form-control">
+            <option value="">品牌</option>
+         </select>
+      </div>
+      <div class="col-sm-3">
+         <select ng-options="c as c.name for c in region.province.districtList" ng-model="model" class="form-control">
+            <option value="">型号</option>
+         </select>
+      </div>
+      <div class="col-sm-3">
          <p class="input-group">
-            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="beginDate" is-open="openeds[1]" max-date="endDate" ng-required="true" close-text="Close" class="form-control" />
             <span class="input-group-btn">
                <button type="button" ng-click="open($event, 1)" class="btn btn-default">
                   <em class="fa fa-calendar"></em>
@@ -11,9 +21,9 @@
             </span>
          </p>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-3">
          <p class="input-group">
-            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" max-date="'2015-06-22'" ng-required="true" close-text="Close" class="form-control" />
+            <input type="text" datepicker-popup="yyyy-MM-dd" ng-model="endDate" is-open="openeds[0]" ng-required="true" close-text="Close" class="form-control" />
             <span class="input-group-btn">
                <button type="button" ng-click="open($event, 0)" class="btn btn-default">
                   <em class="fa fa-calendar"></em>
@@ -28,13 +38,13 @@
    <div class="row">
       <div class="col-lg-12">
          <div id="panelChart2" class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading"><a ng-click="goRoot()" class="pull-right btn btn-warning">查看全国</a>
                <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
                <div class="panel-title">地区排名</div>
             </div>
             <div class="panel-wrapper">
                <div class="panel-body">
-                  <flot dataset="barData" options="barOptions" height="300px"></flot>
+                  <flot dataset="barData" options="barOptions" height="300px" on-plot-click="goSubCatagory(event, pos, item)"></flot>
                </div>
             </div>
          </div>

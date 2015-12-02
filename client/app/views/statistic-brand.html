@@ -1,5 +1,5 @@
 <h3>
-   品牌统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">GO</a>
+   品牌统计<a ng-click="tableParams.reload()" class="pull-right btn btn-info">统计</a>
    <div class="pull-right col-sm-9">
       <div class="col-sm-3">
          <select ng-options="p as p.name for p in provinces" name="province" ng-model="region.province" class="form-control">
@@ -38,7 +38,7 @@
    <div class="row">
       <div class="col-lg-12">
          <div id="panelChart2" class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading"><a ng-click="goRoot()" class="pull-right btn btn-warning">查看品牌</a>
                <paneltool tool-collapse="tool-collapse" tool-dismiss="tool-dismiss"></paneltool>
                <div class="panel-title">品牌型号排名</div>
             </div>

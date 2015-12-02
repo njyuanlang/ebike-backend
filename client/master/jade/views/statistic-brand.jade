@@ -1,6 +1,6 @@
 h3 
   | 品牌统计
-  a.pull-right.btn.btn-info(ng-click='tableParams.reload()') GO
+  a.pull-right.btn.btn-info(ng-click='tableParams.reload()') 统计
   .pull-right.col-sm-9
     .col-sm-3
       select.form-control(ng-options="p as p.name for p in provinces", name="province", ng-model="region.province")
@@ -27,6 +27,7 @@ h3
     .col-lg-12
       #panelChart2.panel.panel-default
         .panel-heading
+          a.pull-right.btn.btn-warning(ng-click="goRoot()") 查看品牌
           paneltool(tool-collapse, tool-dismiss)
           .panel-title 品牌型号排名
         .panel-wrapper
