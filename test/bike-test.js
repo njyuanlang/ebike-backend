@@ -14,13 +14,13 @@ describe('Bike', function() {
   
   lt.beforeEach.givenLoggedInUser(loggedInUser);
   
-  describe('#Create', function() {
+  describe.only('#Create', function() {
     lt.describe.whenCalledRemotely('POST', '/api/bikes', {
       "serialNumber": "010101010101011",
       "brand": {
         "name": "尚品",
         "id": "555f06dec0daf6350e2cb216",
-        "manufacturerId": "555f0674c0daf6350e2cb213"
+        "manufacturerId": "564d3e32f444fa183abd9c5e"
       },
       "model": "sp-1",
       "workmode": 0,

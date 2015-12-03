@@ -6,7 +6,13 @@
   "realmRequired": false,
   "properties": {},
   "validations": [],
-  "relations": {},
+  "relations": {
+    "manufacturer": {
+      "type": "belongsTo",
+      "model": "manufacturer",
+      "foreignKey": ""
+    }
+  },
   "acls": [
     {
       "accessType": "*",

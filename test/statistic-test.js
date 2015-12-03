@@ -16,7 +16,7 @@ var brandId = "555f06dec0daf6350e2cb216";
 
 describe('Statistic', function() {
     
-  describe.only('# Bike', function() {
+  describe('# Bike', function() {
     // lt.beforeEach.givenLoggedInUser(loggedInAdmin);
     lt.beforeEach.givenLoggedInUser(loggedInManufacturer);
     var filter = {

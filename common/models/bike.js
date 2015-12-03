@@ -17,10 +17,9 @@ module.exports = function(Bike) {
   });
   
   Bike.afterRemote('create', function welcomeMessage(ctx, modelInstance, next) {
-    var ObjectID = Bike.getDataSource().ObjectID;
     var manufacturerId = modelInstance.brand.manufacturerId;
     Bike.app.models.User.findOne({
-      where:{manufacturerId: {inq: [manufacturerId, ObjectID(manufacturerId)]}}
+      where:{manufacturerId: manufacturerId}
     }, function (err, result) {
       if(err) return next(err);
       if(!result) {

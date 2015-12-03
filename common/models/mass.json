@@ -1,6 +1,6 @@
 {
   "name": "mass",
-  "plural":"mass",
+  "plural": "mass",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
