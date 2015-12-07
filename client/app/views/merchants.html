@@ -1,0 +1,8 @@
+<h3>
+   商户管理</h3>
+<div id="container">
+   <infowindow ng-show="!!clouddata"></infowindow>
+</div>
+<script type="text/ng-template" id="merchant-popover.html">
+   <div id="info"><h3>{{clouddata._name}}</h3><p>地址：{{clouddata._address}} <br> 电话：{{clouddata.telephone}}</p><div ng-repeat="(key, value) in ability"><i ng-class="value?'fa fa-check-circle text-green':'fa fa-times-circle'" class="mr"> </i>{{key|merchant_ability}}  </div></div>
+</script>

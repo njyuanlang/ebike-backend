@@ -23,6 +23,12 @@
     "translate": "sidebar.nav.MESSAGE"
   },
   {
+    "text": "Merchants",
+    "sref": "app.merchants",
+    "icon": "icon-map",
+    "translate": "sidebar.nav.MERCHANT"
+  },
+  {
     "text": "Clients",
     "sref": "app.clients",
     "icon": "icon-users",

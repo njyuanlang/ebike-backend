@@ -57,6 +57,13 @@ function ($stateProvider, $locationProvider, $urlRouterProvider, helper) {
         controller: 'MessageComposeController',
         templateUrl: helper.basepath('message-compose.html')
     })
+    .state('app.merchants', {
+        url: '/merchants',
+        title: 'Merchants',
+        controller: 'MerchantsController',
+        templateUrl: helper.basepath('merchants.html'),
+        resolve: helper.resolveFor('ngTableExport')
+    })
     .state('app.clients', {
         url: '/clients',
         title: 'Clients',

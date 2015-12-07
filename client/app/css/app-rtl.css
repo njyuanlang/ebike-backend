@@ -15935,3 +15935,26 @@ body .ui-select-bootstrap .ui-select-toggle {
     overflow: hidden !important;
   }
 }
+
+/* ========================================================================
+   Component: amap.less
+ ========================================================================== */
+
+.scroll {
+  height: 100%;
+}
+
+#container {
+  width: 100%;
+  height: 500px;
+}
+
+#container2 {
+  width: 100%;
+  height: 150px;
+}
+
+#container3 {
+  width: 100%;
+  height: 100%;
+}
