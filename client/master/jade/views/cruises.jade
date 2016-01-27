@@ -12,12 +12,12 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
-          tr(ng-repeat='entity in $data')
-            td(data-title="'车辆编号'") {{entity.bike.serialNumber}}
+          tr.text-center(ng-repeat='entity in $data')
+            td.text-left(data-title="'车辆编号'") {{entity.bike.serialNumber}}
             td(data-title="'品牌'") {{entity.bike.brand.name}}
             td(data-title="'型号'") {{entity.bike.model}}
             td(data-title="'电量'") {{entity.power}}
             td(data-title="'续航里程'") {{entity.mileage}}
             td(data-title="'时速'") {{entity.speed}}
             td(data-title="'电流'") {{entity.current}}
-            td(data-title="'登记时间'") {{entity.created}}
+            td(data-title="'登记时间'") {{entity.created | moment}}

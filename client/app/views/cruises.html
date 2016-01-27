@@ -13,15 +13,15 @@
       <div class="table-responsive">
          <table ng-table="tableParams" class="table table-bordered table-striped">
             <tbody>
-               <tr ng-repeat="entity in $data">
-                  <td data-title="'车辆编号'">{{entity.bike.serialNumber}}</td>
+               <tr ng-repeat="entity in $data" class="text-center">
+                  <td data-title="'车辆编号'" class="text-left">{{entity.bike.serialNumber}}</td>
                   <td data-title="'品牌'">{{entity.bike.brand.name}}</td>
                   <td data-title="'型号'">{{entity.bike.model}}</td>
                   <td data-title="'电量'">{{entity.power}}</td>
                   <td data-title="'续航里程'">{{entity.mileage}}</td>
                   <td data-title="'时速'">{{entity.speed}}</td>
                   <td data-title="'电流'">{{entity.current}}</td>
-                  <td data-title="'登记时间'">{{entity.created}}</td>
+                  <td data-title="'登记时间'">{{entity.created | moment}}</td>
                </tr>
             </tbody>
          </table>

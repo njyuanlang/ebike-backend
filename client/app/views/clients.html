@@ -22,7 +22,7 @@
                   <td data-title="'联系电话'">{{user.phone}}</td>
                   <td data-title="'省'">{{user.region.province}}</td>
                   <td data-title="'城市'">{{user.region.city}}</td>
-                  <td data-title="'注册日期'">{{user.created}}</td>
+                  <td data-title="'注册日期'">{{user.created | moment}}</td>
                </tr>
             </tbody>
          </table>

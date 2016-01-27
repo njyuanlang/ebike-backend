@@ -21,4 +21,4 @@ h3
             td(data-title="'电池容量'") {{entity.current}} AH
             td(data-title="'车主'") {{entity.owner.username}}
             td(data-title="'注册地'") {{entity.owner.region.province}} {{entity.owner.region.city}}
-            td(data-title="'注册日期'") {{entity.created}}
+            td(data-title="'注册日期'") {{entity.created | moment}}

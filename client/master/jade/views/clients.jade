@@ -21,4 +21,4 @@ h3
             td(data-title="'联系电话'") {{user.phone}}
             td(data-title="'省'") {{user.region.province}}
             td(data-title="'城市'") {{user.region.city}}
-            td(data-title="'注册日期'") {{user.created}}
+            td(data-title="'注册日期'") {{user.created | moment}}

@@ -18,9 +18,9 @@ h3
     .table-responsive
       table.table.table-bordered.table-striped(ng-table='tableParams')
         tbody
-          tr(ng-repeat='entity in $data')
-            td(data-title="'制造商名称'") {{entity.name}}
+          tr.text-center(ng-repeat='entity in $data')
+            td.text-left(data-title="'制造商名称'") {{entity.name}}
             td(data-title="'联系电话'") {{entity.phone}}
             td(data-title="'电子邮件'") {{entity.email}}
             td(data-title="'联系地址'") {{entity.address}}
-            td(data-title="'登记日期'") {{entity.created}}
+            td(data-title="'登记日期'") {{entity.created | moment}}

@@ -16,12 +16,12 @@
       <div class="table-responsive">
          <table ng-table="tableParams" class="table table-bordered table-striped">
             <tbody>
-               <tr ng-repeat="entity in $data" ui-sref="app.account({accountId: entity.id})">
+               <tr ng-repeat="entity in $data" ui-sref="app.account({accountId: entity.id})" class="text-center">
                   <td data-title="'用户名'">{{entity.username}}</td>
                   <td data-title="'用户真名'">{{entity.name}}</td>
                   <td data-title="'联系电话'">{{entity.phone}}</td>
                   <td data-title="'电子邮件'">{{entity.email}}</td>
-                  <td data-title="'注册日期'">{{entity.created}}</td>
+                  <td data-title="'注册日期'">{{entity.created | moment}}</td>
                </tr>
             </tbody>
          </table>
