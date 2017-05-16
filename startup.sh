@@ -7,6 +7,9 @@ if [[ $1 == 'manufacturer' ]]; then
   HOST=ht.baoxu360.com
   CONTAINER=manufacturer
   VPATH=$(pwd)/../ebike-manufacturer/:/usr/share/nginx/html:ro
+elif [[ $1 == 'api' ]]; then
+  HOST=bx.minfan.pw
+  CONTAINER=api
 fi
 
 docker rm -f $CONTAINER
