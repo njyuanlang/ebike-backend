@@ -19,6 +19,8 @@ $ docker run --name mongodb -v /datadb/db/:/data/db -d mongo:3.4
 ## Https
 
 ```bash
-$ docker network create nginx-proxy
+$ docker network create -d bridge nginx-proxy
 $ docker-compose up -d
 ```
+
+** CA may fail due to ipv6. **
