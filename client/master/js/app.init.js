@@ -45,7 +45,7 @@ App.run(["$rootScope", "$state", "$stateParams",  '$window', '$templateCache', "
     // Scope Globals
     // ----------------------------------- 
     $rootScope.app = {
-      name: '宝旭电动车后台管理系统',
+      name: '宝旭后台管理',
       description: '宝旭电动车后台管理系统',
       year: ((new Date()).getFullYear()),
       layout: {

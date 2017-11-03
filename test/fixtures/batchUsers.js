@@ -35,7 +35,7 @@ function updateUsers(db) {
   var user2 = db.collection('user2')
   db.collection('user').find({}).toArray().then(function (items) {
     items.forEach(function (item) {
-      user2.findOneAndReplace({username: item.username}, item)
+      user2.findOneAndReplace({username: item.username}, item, {upsert: true})
       console.log(item);
     })
   })

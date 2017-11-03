@@ -1,7 +1,22 @@
 <h3>
-   商户管理</h3>
-<div id="container">
-   <infowindow ng-show="!!clouddata"></infowindow>
+   商户管理
+   <from class="pull-right col-sm-3"></from>
+</h3>
+<div class="row">
+   <div class="col-lg-9">
+      <div id="container">
+         <infowindow ng-show="!!clouddata"></infowindow>
+      </div>
+   </div>
+   <div class="col-lg-3">
+      <div class="input-group">
+         <span class="input-group-addon">
+            <div class="icon-magnifier"></div>
+         </span>
+         <input type="text" placeholder="输入商户手机号码" ng-model="query.keywords" ui-keypress="{13:'refresh()'}" class="form-control" />
+      </div>
+      <div id="panel"></div>
+   </div>
 </div>
 <script type="text/ng-template" id="merchant-popover.html">
    <div id="info"><h3>{{clouddata._name}}</h3><p>地址：{{clouddata._address}} <br> 电话：{{clouddata.telephone}}</p><div ng-repeat="(key, value) in ability"><i ng-class="value?'fa fa-check-circle text-green':'fa fa-times-circle'" class="mr"> </i>{{key|merchant_ability}}  </div></div>

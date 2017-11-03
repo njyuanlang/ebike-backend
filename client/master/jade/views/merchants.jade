@@ -1,8 +1,27 @@
 h3 
   | 商户管理
+  from.pull-right.col-sm-3
 
-#container
-  infowindow(ng-show="!!clouddata")
+.row
+  .col-lg-9
+    #container
+      infowindow(ng-show="!!clouddata")
+  .col-lg-3
+    .input-group
+      span.input-group-addon
+        .icon-magnifier
+      input.form-control(type='text', placeholder="输入商户手机号码", ng-model="query.keywords", ui-keypress="{13:'refresh()'}")
+    #panel
+    //- .amap_lib_cloudDataSearch
+    //-   .amap_lib_cloudDataSearch_list
+    //-     ul
+    //-       li.poibox(ng-repeat="poi in pois" ng-class="{'active': activeIndex==$index}" ng-click="activeIndex=$index")
+    //-         .amap_lib_cloudDataSearch_poi.poibox-icon {{$index+1}}
+    //-         h3.poi-title
+    //-           span.poi-name {{poi._name}}
+    //-         .poi-info
+    //-           p 电话：{{poi.telephone}}
+    //-           p.poi-addr 地址：{{poi._address}}
 
 script(type="text/ng-template", id="merchant-popover.html")
   #info
@@ -11,6 +30,3 @@ script(type="text/ng-template", id="merchant-popover.html")
     div(ng-repeat="(key, value) in ability")
       i.mr(ng-class="value?'fa fa-check-circle text-green':'fa fa-times-circle'") 
       | {{key|merchant_ability}}  
-    //- .padding
-      //- a.btn.btn-block.btn-info.icon-left.icon-navigate(ng-click="navigate()") 导航
-      //- a.btn.btn-lg.btn-info.icon-left.icon-telephone(href="tel:{{clouddata.telephone}}") 电话

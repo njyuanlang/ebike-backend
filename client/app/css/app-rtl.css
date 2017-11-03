@@ -15958,3 +15958,7 @@ body .ui-select-bootstrap .ui-select-toggle {
   width: 100%;
   height: 100%;
 }
+
+.poibox h3 {
+  margin: 0;
+}
