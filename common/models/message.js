@@ -1,4 +1,4 @@
-var loopback = require('loopback');
+var LoopBackContext = require('loopback-context');
 var async = require('async');
 
 module.exports = function(Message) {
@@ -6,7 +6,7 @@ module.exports = function(Message) {
   Message.chats = function (filter, next) {
     filter = filter || {}
     filter.where = filter.where || {}
-    var context = loopback.getCurrentContext()
+    var context = LoopBackContext.getCurrentContext();
     var currentUser = context && context.get('currentUser');
     filter.where.or = [{ToUserName: currentUser.id}, {FromUserName: currentUser.id}];
 

@@ -22,3 +22,5 @@ ebike.apk
 
 server/test/fixtures/ebike/*
 test/fixtures/ebike/*
+package-lock.json
+.vscode

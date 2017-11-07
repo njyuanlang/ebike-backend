@@ -1,10 +1,11 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var LoopBackContext = require('loopback-context');
 
 var app = module.exports = loopback();
 
 // -- Add your pre-processing middleware here --
-app.use(loopback.context());
+app.use(LoopBackContext.perRequest());
 app.use(loopback.token());
 app.use(function setCurrentUser(req, res, next) {
   if (!req.accessToken) {
@@ -17,7 +18,7 @@ app.use(function setCurrentUser(req, res, next) {
     if (!user) {
       return next(new Error('No user with this access token was found.'));
     }
-    var loopbackContext = loopback.getCurrentContext();
+    var loopbackContext = LoopBackContext.getCurrentContext();
     if (loopbackContext) {
       loopbackContext.set('currentUser', user);
     }

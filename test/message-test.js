@@ -107,6 +107,16 @@ describe('Message', function() {
         });
       });
     });
+
+    describe('### Chats', function() {
+      lt.describe.whenCalledRemotely('GET', '/api/messages/chats', function(){
+        it('should success', function(done) {
+          console.log(this.res.body);
+          assert.equal(this.res.statusCode, 200);
+          done()
+        });
+      })
+    });
     
   });
   
