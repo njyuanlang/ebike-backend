@@ -18,9 +18,9 @@ app.use(function setCurrentUser(req, res, next) {
     if (!user) {
       return next(new Error('No user with this access token was found.'));
     }
-    var loopbackContext = LoopBackContext.getCurrentContext();
-    if (loopbackContext) {
-      loopbackContext.set('currentUser', user);
+    var ctx = LoopBackContext.getCurrentContext();
+    if (ctx) {
+      ctx.set('currentUser', user);
     }
     next();
   });
