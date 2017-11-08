@@ -1,6 +1,10 @@
 {
   "initial:before": {
-    "loopback-context#per-request": {},
+    "loopback-context#per-request": {
+      "params": {
+        "enableHttpContext": true
+      }
+    },
     "loopback#favicon": {}
   },
   "initial": {
