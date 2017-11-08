@@ -62,16 +62,15 @@ module.exports = function(Message) {
   });
 
   Message.observe('access', function limitScope(ctx, next) {
-    var context = LoopBackContext.getCurrentContext()
-    var currentUser = context && context.get('currentUser');
-    // console.log(currentUser, context);
+    var accessToken = ctx.options && ctx.options.accessToken;
+    var userId = accessToken && accessToken.userId
     
     ctx.query.order = ctx.query.order || 'CreateTime DESC';
     ctx.query.limit = ctx.query.limit || 10;
     ctx.query.skip = ctx.query.skip || 0;
     ctx.query.where = ctx.query.where || {};
     ctx.query.where.and = ctx.query.where.and || [];
-    ctx.query.where.and.push({or:[{ToUserName: currentUser.id}, {FromUserName: currentUser.id}]});
+    ctx.query.where.and.push({or:[{ToUserName: userId}, {FromUserName: userId}]});
     // console.log(JSON.stringify(ctx.query.where.and));
     next();
   });
