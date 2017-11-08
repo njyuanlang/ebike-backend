@@ -3,6 +3,7 @@
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
+    "injectOptionsFromRemoteContext": true,
     "validateUpsert": true
   },
   "properties": {

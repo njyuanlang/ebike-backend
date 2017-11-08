@@ -3,12 +3,14 @@ var async = require('async');
 
 module.exports = function(Message) {
   
-  Message.chats = function (filter, next) {
+  Message.chats = function (filter, options, next) {
     filter = filter || {}
     filter.where = filter.where || {}
-    var context = LoopBackContext.getCurrentContext();
-    var currentUser = context && context.get('currentUser');
-    filter.where.or = [{ToUserName: currentUser.id}, {FromUserName: currentUser.id}];
+    // var context = LoopBackContext.getCurrentContext();
+    // var currentUser = context && context.get('currentUser');
+    var accessToken = options && options.accessToken;
+    var userId = accessToken && accessToken.userId
+    filter.where.or = [{ToUserName: userId}, {FromUserName: userId}];
 
     var Model = Message;
     filter.where = Model._coerce(filter.where)
@@ -20,7 +22,7 @@ module.exports = function(Message) {
       { $sort: { CreateTime: -1} },
       {
         $group: {
-          _id: { $cond: [{$eq: ["$ToUserName", currentUser.id]}, "$FromUserName", "$ToUserName"]},
+          _id: { $cond: [{$eq: ["$ToUserName", userId]}, "$FromUserName", "$ToUserName"]},
           message: { $first: "$$ROOT"}
         }
       }
@@ -46,7 +48,8 @@ module.exports = function(Message) {
     'chats',
     {
       accepts: [
-        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true}
+        {arg:'filter', type: 'Object', http: {source: 'query'}, root:true},
+        {"arg": "options", "type": "object", "http": "optionsFromRequest"}
       ],
       returns: {arg:'data', type: 'Array', root: true},
       http: {verb: 'get'}
