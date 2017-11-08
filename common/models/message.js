@@ -6,8 +6,6 @@ module.exports = function(Message) {
   Message.chats = function (filter, options, next) {
     filter = filter || {}
     filter.where = filter.where || {}
-    // var context = LoopBackContext.getCurrentContext();
-    // var currentUser = context && context.get('currentUser');
     var accessToken = options && options.accessToken;
     var userId = accessToken && accessToken.userId
     filter.where.or = [{ToUserName: userId}, {FromUserName: userId}];
@@ -64,8 +62,9 @@ module.exports = function(Message) {
   });
 
   Message.observe('access', function limitScope(ctx, next) {
-    var context = loopback.getCurrentContext()
+    var context = LoopBackContext.getCurrentContext()
     var currentUser = context && context.get('currentUser');
+    // console.log(currentUser, context);
     
     ctx.query.order = ctx.query.order || 'CreateTime DESC';
     ctx.query.limit = ctx.query.limit || 10;

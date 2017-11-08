@@ -87,7 +87,7 @@ describe('Message', function() {
       lt.it.shouldBeAllowed();
     });
     
-    describe('### Fetch Message', function() {
+    describe.only('### Fetch Message', function() {
       var filter = {
         // include: ['FromUser'],
         where: {
@@ -108,7 +108,7 @@ describe('Message', function() {
       });
     });
 
-    describe.only('### Chats', function() {
+    describe('### Chats', function() {
       lt.describe.whenCalledRemotely('GET', '/api/messages/chats', function(){
         it('should success', function(done) {
           console.log(this.res.body);
