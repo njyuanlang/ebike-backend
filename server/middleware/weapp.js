@@ -9,7 +9,7 @@ var config = {
 
 module.exports = function (options) {
   return function (req, res) {
-    var qs = Object.assign({js_code: req.params.code}, config);
+    var qs = Object.assign({js_code: req.query.code}, config);
     request.get({
       uri: "https://api.weixin.qq.com/sns/jscode2session",
       qs: qs
