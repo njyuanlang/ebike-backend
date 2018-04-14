@@ -13,7 +13,14 @@
   "session": {},
   "auth": {},
   "parse": {},
-  "routes": {},
+  "routes": {
+    "./middleware/weapp": {
+      "paths": [
+        "/weapp"
+      ],
+      "params": {}
+    }
+  },
   "files": {
     "loopback#static": {
       "params": "$!../client"
